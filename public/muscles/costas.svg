@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="194" viewBox="0 0 384 194" fill="none">
+  <g stroke="#2f3142" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Torso outline -->
+    <path d="M44 22c18 8 36 14 56 18 10 2 18 9 24 18l18 28c6 10 16 16 28 16h44c12 0 22-6 28-16l18-28c6-9 14-16 24-18 20-4 38-10 56-18" />
+    <!-- Spine -->
+    <path d="M192 48v120" opacity="0.55"/>
+    <!-- Scapula/lat hints -->
+    <path d="M120 58c-18 18-28 42-28 66 0 20 8 36 22 48" opacity="0.75"/>
+    <path d="M264 58c18 18 28 42 28 66 0 20-8 36-22 48" opacity="0.75"/>
+  </g>
+
+  <!-- Back highlight (lats + mid-back) -->
+  <g fill="#e8001d">
+    <path d="M122 64c-28 20-40 52-34 78 6 26 30 34 52 16 20-16 30-38 30-58 0-18-8-34-48-36z" opacity="0.65"/>
+    <path d="M262 64c28 20 40 52 34 78-6 26-30 34-52 16-20-16-30-38-30-58 0-18 8-34 48-36z" opacity="0.65"/>
+    <path d="M150 86c-10 10-16 22-18 36" stroke="#ff5030" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M234 86c10 10 16 22 18 36" stroke="#ff5030" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.85"/>
+  </g>
+</svg>

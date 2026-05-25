@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="194" viewBox="0 0 384 194" fill="none">
+  <g stroke="#2f3142" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 22c18 8 36 14 56 18 10 2 18 9 24 18l18 28c6 10 16 16 28 16h44c12 0 22-6 28-16l18-28c6-9 14-16 24-18 20-4 38-10 56-18" />
+    <!-- Arm silhouettes -->
+    <path d="M62 50c-16 18-24 36-22 56 2 18 12 34 30 48" opacity="0.6"/>
+    <path d="M322 50c16 18 24 36 22 56-2 18-12 34-30 48" opacity="0.6"/>
+  </g>
+
+  <!-- Biceps highlight -->
+  <g fill="#e8001d">
+    <path d="M78 90c-14 10-18 26-10 40 8 14 26 18 40 8 14-10 18-26 10-40-8-14-26-18-40-8z" opacity="0.7"/>
+    <path d="M306 90c14 10 18 26 10 40-8 14-26 18-40 8-14-10-18-26-10-40 8-14 26-18 40-8z" opacity="0.7"/>
+  </g>
+</svg>

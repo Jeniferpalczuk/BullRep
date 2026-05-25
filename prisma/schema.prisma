@@ -1,0 +1,79 @@
+// BullRep — Prisma Schema (Neon PostgreSQL)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String
+  weight       Float?
+  height       Float?
+  goal         String?
+  fitnessLevel String?  @map("fitness_level")
+  frequency    String?
+  appLevel     Int      @default(1) @map("app_level")
+  avatarUrl    String?  @map("avatar_url")
+  isAdmin      Boolean  @default(false) @map("is_admin")
+  xp           Int      @default(0)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  trainingSessions TrainingSession[]
+
+  @@map("users")
+}
+
+model Exercise {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique
+  muscleGroup String   @map("muscle_group")
+  equipment   String?
+  level       String?
+  gifUrl      String?  @map("gif_url")
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  sessionExercises TrainingSessionExercise[] @relation("ExerciseCatalog")
+
+  @@map("exercises")
+}
+
+model TrainingSession {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  workoutId    String?  @map("workout_id") @db.Uuid
+  date         DateTime @db.Date
+  trainingType String   @map("training_type")
+  notes        String?
+  durationMin  Int?     @map("duration_min")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user      User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises TrainingSessionExercise[]
+
+  @@map("training_sessions")
+}
+
+model TrainingSessionExercise {
+  id         String   @id @default(uuid()) @db.Uuid
+  sessionId  String   @map("session_id") @db.Uuid
+  exerciseId String?  @map("exercise_id") @db.Uuid
+  name       String
+  setsDone   Int      @map("sets_done")
+  repsDone   Int      @map("reps_done")
+  weight     Float
+  orderIndex Int      @map("order_index")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  session  TrainingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exercise Exercise?       @relation("ExerciseCatalog", fields: [exerciseId], references: [id], onDelete: SetNull)
+
+  @@map("training_session_exercises")
+}

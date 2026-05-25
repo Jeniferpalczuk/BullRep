@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="194" viewBox="0 0 384 194" fill="none">
+  <g stroke="#2f3142" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M96 24c30 20 64 30 96 30s66-10 96-30" opacity="0.8"/>
+    <path d="M140 54c-18 26-28 52-28 78 0 20 6 38 18 54" opacity="0.7"/>
+    <path d="M244 54c18 26 28 52 28 78 0 20-6 38-18 54" opacity="0.7"/>
+    <!-- Knee hints -->
+    <path d="M138 128c6 6 12 8 18 8s12-2 18-8" opacity="0.6"/>
+    <path d="M210 128c6 6 12 8 18 8s12-2 18-8" opacity="0.6"/>
+  </g>
+
+  <!-- Quads highlight -->
+  <g fill="#e8001d">
+    <path d="M138 68c-18 18-26 40-22 64 4 24 22 36 42 26 20-10 30-34 26-58-4-24-20-42-46-32z" opacity="0.68"/>
+    <path d="M246 68c18 18 26 40 22 64-4 24-22 36-42 26-20-10-30-34-26-58 4-24 20-42 46-32z" opacity="0.68"/>
+  </g>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="194" viewBox="0 0 384 194" fill="none">
+  <!-- Simple chest highlight icon (transparent background) -->
+  <g stroke="#2f3142" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Torso outline -->
+    <path d="M44 22c18 8 36 14 56 18 10 2 18 9 24 18l18 28c6 10 16 16 28 16h44c12 0 22-6 28-16l18-28c6-9 14-16 24-18 20-4 38-10 56-18" />
+    <path d="M116 44c-10 18-16 36-18 56-2 20 4 40 18 58" opacity="0.85"/>
+    <path d="M268 44c10 18 16 36 18 56 2 20-4 40-18 58" opacity="0.85"/>
+    <!-- Upper arms hints -->
+    <path d="M24 34c-8 20-10 38-8 58 2 20 10 40 24 58" opacity="0.55"/>
+    <path d="M360 34c8 20 10 38 8 58-2 20-10 40-24 58" opacity="0.55"/>
+    <!-- Abs hints -->
+    <path d="M192 108v64" opacity="0.55"/>
+    <path d="M156 122c10 8 20 12 36 12s26-4 36-12" opacity="0.5"/>
+    <path d="M156 148c10 8 20 12 36 12s26-4 36-12" opacity="0.5"/>
+  </g>
+
+  <!-- Pectorals highlight -->
+  <g>
+    <path d="M110 54c-22 6-38 22-42 42-4 22 10 36 30 34 18-2 36-14 48-34 10-16 12-34 6-42-8-10-22-10-42 0z" fill="#e8001d" opacity="0.68"/>
+    <path d="M274 54c22 6 38 22 42 42 4 22-10 36-30 34-18-2-36-14-48-34-10-16-12-34-6-42 8-10 22-10 42 0z" fill="#e8001d" opacity="0.68"/>
+    <path d="M140 58c-10 6-18 14-22 24" stroke="#ff5030" stroke-width="5" stroke-linecap="round" opacity="0.72"/>
+    <path d="M244 58c10 6 18 14 22 24" stroke="#ff5030" stroke-width="5" stroke-linecap="round" opacity="0.72"/>
+  </g>
+</svg>

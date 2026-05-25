@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="194" viewBox="0 0 384 194" fill="none">
+  <g stroke="#2f3142" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 22c18 8 36 14 56 18 10 2 18 9 24 18l18 28c6 10 16 16 28 16h44c12 0 22-6 28-16l18-28c6-9 14-16 24-18 20-4 38-10 56-18" />
+    <path d="M72 44c-18 18-28 40-26 62 2 22 10 42 24 56" opacity="0.55"/>
+    <path d="M312 44c18 18 28 40 26 62-2 22-10 42-24 56" opacity="0.55"/>
+  </g>
+
+  <!-- Triceps highlight (back of upper arm) -->
+  <g fill="#e8001d">
+    <path d="M90 74c-14 18-18 38-10 54 10 18 32 18 44 0 10-14 10-34 0-52-8-12-20-14-34-2z" opacity="0.7"/>
+    <path d="M294 74c14 18 18 38 10 54-10 18-32 18-44 0-10-14-10-34 0-52 8-12 20-14 34-2z" opacity="0.7"/>
+  </g>
+</svg>
