@@ -6,6 +6,7 @@ import { ArrowRight, Lock, Mail, Shield } from 'lucide-react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { Toast, type ToastState } from '@/components/Toast';
+import { apiRequest } from '@/lib/apiClient';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [recovering, setRecovering] = useState(false);
   const [toast, setToast] = useState<ToastState>(null);
 
   useEffect(() => {
@@ -38,13 +40,38 @@ export default function LoginPage() {
     router.replace('/');
   };
 
+  const handleForgotPassword = async () => {
+    const cleanEmail = email.trim().toLowerCase();
+
+    if (!cleanEmail) {
+      setToast({ type: 'error', message: 'Digite seu e-mail para recuperar a senha.' });
+      return;
+    }
+
+    setRecovering(true);
+    try {
+      await apiRequest('/api/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email: cleanEmail }),
+      });
+      setToast({ type: 'success', message: 'Enviamos uma nova senha para seu e-mail.' });
+    } catch (error) {
+      setToast({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Nao foi possivel recuperar a senha.',
+      });
+    } finally {
+      setRecovering(false);
+    }
+  };
+
   return (
     <div className="auth-shell">
       <div className="auth-bg" />
 
-      <div className="auth-card card-premium" style={{ maxWidth: '980px', padding: '0', overflow: 'hidden' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 0.95fr) minmax(0, 1.05fr)' }}>
-          <div style={{ padding: '30px 26px', borderRight: '1px solid rgba(255,255,255,0.06)', background: 'radial-gradient(620px 260px at 15% 0%, rgba(232,0,29,0.18), transparent 62%), rgba(12,12,12,0.86)' }}>
+      <div className="auth-card card-premium auth-login-card" style={{ maxWidth: '980px', padding: '0', overflow: 'hidden' }}>
+        <div className="auth-login-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 0.95fr) minmax(0, 1.05fr)' }}>
+          <div className="auth-login-hero" style={{ padding: '30px 26px', borderRight: '1px solid rgba(255,255,255,0.06)', background: 'radial-gradient(620px 260px at 15% 0%, rgba(232,0,29,0.18), transparent 62%), rgba(12,12,12,0.86)' }}>
             <div className="auth-brand" style={{ marginBottom: '16px' }}>
               <div className="auth-logo">BULL<span>REP</span></div>
               <div className="auth-badge">
@@ -72,7 +99,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div style={{ padding: '30px 26px' }}>
+          <div className="auth-login-form" style={{ padding: '30px 26px' }}>
             <h1 className="auth-title" style={{ marginTop: 0 }}>Entrar</h1>
             <p className="auth-subtitle">Acesse seu dashboard e continue evoluindo.</p>
 
@@ -97,9 +124,10 @@ export default function LoginPage() {
                 type="button"
                 className="auth-link"
                 style={{ alignSelf: 'flex-end', marginTop: '-2px' }}
-                onClick={() => setToast({ type: 'success', message: 'Recuperação de senha em breve.' })}
+                onClick={handleForgotPassword}
+                disabled={recovering}
               >
-                Esqueci minha senha
+                {recovering ? 'Enviando...' : 'Esqueci minha senha'}
               </button>
 
               <button className="btn-primary" type="submit" disabled={!canSubmit || submitting} style={{ width: '100%', marginTop: '6px' }}>

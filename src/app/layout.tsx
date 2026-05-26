@@ -3,9 +3,13 @@ import "./globals.css";
 import { AuthProvider } from "@/providers/AuthProvider";
 
 export const metadata: Metadata = {
-  title: "BullRep — Evolução de Treino",
-  description: "Acompanhe sua evolução, controle seus treinos e supere seus limites com o BullRep.",
-  keywords: ["treino", "fitness", "academia", "musculação", "evolução"],
+  title: "BullRep - Evolucao de Treino",
+  description: "Acompanhe sua evolucao, controle seus treinos e supere seus limites com o BullRep.",
+  keywords: ["treino", "fitness", "academia", "musculacao", "evolucao"],
+  icons: {
+    icon: "/icon",
+    apple: "/apple-icon",
+  },
 };
 
 export default function RootLayout({
