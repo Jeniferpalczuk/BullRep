@@ -80,7 +80,7 @@ export default function AvatarStep() {
         </div>
 
         {/* 2-Column Grid Layout */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '32px', marginTop: '32px' }}>
+        <div className="avatarstep-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '32px', marginTop: '32px' }}>
 
           {/* LADO ESQUERDO */}
           <div>
@@ -199,7 +199,7 @@ export default function AvatarStep() {
           </div>
 
           {/* LADO DIREITO (Prévias) */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className="avatarstep-preview-col" style={{ display: 'flex', flexDirection: 'column' }}>
             <h4 style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.55)', marginBottom: '12px' }}>
               PRÉVIA
             </h4>
@@ -220,7 +220,7 @@ export default function AvatarStep() {
                 justifyContent: 'center',
                 marginBottom: '24px'
               }}>
-                <div style={{
+                <div className="avatarstep-preview-circle" style={{
                   width: '240px',
                   height: '240px',
                   borderRadius: '50%',

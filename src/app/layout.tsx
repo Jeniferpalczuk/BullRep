@@ -3,12 +3,18 @@ import "./globals.css";
 import { AuthProvider } from "@/providers/AuthProvider";
 
 export const metadata: Metadata = {
-  title: "BullRep - Evolucao de Treino",
+  title: "BullRep",
+  applicationName: "BullRep",
   description: "Acompanhe sua evolucao, controle seus treinos e supere seus limites com o BullRep.",
   keywords: ["treino", "fitness", "academia", "musculacao", "evolucao"],
+  appleWebApp: {
+    capable: true,
+    title: "BullRep",
+    statusBarStyle: "black-translucent",
+  },
   icons: {
-    icon: "/icon",
-    apple: "/apple-icon",
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 

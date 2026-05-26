@@ -361,8 +361,8 @@ export default function CadastroPage() {
 
         {step === 6 && (
           <div className="auth-pane">
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.15fr) minmax(320px, 0.85fr)', gap: '28px', alignItems: 'stretch' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            <div className="cadastro-avatar-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.15fr) minmax(320px, 0.85fr)', gap: '28px', alignItems: 'stretch' }}>
+              <div className="cadastro-avatar-left" style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 <h4 style={{ fontSize: '0.75rem', fontWeight: 900, marginBottom: '12px', color: 'rgba(255,255,255,0.55)' }}>ESTILO</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px' }}>
                   {STYLES.map(st => (
@@ -383,8 +383,8 @@ export default function CadastroPage() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', minHeight: '100%' }}>
-                <div style={{ width: '280px', height: '280px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,0,29,0.15) 0%, rgba(0,0,0,0.5) 100%)', border: '1px solid rgba(232,0,29,0.2)', overflow: 'hidden', boxShadow: '0 18px 50px rgba(0,0,0,0.45)' }}>
+              <div className="cadastro-avatar-right" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', minHeight: '100%' }}>
+                <div className="cadastro-avatar-circle" style={{ width: '280px', height: '280px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,0,29,0.15) 0%, rgba(0,0,0,0.5) 100%)', border: '1px solid rgba(232,0,29,0.2)', overflow: 'hidden', boxShadow: '0 18px 50px rgba(0,0,0,0.45)' }}>
                   <img src={avatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <button onClick={handleRandomize} style={{ width: '100%', padding: '12px', borderRadius: '14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', color: '#fff', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>

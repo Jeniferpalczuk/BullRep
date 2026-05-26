@@ -1897,4 +1897,109 @@ select:focus-visible {
   .auth-subtitle {
     font-size: 0.92rem;
   }
+
+  .profile-hero-grid {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+  }
+
+  .profile-hero-avatar-wrap {
+    justify-content: center !important;
+  }
+
+  .profile-summary-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cadastro-avatar-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .cadastro-avatar-right {
+    order: -1;
+  }
+
+  .cadastro-avatar-circle {
+    width: min(72vw, 280px) !important;
+    height: min(72vw, 280px) !important;
+  }
+
+  .avatarstep-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .avatarstep-preview-col {
+    order: -1;
+  }
+
+  .avatarstep-preview-circle {
+    width: min(72vw, 240px) !important;
+    height: min(72vw, 240px) !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .profile-hero-avatar {
+    width: min(62vw, 224px) !important;
+    height: min(62vw, 224px) !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .auth-shell {
+    padding: 10px 8px 24px;
+  }
+
+  .auth-card {
+    border-radius: 18px;
+    padding: 16px !important;
+  }
+
+  .auth-title {
+    font-size: 1.35rem !important;
+  }
+
+  .auth-subtitle {
+    font-size: 0.86rem !important;
+  }
+
+  .auth-input {
+    padding: 12px 12px;
+    border-radius: 14px;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    min-height: 44px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-size: 0.9rem;
+  }
+
+  .auth-actions {
+    flex-direction: column;
+  }
+
+  .auth-actions .btn-primary,
+  .auth-actions .btn-ghost {
+    width: 100%;
+  }
+
+  .auth-links {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .profile-hero-avatar {
+    width: min(70vw, 200px) !important;
+    height: min(70vw, 200px) !important;
+  }
+
+  .cadastro-avatar-circle,
+  .avatarstep-preview-circle {
+    width: min(74vw, 220px) !important;
+    height: min(74vw, 220px) !important;
+  }
 }

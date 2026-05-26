@@ -30,6 +30,7 @@ import { ExerciseSelectorModal, WorkoutSummaryModal } from '@/components/modals'
 import { WorkoutExperience } from '@/components/workout/WorkoutExperience';
 import { useAuth } from '@/hooks/useAuth';
 import { Toast, type ToastState } from '@/components/Toast';
+import { apiRequest } from '@/lib/apiClient';
 import { CalendarSection } from '@/features/dashboard/components/CalendarSection';
 import { DashTooltip } from '@/features/dashboard/components/DashTooltip';
 import { ProgressScreen } from '@/features/progress/components/ProgressScreen';
@@ -367,6 +368,10 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<ToastState>(null);
   const [savingProfile, setSavingProfile] = useState(false);
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   const [pName, setPName] = useState('');
   const [pWeight, setPWeight] = useState<number>(70);
@@ -529,6 +534,45 @@ export default function App() {
       return;
     }
     setToast({ type: 'success', message: 'Perfil atualizado com sucesso.' });
+  };
+
+  const handleChangePassword = async () => {
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      setToast({ type: 'error', message: 'Preencha todos os campos de senha.' });
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setToast({ type: 'error', message: 'A nova senha deve ter pelo menos 8 caracteres.' });
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      setToast({ type: 'error', message: 'A confirmacao da nova senha nao confere.' });
+      return;
+    }
+
+    setChangingPassword(true);
+    try {
+      await apiRequest('/api/auth/change-password', {
+        method: 'POST',
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+        }),
+      });
+      setToast({ type: 'success', message: 'Senha alterada com sucesso.' });
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+    } catch (error) {
+      setToast({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Nao foi possivel alterar a senha.',
+      });
+    } finally {
+      setChangingPassword(false);
+    }
   };
 
   const navItems: { id: Tab; label: string; icon: (a: boolean) => React.ReactElement }[] = [
@@ -727,6 +771,7 @@ export default function App() {
                 }}
               />
               <div
+                className="profile-hero-grid"
                 style={{
                   position: 'relative',
                   display: 'grid',
@@ -735,8 +780,9 @@ export default function App() {
                   alignItems: 'center',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div className="profile-hero-avatar-wrap" style={{ display: 'flex', justifyContent: 'center' }}>
                   <div
+                    className="profile-hero-avatar"
                     style={{
                       width: '224px',
                       height: '224px',
@@ -771,7 +817,7 @@ export default function App() {
 
             <div className="card" style={{ padding: '20px', marginTop: '0', textAlign: 'left' }}>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Resumo</p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div className="profile-summary-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px' }}>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Peso</p>
                   <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{(profile?.weight ?? user?.weight) ? `${profile?.weight ?? user?.weight}kg` : '—'}</p>
