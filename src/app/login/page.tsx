@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Lock, Mail, Shield } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Lock, Mail, Shield } from 'lucide-react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { Toast, type ToastState } from '@/components/Toast';
@@ -14,6 +14,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [recovering, setRecovering] = useState(false);
   const [toast, setToast] = useState<ToastState>(null);
@@ -116,7 +117,15 @@ export default function LoginPage() {
                 <span>Senha</span>
                 <div className="auth-input">
                   <Lock size={16} />
-                  <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" type="password" autoComplete="current-password" />
+                  <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" type={showPassword ? 'text' : 'password'} autoComplete="current-password" />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                    style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.72)', cursor: 'pointer', display: 'grid', placeItems: 'center' }}
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
                 </div>
               </label>
 
