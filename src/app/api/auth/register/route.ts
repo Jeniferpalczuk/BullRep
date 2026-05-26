@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
+import { Prisma } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 import { signToken } from '@/lib/auth';
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
         fitnessLevel: fitness_level || null,
         frequency: frequency || null,
         avatarUrl: typeof avatar_url === 'string' ? avatar_url.trim() : null,
-      } as never,
+      },
     });
 
     
@@ -79,6 +80,19 @@ export async function POST(req: NextRequest) {
     return response;
   } catch (err) {
     console.error('[API] register error:', err);
+
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === 'P2002') {
+        return NextResponse.json({ error: 'Este e-mail já está cadastrado.' }, { status: 409 });
+      }
+      if (err.code === 'P2021') {
+        return NextResponse.json({ error: 'Tabela de usuários não encontrada no banco.' }, { status: 500 });
+      }
+      if (err.code === 'P2022') {
+        return NextResponse.json({ error: 'Estrutura do banco desatualizada. Rode a migração.' }, { status: 500 });
+      }
+    }
+
     const message = err instanceof Error ? err.message : 'Erro interno ao criar conta. Tente novamente.';
     return NextResponse.json(
       { error: process.env.NODE_ENV === 'development' ? message : 'Erro interno ao criar conta. Tente novamente.' },
