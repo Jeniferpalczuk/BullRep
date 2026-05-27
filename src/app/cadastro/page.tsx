@@ -20,7 +20,7 @@ const STYLES = [
   { id: 'adventurer', label: 'Cartoon', img: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Cartoon&skinColor=f2d3b1' },
   { id: 'notionists', label: 'Realista', img: 'https://api.dicebear.com/9.x/notionists/svg?seed=Real' },
   { id: 'pixel-art', label: 'Pixel', img: 'https://api.dicebear.com/9.x/pixel-art/svg?seed=Pixel' },
-  { id: 'bottts', label: 'Robô', img: 'https://api.dicebear.com/9.x/bottts/svg?seed=BULL' },
+  { id: 'bottts', label: 'Rob�', img: 'https://api.dicebear.com/9.x/bottts/svg?seed=BULL' },
 ];
 
 type GenderOption = 'Feminino' | 'Masculino' | 'Outros';
@@ -49,7 +49,7 @@ export default function CadastroPage() {
   // Step 3: objetivo
   const [goal, setGoal] = useState<BullrepGoal>('Ganhar massa');
 
-  // Step 4: nível/frequência
+  // Step 4: n�vel/frequ�ncia
   const [fitnessLevel, setFitnessLevel] = useState<BullrepFitnessLevel>('Iniciante');
   const [frequency, setFrequency] = useState<BullrepFrequency>('3x');
 
@@ -107,23 +107,23 @@ export default function CadastroPage() {
     const maxIdeal = Number((24.9 * heightMeters * heightMeters).toFixed(1));
 
     let category = 'Peso normal';
-    let meaning = 'Seu IMC está na faixa considerada saudável.';
+    let meaning = 'Seu IMC est� na faixa considerada saud�vel.';
 
     if (bmiRounded == null) {
-      category = 'Indisponível';
-      meaning = 'Não foi possível calcular seu IMC com os dados atuais.';
+      category = 'Indispon�vel';
+      meaning = 'N�o foi poss�vel calcular seu IMC com os dados atuais.';
     } else if (bmiRounded < 18.5) {
       category = 'Abaixo do peso';
-      meaning = 'Seu IMC está abaixo da faixa ideal. Foque em ganho de massa com orientação profissional.';
+      meaning = 'Seu IMC est� abaixo da faixa ideal. Foque em ganho de massa com orienta��o profissional.';
     } else if (bmiRounded < 25) {
       category = 'Peso normal';
-      meaning = 'Seu IMC está na faixa considerada saudável.';
+      meaning = 'Seu IMC est� na faixa considerada saud�vel.';
     } else if (bmiRounded < 30) {
       category = 'Sobrepeso';
-      meaning = 'Seu IMC está acima da faixa ideal. Ajustes de treino e nutrição podem ajudar.';
+      meaning = 'Seu IMC est� acima da faixa ideal. Ajustes de treino e nutri��o podem ajudar.';
     } else {
       category = 'Obesidade';
-      meaning = 'Seu IMC está bem acima da faixa ideal. É importante acompanhamento profissional.';
+      meaning = 'Seu IMC est� bem acima da faixa ideal. � importante acompanhamento profissional.';
     }
 
     return {
@@ -162,7 +162,7 @@ export default function CadastroPage() {
         router.replace('/login');
         return;
       }
-      setToast({ type: 'success', message: 'Cadastro concluído. Bem-vinda ao BULLREP.' });
+      setToast({ type: 'success', message: 'Cadastro conclu�do. Bem-vinda ao BULLREP.' });
       router.replace('/');
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Erro inesperado ao criar conta.';
@@ -196,12 +196,12 @@ export default function CadastroPage() {
         <div className="auth-step-head">
           <h1 className="auth-title">Criar conta</h1>
           <p className="auth-subtitle">
-            {step === 1 && 'Etapa 1 • Conta'}
-            {step === 2 && 'Etapa 2 • Dados corporais'}
-            {step === 3 && 'Etapa 3 • Objetivo'}
-            {step === 4 && 'Etapa 4 • Nível e frequência'}
-            {step === 5 && 'Etapa 5 • Resumo final'}
-            {step === 6 && 'Etapa 6 • Personalização do Avatar'}
+            {step === 1 && 'Etapa 1 � Conta'}
+            {step === 2 && 'Etapa 2 � Dados corporais'}
+            {step === 3 && 'Etapa 3 � Objetivo'}
+            {step === 4 && 'Etapa 4 � N�vel e frequ�ncia'}
+            {step === 5 && 'Etapa 5 � Resumo final'}
+            {step === 6 && 'Etapa 6 � Personaliza��o do Avatar'}
           </p>
         </div>
 
@@ -220,14 +220,14 @@ export default function CadastroPage() {
                 <Mail size={16} />
                 <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="seuemail@exemplo.com" type="email" autoComplete="email" />
               </div>
-              {!emailValid && email.length > 0 && <p className="auth-error">Digite um e-mail válido.</p>}
+              {!emailValid && email.length > 0 && <p className="auth-error">Digite um e-mail v�lido.</p>}
             </label>
             <div className="auth-grid2">
               <label className="auth-field">
                 <span>Senha</span>
                 <div className="auth-input">
                   <Shield size={16} />
-                  <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="mínimo 8 caracteres" type="password" autoComplete="new-password" />
+                  <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="m�nimo 8 caracteres" type="password" autoComplete="new-password" />
                 </div>
                 {!passwordStrong && password.length > 0 && <p className="auth-error">Use pelo menos 8 caracteres.</p>}
               </label>
@@ -237,7 +237,7 @@ export default function CadastroPage() {
                   <Shield size={16} />
                   <input value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder="repita a senha" type="password" autoComplete="new-password" />
                 </div>
-                {confirm.length > 0 && !passwordsMatch && <p className="auth-error">As senhas não coincidem.</p>}
+                {confirm.length > 0 && !passwordsMatch && <p className="auth-error">As senhas n�o coincidem.</p>}
               </label>
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function CadastroPage() {
         {step === 2 && (
           <div className="auth-pane">
             <label className="auth-field">
-              <span>Gênero</span>
+              <span>G�nero</span>
               <div className="auth-chip-row">
                 {(['Feminino', 'Masculino', 'Outros'] as GenderOption[]).map((option) => (
                   <button
@@ -280,9 +280,9 @@ export default function CadastroPage() {
 
             {bmiData && (
               <div className="auth-summary card" style={{ marginTop: '6px' }}>
-                <p className="auth-summary-kicker">Composição corporal</p>
+                <p className="auth-summary-kicker">Composi��o corporal</p>
                 <div className="auth-summary-row"><span>Seu IMC</span><strong>{bmiData.bmi}</strong></div>
-                <div className="auth-summary-row"><span>Classificação</span><strong>{bmiData.category}</strong></div>
+                <div className="auth-summary-row"><span>Classifica��o</span><strong>{bmiData.category}</strong></div>
                 <div className="auth-summary-row"><span>Peso ideal (faixa)</span><strong>{bmiData.idealRange}</strong></div>
                 <p style={{ marginTop: '10px', color: 'rgba(255,255,255,0.72)', fontSize: '0.82rem', lineHeight: 1.35 }}>
                   {bmiData.meaning}
@@ -312,7 +312,7 @@ export default function CadastroPage() {
           <div className="auth-pane">
             <div className="auth-grid2">
               <div className="auth-field">
-                <span>Nível</span>
+                <span>N�vel</span>
                 <div className="auth-chip-row">
                   {FITNESS_LEVEL_OPTIONS.map((l) => (
                     <button key={l} type="button" className={`auth-chip ${fitnessLevel === l ? 'active' : ''}`} onClick={() => setFitnessLevel(l)}>
@@ -340,11 +340,11 @@ export default function CadastroPage() {
           <div className="auth-pane">
             <div className="auth-summary card">
               <p className="auth-summary-kicker">Resumo do cadastro</p>
-              <div className="auth-summary-row"><span>Nome</span><strong>{name || '—'}</strong></div>
-              <div className="auth-summary-row"><span>E-mail</span><strong>{email || '—'}</strong></div>
+              <div className="auth-summary-row"><span>Nome</span><strong>{name || '-'}</strong></div>
+              <div className="auth-summary-row"><span>E-mail</span><strong>{email || '-'}</strong></div>
               <div className="auth-summary-row"><span>Peso</span><strong>{weight}kg</strong></div>
               <div className="auth-summary-row"><span>Altura</span><strong>{height}cm</strong></div>
-              <div className="auth-summary-row"><span>Gênero</span><strong>{gender}</strong></div>
+              <div className="auth-summary-row"><span>G�nero</span><strong>{gender}</strong></div>
               {bmiData && (
                 <>
                   <div className="auth-summary-row"><span>IMC</span><strong>{bmiData.bmi}</strong></div>
@@ -353,8 +353,8 @@ export default function CadastroPage() {
                 </>
               )}
               <div className="auth-summary-row"><span>Objetivo</span><strong>{goal}</strong></div>
-              <div className="auth-summary-row"><span>Nível</span><strong>{fitnessLevel}</strong></div>
-              <div className="auth-summary-row"><span>Frequência</span><strong>{frequency}</strong></div>
+              <div className="auth-summary-row"><span>N�vel</span><strong>{fitnessLevel}</strong></div>
+              <div className="auth-summary-row"><span>Frequ�ncia</span><strong>{frequency}</strong></div>
             </div>
           </div>
         )}
@@ -388,7 +388,7 @@ export default function CadastroPage() {
                   <img src={avatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <button onClick={handleRandomize} style={{ width: '100%', padding: '12px', borderRadius: '14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', color: '#fff', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
-                  <Dices size={16} /> ALEATÓRIO
+                  <Dices size={16} /> ALEAT�RIO
                 </button>
               </div>
             </div>
@@ -416,7 +416,7 @@ export default function CadastroPage() {
         </div>
 
         <div className="auth-links" style={{ marginTop: '14px' }}>
-          <span className="auth-hint">Já tem conta?</span>
+          <span className="auth-hint">J� tem conta?</span>
           <button type="button" className="auth-link" onClick={() => router.push('/login')}>Entrar</button>
         </div>
       </div>

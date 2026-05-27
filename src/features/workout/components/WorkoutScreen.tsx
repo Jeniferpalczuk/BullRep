@@ -138,7 +138,7 @@ export function WorkoutScreen({
         <div className="guide-header">
           <div className="guide-badge-live">
             <div className="dot-live" />
-            <span>Ao Vivo • {formatElapsedTime(elapsed)}</span>
+            <span>Ao Vivo � {formatElapsedTime(elapsed)}</span>
           </div>
         </div>
 
@@ -158,7 +158,7 @@ export function WorkoutScreen({
           ) : (MUSCLE_ICONS[muscleKey]?.startsWith('http') || MUSCLE_ICONS[muscleKey]?.startsWith('/')) ? (
             <img
               src={MUSCLE_ICONS[muscleKey]}
-              alt="Músculo"
+              alt="M�sculo"
               style={{ width: '220px', height: '220px', objectFit: 'contain', filter: 'drop-shadow(0 0 20px rgba(232,0,29,0.2))' }}
             />
           ) : (
@@ -169,7 +169,7 @@ export function WorkoutScreen({
         </motion.div>
 
         <h1 className="guide-main-title">{currentEx.name}</h1>
-        <p className="guide-subtitle">{activeExerciseIndex + 1} de {target.exercises.length} exercícios</p>
+        <p className="guide-subtitle">{activeExerciseIndex + 1} de {target.exercises.length} exerc�cios</p>
         {entry?.exercise.description && (
           <p style={{ maxWidth: '680px', textAlign: 'center', color: 'rgba(255,255,255,0.78)', fontSize: '0.9rem', lineHeight: 1.35, marginTop: '10px', padding: '0 18px' }}>
             {entry.exercise.description}
@@ -182,7 +182,7 @@ export function WorkoutScreen({
             <p style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--red-primary)' }}>{currentEx.weight}<span style={{ fontSize: '0.8rem' }}>kg</span></p>
           </div>
           <div className="guide-stat-card">
-            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase' }}>Repetições</p>
+            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase' }}>Repeti��es</p>
             <p style={{ fontSize: '1.4rem', fontWeight: 900 }}>{currentEx.repsDone}</p>
           </div>
         </div>
@@ -197,7 +197,7 @@ export function WorkoutScreen({
 
         <div className="guide-controls">
           <button className="btn-finish-set" onClick={nextSet}>
-            {currentSet < currentEx.setsDone ? 'Concluir Série' : activeExerciseIndex < target.exercises.length - 1 ? 'Próximo Exercício' : 'Finalizar Treino'}
+            {currentSet < currentEx.setsDone ? 'Concluir S�rie' : activeExerciseIndex < target.exercises.length - 1 ? 'Pr�ximo Exerc�cio' : 'Finalizar Treino'}
           </button>
           <div style={{ display: 'flex', gap: '12px' }}>
             <button
@@ -205,7 +205,7 @@ export function WorkoutScreen({
               style={{ flex: 1, padding: '16px' }}
               onClick={() => setStarted(false)}
             >
-              Visão Geral
+              Vis�o Geral
             </button>
             <button
               className="btn-ghost"
@@ -254,7 +254,7 @@ export function WorkoutScreen({
     <div style={{ padding: '0 20px', position: 'relative' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
         <div style={{ width: '4px', height: '28px', background: 'var(--red-primary)', borderRadius: '2px' }} />
-        <h2 style={{ fontSize: '1.6rem', fontWeight: 900 }}>Resumo da Sessão</h2>
+        <h2 style={{ fontSize: '1.6rem', fontWeight: 900 }}>Resumo da Sess�o</h2>
       </div>
 
       <div className="card-premium" style={{ marginBottom: '32px' }}>
@@ -264,7 +264,7 @@ export function WorkoutScreen({
           </div>
           <div>
             <h3 style={{ fontSize: '1.3rem', fontWeight: 900 }}>{target.trainingType}</h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{target.exercises.length} exercícios planejados</p>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{target.exercises.length} exerc�cios planejados</p>
           </div>
         </div>
 
@@ -275,13 +275,13 @@ export function WorkoutScreen({
           </div>
           <div className="glass-panel" style={{ padding: '16px', borderRadius: '16px' }}>
             <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 800 }}>INTENSIDADE</p>
-            <p style={{ fontSize: '1.1rem', fontWeight: 900, marginTop: '4px', color: '#ffcc00' }}>ALTA 🔥</p>
+            <p style={{ fontSize: '1.1rem', fontWeight: 900, marginTop: '4px', color: '#ffcc00' }}>ALTA ??</p>
           </div>
         </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '40px' }}>
-        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Lista de Exercícios</p>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>Lista de Exerc�cios</p>
         {target.exercises.map((ex) => (
           <div key={ex.id} className="exercise-item-main">
             <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
@@ -289,7 +289,7 @@ export function WorkoutScreen({
             </div>
             <div style={{ flex: 1 }}>
               <p style={{ fontWeight: 800 }}>{ex.name}</p>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{ex.setsDone} séries × {ex.repsDone} reps</p>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{ex.setsDone} s�ries × {ex.repsDone} reps</p>
             </div>
             <span className="badge-red">{ex.weight}kg</span>
           </div>
@@ -303,4 +303,4 @@ export function WorkoutScreen({
   );
 }
 
-// â”€â”€â”€ MAIN APP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// �”€�”€�”€ MAIN APP �”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€

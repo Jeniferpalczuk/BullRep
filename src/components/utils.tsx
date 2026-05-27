@@ -8,7 +8,7 @@ export function getGreeting(): string {
 }
 
 export function getDayOfWeek(): string {
-  const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+  const days = ['Domingo', 'Segunda-feira', 'Tera-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sbado'];
   return days[new Date().getDay()];
 }
 
@@ -45,36 +45,36 @@ export type CatalogExercise = {
 
 const DIFFICULTY_MAP: Record<string, string> = {
   Iniciante: 'Iniciante',
-  Médio: 'Intermediário',
-  Avançado: 'Avançado',
+  Mdio: 'Intermedirio',
+  Avanado: 'Avanado',
 };
 
 const CATEGORY_BY_MUSCLE_ID: Record<string, string> = {
-  biceps: 'Bíceps',
-  triceps: 'Tríceps',
+  biceps: 'Bceps',
+  triceps: 'Trceps',
   chest: 'Peito',
   shoulders: 'Ombro',
-  trapezius: 'Trapézio',
+  trapezius: 'Trapzio',
   back: 'Costas',
-  forearms: 'Antebraço',
-  abs: 'Abdômen',
+  forearms: 'Antebrao',
+  abs: 'Abdmen',
   legs: 'Perna',
   calves: 'Panturrilhas',
-  glutes: 'Glúteo',
+  glutes: 'Glteo',
 };
 
 const TARGET_BY_MUSCLE_ID: Record<string, string> = {
-  biceps: 'Bíceps',
-  triceps: 'Tríceps',
+  biceps: 'Bceps',
+  triceps: 'Trceps',
   chest: 'Peitoral',
   shoulders: 'Ombro',
-  trapezius: 'Trapézio',
+  trapezius: 'Trapzio',
   back: 'Costas',
-  forearms: 'Antebraço',
-  abs: 'Abdômen',
+  forearms: 'Antebrao',
+  abs: 'Abdmen',
   legs: 'Pernas',
   calves: 'Panturrilhas',
-  glutes: 'Glúteos',
+  glutes: 'Glteos',
 };
 
 const EQUIPMENT_LABEL: Record<string, string> = {
@@ -133,12 +133,12 @@ export const MUSCLE_ICONS: Record<string, string> = {
   Peito: IMAGE_BY_MUSCLE_ID.Peito || '💪',
   Costas: IMAGE_BY_MUSCLE_ID.Costas || '💪',
   Perna: IMAGE_BY_MUSCLE_ID.Perna || '🦵',
-  Glúteo: IMAGE_BY_MUSCLE_ID['Glúteo'] || '🍑',
-  Bíceps: IMAGE_BY_MUSCLE_ID['Bíceps'] || '💪',
-  Tríceps: IMAGE_BY_MUSCLE_ID['Tríceps'] || '🏋️',
+  Glteo: IMAGE_BY_MUSCLE_ID['Glteo'] || '🍑',
+  Bceps: IMAGE_BY_MUSCLE_ID['Bceps'] || '💪',
+  Trceps: IMAGE_BY_MUSCLE_ID['Trceps'] || '🏋️',
   Ombro: IMAGE_BY_MUSCLE_ID.Ombro || '🏋️',
-  Abdômen: IMAGE_BY_MUSCLE_ID['Abdômen'] || '🔥',
-  Trapézio: IMAGE_BY_MUSCLE_ID['Trapézio'] || '💪',
-  Antebraço: IMAGE_BY_MUSCLE_ID['Antebraço'] || '💪',
+  Abdmen: IMAGE_BY_MUSCLE_ID['Abdmen'] || '??',
+  Trapzio: IMAGE_BY_MUSCLE_ID['Trapzio'] || '💪',
+  Antebrao: IMAGE_BY_MUSCLE_ID['Antebrao'] || '💪',
   Panturrilhas: IMAGE_BY_MUSCLE_ID.Panturrilhas || '🦵',
 };

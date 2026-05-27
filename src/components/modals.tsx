@@ -16,7 +16,7 @@ export function ExerciseSelectorModal({
   onCancel,
   defaultCategory,
 }: {
-  onSelect: (name: string) => void;
+  onSelect: (names: string[]) => void;
   onCancel: () => void;
   defaultCategory?: string;
 }) {
@@ -24,7 +24,7 @@ export function ExerciseSelectorModal({
   const [selectedCategories, setSelectedCategories] = useState<string[]>(defaultCat ? [defaultCat] : []);
   const [query, setQuery] = useState('');
   const [showCategoryPicker, setShowCategoryPicker] = useState(!defaultCat);
-  const [added, setAdded] = useState<string[]>([]);
+  const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
 
   const allCategories = useMemo(() => Object.keys(EXERCISE_CATALOG), []);
 
@@ -58,9 +58,16 @@ export function ExerciseSelectorModal({
     });
   };
 
-  const selectExercise = (name: string) => {
-    onSelect(name);
-    setAdded((prev) => (prev.includes(name) ? prev : [...prev, name]));
+  const toggleExercise = (name: string) => {
+    setSelectedExercises((prev) =>
+      prev.includes(name) ? prev.filter((item) => item !== name) : [...prev, name]
+    );
+  };
+
+  const launchExercises = () => {
+    if (!selectedExercises.length) return;
+    onSelect(selectedExercises);
+    onCancel();
   };
 
   return (
@@ -72,9 +79,9 @@ export function ExerciseSelectorModal({
         background: 'rgba(0,0,0,0.88)',
         backdropFilter: 'blur(12px)',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '18px',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '18px',
       }}
     >
       <motion.div
@@ -87,11 +94,13 @@ export function ExerciseSelectorModal({
           width: '100%',
           maxWidth: '760px',
           maxHeight: '90vh',
-          overflowY: 'auto',
+          overflow: 'hidden',
           borderRadius: '24px',
           border: '1px solid rgba(255,255,255,0.08)',
           background: 'linear-gradient(180deg, rgba(12,12,12,0.98), rgba(6,6,6,0.95))',
           padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginBottom: '14px', position: 'sticky', top: '-20px', zIndex: 1, background: 'linear-gradient(180deg, rgba(12,12,12,0.98), rgba(12,12,12,0.94))', paddingTop: '2px', paddingBottom: '8px' }}>
@@ -122,11 +131,11 @@ export function ExerciseSelectorModal({
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', flexWrap: 'wrap' }}>
             <div>
               <p style={{ fontSize: '0.72rem', fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-                Músculos selecionados
+                M�sculos selecionados
               </p>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
                 {selectedCategories.length === 0 && (
-                  <span className="badge-gray">Selecione pelo menos 1 músculo</span>
+                  <span className="badge-gray">Selecione pelo menos 1 m�sculo</span>
                 )}
                 {selectedCategories.map((cat) => (
                   <button
@@ -161,7 +170,7 @@ export function ExerciseSelectorModal({
               style={{ padding: '10px 12px', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
             >
               <Plus size={16} />
-              Adicionar músculo
+              Adicionar m�sculo
             </button>
           </div>
 
@@ -200,19 +209,19 @@ export function ExerciseSelectorModal({
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Buscar exercício..."
+              placeholder="Buscar exerc�cio..."
               style={{ width: '100%', background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontWeight: 700 }}
             />
           </div>
         </div>
 
         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '10px' }}>
-          {exerciseList.length} exercícios encontrados
+          {exerciseList.length} exerc�cios encontrados
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflowY: 'auto', paddingRight: '2px' }}>
           {exerciseList.map((ex, idx) => {
-            const isAdded = added.includes(ex.name);
+            const isAdded = selectedExercises.includes(ex.name);
             return (
               <div
                 key={`${ex.name}-${idx}`}
@@ -244,9 +253,9 @@ export function ExerciseSelectorModal({
                   <div style={{ flex: 1 }}>
                     <h3 style={{ fontSize: '1rem', fontWeight: 900, color: '#fff', marginBottom: '5px' }}>{ex.name}</h3>
                     <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 700, marginBottom: '7px' }}>
-                      {ex.target ? <>Músculo: <span style={{ color: '#fff' }}>{ex.target}</span></> : null}
-                      {ex.equipment ? <> • Equip: <span style={{ color: '#fff' }}>{ex.equipment}</span></> : null}
-                      {ex.difficulty ? <> • Nível: <span style={{ color: '#fff' }}>{ex.difficulty}</span></> : null}
+                      {ex.target ? <>M�sculo: <span style={{ color: '#fff' }}>{ex.target}</span></> : null}
+                      {ex.equipment ? <> � Equip: <span style={{ color: '#fff' }}>{ex.equipment}</span></> : null}
+                      {ex.difficulty ? <> � N�vel: <span style={{ color: '#fff' }}>{ex.difficulty}</span></> : null}
                     </p>
                     {ex.description ? (
                       <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.35, marginBottom: '9px' }}>{ex.description}</p>
@@ -254,7 +263,7 @@ export function ExerciseSelectorModal({
 
                     <button
                       type="button"
-                      onClick={() => selectExercise(ex.name)}
+                      onClick={() => toggleExercise(ex.name)}
                       style={{
                         width: '100%',
                         borderRadius: '12px',
@@ -272,7 +281,7 @@ export function ExerciseSelectorModal({
                       }}
                     >
                       {isAdded ? <Check size={15} /> : <Plus size={15} />}
-                      {isAdded ? 'Exercício adicionado' : 'Adicionar exercício'}
+                      {isAdded ? 'Selecionado' : 'Adicionar exerc�cio'}
                     </button>
                   </div>
                 </div>
@@ -282,9 +291,21 @@ export function ExerciseSelectorModal({
 
           {exerciseList.length === 0 && (
             <div className="glass-panel" style={{ borderRadius: '16px', padding: '18px' }}>
-              <p style={{ color: 'var(--text-muted)', fontWeight: 700 }}>Nenhum exercício encontrado para o(s) músculo(s) selecionado(s).</p>
+              <p style={{ color: 'var(--text-muted)', fontWeight: 700 }}>Nenhum exerc�cio encontrado para o(s) m�sculo(s) selecionado(s).</p>
             </div>
           )}
+        </div>
+
+        <div style={{ position: 'sticky', bottom: '-20px', paddingTop: '14px', paddingBottom: '2px', background: 'linear-gradient(180deg, rgba(6,6,6,0), rgba(6,6,6,0.98) 35%)' }}>
+          <button
+            type="button"
+            className="btn-primary"
+            disabled={selectedExercises.length === 0}
+            onClick={launchExercises}
+            style={{ width: '100%', opacity: selectedExercises.length === 0 ? 0.55 : 1 }}
+          >
+            Lan�ar exerc�cios ({selectedExercises.length})
+          </button>
         </div>
       </motion.div>
     </div>
@@ -311,11 +332,11 @@ export function WorkoutSummaryModal({ duration, onDismiss }: { duration: number;
           <CheckCircle2 size={40} color="#fff" />
         </div>
         <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '8px' }}>Treino Finalizado!</h2>
-        <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Parabéns! Você concluiu seus objetivos de hoje.</p>
+        <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Parab�ns! Voc� concluiu seus objetivos de hoje.</p>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' }}>
           <div className="card" style={{ padding: '16px' }}>
-            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase' }}>Duração</p>
+            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase' }}>Dura��o</p>
             <p style={{ fontSize: '1.1rem', fontWeight: 900, color: 'var(--red-primary)', marginTop: '4px' }}>{timeStr}</p>
           </div>
           <div className="card" style={{ padding: '16px' }}>

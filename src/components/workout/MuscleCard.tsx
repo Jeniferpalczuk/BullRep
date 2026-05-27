@@ -20,7 +20,7 @@ export function MuscleCard({
           {muscle.imageUrl ? (
             <Image
               src={muscle.imageUrl}
-              alt={`Ilustração de ${muscle.name}`}
+              alt={`Ilustra��o de ${muscle.name}`}
               fill
               className="object-cover transition-transform duration-300 scale-[1.22] group-hover:scale-[1.28]"
               sizes="(max-width: 1024px) 50vw, 25vw"
@@ -37,7 +37,7 @@ export function MuscleCard({
 
       <div className="border-t border-white/10 bg-zinc-950 px-3 py-2.5">
         <p className="line-clamp-2 text-center text-[0.92rem] font-extrabold text-zinc-100">
-          Exercícios para {muscle.name}
+          Exerc�cios para {muscle.name}
         </p>
       </div>
     </button>

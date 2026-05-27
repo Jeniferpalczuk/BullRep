@@ -11,12 +11,12 @@ export async function GET(req: NextRequest) {
     const token = bearerToken || cookieToken;
 
     if (!token) {
-      return NextResponse.json({ error: 'Token não fornecido.' }, { status: 401 });
+      return NextResponse.json({ error: 'Token n�o fornecido.' }, { status: 401 });
     }
 
     const payload = await verifyToken(token);
     if (!payload) {
-      return NextResponse.json({ error: 'Token inválido ou expirado.' }, { status: 401 });
+      return NextResponse.json({ error: 'Token inv�lido ou expirado.' }, { status: 401 });
     }
 
     const user = await prisma.user.findUnique({
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'Usuário não encontrado.' }, { status: 404 });
+      return NextResponse.json({ error: 'Usu�rio n�o encontrado.' }, { status: 404 });
     }
 
     return NextResponse.json({

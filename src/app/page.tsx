@@ -42,7 +42,7 @@ const AVATAR_STYLES = [
   { id: 'adventurer', label: 'Cartoon' },
   { id: 'notionists', label: 'Realista' },
   { id: 'pixel-art', label: 'Pixel' },
-  { id: 'bottts', label: 'Robô' },
+  { id: 'bottts', label: 'Rob' },
 ] as const;
 
 const AVATAR_SKIN_COLORS = ['f2d3b1', 'd4a373', 'a67c52', '6b4c3a', '3d261e'];
@@ -87,13 +87,13 @@ function parseAvatarUrl(avatarUrl: string | null | undefined) {
 
 
 
-// â”€â”€â”€ SCREEN: HOME â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Screen: Home
 type Tab = 'home' | 'progress' | 'workout' | 'profile' | 'admin';
 
-// Workout (NEW SPA UI) — no rotas, tudo em estado local.
+// Workout (NEW SPA UI) - no rotas, tudo em estado local.
 function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
   type WorkoutView = 'grupos' | 'exercicios' | 'detalhe';
-  type MuscleKey = 'Peito' | 'Costas' | 'Ombro' | 'Bíceps' | 'Tríceps' | 'Perna';
+  type MuscleKey = 'Peito' | 'Costas' | 'Ombro' | 'Bceps' | 'Trceps' | 'Perna';
   type ExerciseLite = { name: string; steps: string[] };
 
   const [view, setView] = useState<WorkoutView>('grupos');
@@ -105,17 +105,17 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
     { key: 'Peito', label: 'Peito' },
     { key: 'Costas', label: 'Costas' },
     { key: 'Ombro', label: 'Ombro' },
-    { key: 'Bíceps', label: 'Bíceps' },
-    { key: 'Tríceps', label: 'Tríceps' },
+    { key: 'Bceps', label: 'Bceps' },
+    { key: 'Trceps', label: 'Trceps' },
     { key: 'Perna', label: 'Perna' },
   ];
 
   const exerciseListByMuscle: Record<MuscleKey, string[]> = {
     Peito: (EXERCISE_CATALOG['Peito'] || []).slice(0, 8).map((e) => e.name),
     Costas: (EXERCISE_CATALOG['Costas'] || []).slice(0, 8).map((e) => e.name),
-    Ombro: ['Desenvolvimento com barra', 'Elevação frontal', 'Remada vertical'],
-    Bíceps: (EXERCISE_CATALOG['Bíceps'] || []).slice(0, 8).map((e) => e.name),
-    Tríceps: (EXERCISE_CATALOG['Tríceps'] || []).slice(0, 8).map((e) => e.name),
+    Ombro: ['Desenvolvimento com barra', 'Elevao frontal', 'Remada vertical'],
+    Bceps: (EXERCISE_CATALOG['Bceps'] || []).slice(0, 8).map((e) => e.name),
+    Trceps: (EXERCISE_CATALOG['Trceps'] || []).slice(0, 8).map((e) => e.name),
     Perna: (EXERCISE_CATALOG['Perna'] || []).slice(0, 8).map((e) => e.name),
   };
 
@@ -126,17 +126,17 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
       'Estenda os cotovelos',
       'Retorne com controle',
     ],
-    'Elevação frontal': [
+    'Elevao frontal': [
       'Pegue os halteres com firmeza',
-      'Eleve à frente até a altura dos ombros',
-      'Evite balanço do tronco',
+      'Eleve  frente at a altura dos ombros',
+      'Evite balano do tronco',
       'Retorne com controle',
     ],
     'Remada vertical': [
       'Segure a barra/corda na frente do corpo',
       'Puxe subindo cotovelos',
       'Pare no ponto de conforto',
-      'Desça controlando',
+      'Desa controlando',
     ],
   };
 
@@ -149,7 +149,7 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
       return [
         'Ajuste postura e pegada',
         'Execute o movimento controlado',
-        'Mantenha a técnica durante todo o range',
+        'Mantenha a tcnica durante todo o range',
         'Finalize e retorne com controle',
       ];
     }
@@ -157,7 +157,7 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
     return [
       'Ajuste postura e pegada',
       'Execute o movimento controlado',
-      'Mantenha a técnica durante todo o range',
+      'Mantenha a tcnica durante todo o range',
       'Finalize e retorne com controle',
     ];
   };
@@ -190,13 +190,13 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
     setTab('home');
   };
 
-  const headerTitle = view === 'grupos' ? 'Treino de Hoje' : view === 'exercicios' ? muscle : selectedExercise?.name ?? 'Exercício';
+  const headerTitle = view === 'grupos' ? 'Treino de Hoje' : view === 'exercicios' ? muscle : selectedExercise?.name ?? 'Exerccio';
   const headerSubtitle =
     view === 'grupos'
       ? 'Escolha um grupo muscular'
       : view === 'exercicios'
-        ? 'Selecione um exercício'
-        : 'Execução e checklist';
+        ? 'Selecione um exerccio'
+        : 'Execuo e checklist';
 
   const selectedMediaUrl = selectedExercise ? getCatalogEntryByName(selectedExercise.name)?.exercise.gif : null;
 
@@ -249,11 +249,11 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
                     overflow: 'hidden',
                   }}
                 >
-                  {/* ícones removidos */}
+                  {/* cones removidos */}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                   <span style={{ fontWeight: 950, fontSize: '1rem' }}>{g.label}</span>
-                  <span style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 900 }}>›</span>
+                  <span style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 900 }}></span>
                 </div>
               </button>
             ))}
@@ -269,11 +269,11 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
                 <div>
                   <p style={{ fontWeight: 950, color: '#fff' }}>{name}</p>
                   <p style={{ color: 'rgba(255,255,255,0.62)', fontWeight: 700, fontSize: '0.82rem', marginTop: '6px' }}>
-                    {done[name] ? '✅ Concluído hoje' : 'Treino mini'}
+                    {done[name] ? '? Concludo hoje' : 'Treino mini'}
                   </p>
                 </div>
                 <button className="btn-primary" type="button" onClick={() => openDetail(name)} style={{ padding: '10px 14px', borderRadius: '16px', fontSize: '0.86rem' }}>
-                  Ver execução
+                  Ver execuo
                 </button>
               </div>
             ))}
@@ -296,7 +296,7 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
               <div>
                 <p style={{ fontWeight: 1000, fontSize: '1.15rem' }}>{selectedExercise.name}</p>
                 <p style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 700, fontSize: '0.86rem', marginTop: '6px' }}>
-                  {selectedMediaUrl ? 'Imagem de execução' : 'Área de vídeo (mock)'}
+                  {selectedMediaUrl ? 'Imagem de execuo' : 'Área de vdeo (mock)'}
                 </p>
               </div>
               <div style={{ width: '48px', height: '48px', borderRadius: '18px', background: 'rgba(232,0,29,0.85)', display: 'grid', placeItems: 'center', boxShadow: '0 0 26px rgba(232,0,29,0.20)' }}>
@@ -350,7 +350,7 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
           </div>
 
           <button className="btn-primary" type="button" onClick={markDone} style={{ width: '100%', padding: '18px 18px', borderRadius: '18px' }}>
-            {done[selectedExercise.name] ? 'Feito ✅' : 'Marcar como feito'}
+            {done[selectedExercise.name] ? 'Feito ?' : 'Marcar como feito'}
           </button>
         </div>
       )}
@@ -474,8 +474,11 @@ export default function App() {
     });
     if (error) {
       setToast({ type: 'error', message: `Erro ao salvar treino: ${error}` });
+      return false;
     } else {
       await fetchData();
+      setToast({ type: 'success', message: 'Treino salvo com sucesso.' });
+      return true;
     }
   };
 
@@ -502,19 +505,19 @@ export default function App() {
 
   const handleSaveProfile = async () => {
     if (!profile) {
-      setToast({ type: 'error', message: 'Não foi possível carregar seu perfil. Verifique a conexão com o Neon e a tabela users.' });
+      setToast({ type: 'error', message: 'No foi possvel carregar seu perfil. Verifique a conexo com o Neon e a tabela users.' });
       return;
     }
     if (pName.trim().length < 2) {
-      setToast({ type: 'error', message: 'Digite um nome válido.' });
+      setToast({ type: 'error', message: 'Digite um nome vlido.' });
       return;
     }
     if (!Number.isFinite(pWeight) || pWeight < 30 || pWeight > 300) {
-      setToast({ type: 'error', message: 'Digite um peso válido (30–300kg).' });
+      setToast({ type: 'error', message: 'Digite um peso vlido (30-300kg).' });
       return;
     }
     if (!Number.isFinite(pHeight) || pHeight < 100 || pHeight > 230) {
-      setToast({ type: 'error', message: 'Digite uma altura válida (100–230cm).' });
+      setToast({ type: 'error', message: 'Digite uma altura vlida (100-230cm).' });
       return;
     }
     setSavingProfile(true);
@@ -577,7 +580,7 @@ export default function App() {
 
   const navItems: { id: Tab; label: string; icon: (a: boolean) => React.ReactElement }[] = [
     { id: 'home', label: 'Home', icon: (a) => <IconHome active={a} /> },
-    { id: 'progress', label: 'Evolução', icon: (a) => <IconTrend active={a} /> },
+    { id: 'progress', label: 'Evoluo', icon: (a) => <IconTrend active={a} /> },
     ...(isAdmin ? [{ id: 'workout' as Tab, label: 'Treino', icon: (a: boolean) => <IconDumbbell active={a} /> }] : []),
     { id: 'profile', label: 'Perfil', icon: (a) => <IconUser active={a} /> },
     ...(isAdmin ? [{
@@ -598,7 +601,7 @@ export default function App() {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="card-premium" style={{ padding: '18px 20px' }}>
-          <p style={{ fontWeight: 900, color: '#fff' }}>Carregando sessão…</p>
+          <p style={{ fontWeight: 900, color: '#fff' }}>Carregando sesso…</p>
         </div>
       </div>
     );
@@ -649,7 +652,7 @@ export default function App() {
                 <p style={{ fontSize: '0.9rem', fontWeight: 800, whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{user.name || 'Atleta BullRep'}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
                   <div style={{ width: '4px', height: '4px', background: 'var(--red-primary)', borderRadius: '50%' }} />
-                  <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Nível {user.level || 1}</p>
+                  <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Nvel {user.level || 1}</p>
                 </div>
               </div>
             </div>
@@ -690,13 +693,13 @@ export default function App() {
                   </div>
                   <div>
                     <h2 style={{ fontSize: '1.5rem', fontWeight: 950, lineHeight: 1.1 }}>Painel Admin</h2>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 700, marginTop: '4px' }}>Gerenciamento e visão geral</p>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 700, marginTop: '4px' }}>Gerenciamento e viso geral</p>
                   </div>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '18px' }}>
                   <div className="glass-panel" style={{ padding: '16px', borderRadius: '18px', borderColor: 'rgba(232,0,29,0.15)' }}>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Sessões registradas</p>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Sesses registradas</p>
                     <p style={{ fontSize: '2rem', fontWeight: 950, color: '#fff', marginTop: '4px' }}>{sessions.length}</p>
                   </div>
                   <div className="glass-panel" style={{ padding: '16px', borderRadius: '18px', borderColor: 'rgba(232,0,29,0.15)' }}>
@@ -705,35 +708,35 @@ export default function App() {
                   </div>
                   <div className="glass-panel" style={{ padding: '16px', borderRadius: '18px', borderColor: 'rgba(232,0,29,0.15)' }}>
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Tipo de conta</p>
-                    <p style={{ fontSize: '1rem', fontWeight: 950, color: 'var(--red-primary)', marginTop: '8px' }}>🔑 Administrador</p>
+                    <p style={{ fontSize: '1rem', fontWeight: 950, color: 'var(--red-primary)', marginTop: '8px' }}>?? Administrador</p>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="card-premium" style={{ padding: '22px', marginBottom: '18px' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 950, marginBottom: '14px' }}>A?es do Admin</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 950, marginBottom: '14px' }}>Aes do Admin</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '16px', lineHeight: 1.6 }}>
-                Usuários públicos veem <strong style={{ color: '#fff' }}>3 abas</strong>: Home, Evolução e Perfil.<br />
-                A aba <strong style={{ color: 'var(--red-primary)' }}>Treino</strong> e o <strong style={{ color: 'var(--red-primary)' }}>Painel Admin</strong> são exclusivos do administrador.
+                Usurios pblicos veem <strong style={{ color: '#fff' }}>3 abas</strong>: Home, Evoluo e Perfil.<br />
+                A aba <strong style={{ color: 'var(--red-primary)' }}>Treino</strong> e o <strong style={{ color: 'var(--red-primary)' }}>Painel Admin</strong> so exclusivos do administrador.
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                {['Home', 'Evolução', 'Perfil'].map((t) => (
-                  <span key={t} className="badge-gray" style={{ fontSize: '0.82rem', padding: '8px 14px' }}>✅ {t}</span>
+                {['Home', 'Evoluo', 'Perfil'].map((t) => (
+                  <span key={t} className="badge-gray" style={{ fontSize: '0.82rem', padding: '8px 14px' }}>? {t}</span>
                 ))}
                 {['Treino', 'Admin'].map((t) => (
-                  <span key={t} style={{ fontSize: '0.82rem', padding: '8px 14px', borderRadius: '12px', background: 'rgba(232,0,29,0.12)', border: '1px solid rgba(232,0,29,0.3)', color: 'var(--red-primary)', fontWeight: 800 }}>🔒 {t}</span>
+                  <span key={t} style={{ fontSize: '0.82rem', padding: '8px 14px', borderRadius: '12px', background: 'rgba(232,0,29,0.12)', border: '1px solid rgba(232,0,29,0.3)', color: 'var(--red-primary)', fontWeight: 800 }}>?? {t}</span>
                 ))}
               </div>
             </div>
 
             <div className="card-premium" style={{ padding: '22px' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 950, marginBottom: '14px' }}>⚙️ Ações do Admin</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 950, marginBottom: '14px' }}>?? Aes do Admin</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {[
-                  { label: 'Gerenciar Exerc?cios', desc: 'Adicionar/remover exerc?cios do cat?logo', icon: '?' },
-                  { label: 'Ver Todos os Usu?rios', desc: 'Listar usu?rios cadastrados', icon: '?' },
-                  { label: 'Configura??es do App', desc: 'Ajustar par?metros globais', icon: '?' },
+                  { label: 'Gerenciar Exerccios', desc: 'Adicionar/remover exerc?cios do cat?logo', icon: '?' },
+                  { label: 'Ver Todos os Usurios', desc: 'Listar usu?rios cadastrados', icon: '?' },
+                  { label: 'Configuraes do App', desc: 'Ajustar parmetros globais', icon: '?' },
                 ].map((action) => (
                   <div key={action.label} className="glass-panel" style={{ padding: '14px 16px', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', cursor: 'pointer' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -743,7 +746,7 @@ export default function App() {
                         <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', fontWeight: 600, marginTop: '2px' }}>{action.desc}</p>
                       </div>
                     </div>
-                    <span style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 900, fontSize: '1.1rem' }}>›</span>
+                    <span style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 900, fontSize: '1.1rem' }}></span>
                   </div>
                 ))}
               </div>
@@ -804,10 +807,10 @@ export default function App() {
                   </p>
                   <h2 style={{ fontSize: '2rem', fontWeight: 950, marginTop: '10px', lineHeight: 1.05 }}>{pName || displayName}</h2>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '10px', maxWidth: '42ch' }}>
-                    Aqui você vê seu progresso e mantém seus dados de treino sempre atualizados.
+                    Aqui voc v seu progresso e mantm seus dados de treino sempre atualizados.
                   </p>
                   <div style={{ display: 'flex', gap: '8px', marginTop: '14px', flexWrap: 'wrap' }}>
-                    <span className="badge-red" style={{ fontSize: '0.75rem', fontWeight: 800 }}>NÍVEL {user?.level ?? profile?.app_level ?? 1}</span>
+                    <span className="badge-red" style={{ fontSize: '0.75rem', fontWeight: 800 }}>NVEL {user?.level ?? profile?.app_level ?? 1}</span>
                     <span className="badge-gray" style={{ fontSize: '0.75rem' }}>{user?.xp ?? profile?.xp ?? 0} XP</span>
                     <span className="badge-gray" style={{ fontSize: '0.75rem' }}>Avatar ativo</span>
                   </div>
@@ -820,26 +823,26 @@ export default function App() {
               <div className="profile-summary-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px' }}>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Peso</p>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{(profile?.weight ?? user?.weight) ? `${profile?.weight ?? user?.weight}kg` : '—'}</p>
+                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{(profile?.weight ?? user?.weight) ? `${profile?.weight ?? user?.weight}kg` : '-'}</p>
                 </div>
                 <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px' }}>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Altura</p>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{(profile?.height ?? user?.height) ? `${profile?.height ?? user?.height}cm` : '—'}</p>
+                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{(profile?.height ?? user?.height) ? `${profile?.height ?? user?.height}cm` : '-'}</p>
                 </div>
                 <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px' }}>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Objetivo</p>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{profile?.goal ?? user?.goal ?? '—'}</p>
+                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{profile?.goal ?? user?.goal ?? '-'}</p>
                 </div>
                 <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px' }}>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Frequência</p>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{profile?.frequency ?? user?.frequency ?? '—'}</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Frequncia</p>
+                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{profile?.frequency ?? user?.frequency ?? '-'}</p>
                 </div>
               </div>
             </div>
 
             <div className="card" style={{ padding: '20px', marginTop: '18px', textAlign: 'left' }}>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Configura??es</p>
-              {['Conta', 'Notifica??es', 'Privacidade', 'Sobre o App'].map((item) => (
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Configuraes</p>
+              {['Conta', 'Notificaes', 'Privacidade', 'Sobre o App'].map((item) => (
                 <div key={item} style={{
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   padding: '16px 0', borderBottom: '1px solid var(--border)',
@@ -870,9 +873,9 @@ export default function App() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {!profile && (
                   <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px', borderColor: 'rgba(232,0,29,0.22)', background: 'rgba(232,0,29,0.06)' }}>
-                    <p style={{ color: '#fff', fontWeight: 900, fontSize: '0.9rem' }}>Perfil não carregado</p>
+                    <p style={{ color: '#fff', fontWeight: 900, fontSize: '0.9rem' }}>Perfil no carregado</p>
                     <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.82rem', marginTop: '6px' }}>
-                      Verifique se a conexão com o Neon está configurada em `DATABASE_URL` e se a tabela `users` existe.
+                      Verifique se a conexo com o Neon est configurada em `DATABASE_URL` e se a tabela `users` existe.
                     </p>
                   </div>
                 )}
@@ -917,7 +920,7 @@ export default function App() {
                     </div>
                   </label>
                   <label className="auth-field">
-                    <span>Nível</span>
+                    <span>Nvel</span>
                     <div className="auth-input">
                       <select value={pFitness} onChange={(e) => setPFitness(e.target.value as BullrepFitnessLevel)} style={{ width: '100%', background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontWeight: 800 }}>
                         {FITNESS_LEVEL_OPTIONS.map((option) => (
@@ -929,7 +932,7 @@ export default function App() {
                 </div>
 
                 <label className="auth-field">
-                  <span>Frequ?ncia semanal</span>
+                  <span>Frequncia semanal</span>
                   <div className="auth-input">
                     <select value={pFrequency} onChange={(e) => setPFrequency(e.target.value as BullrepFrequency)} style={{ width: '100%', background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontWeight: 800 }}>
                       {FREQUENCY_OPTIONS.map((option) => (
@@ -940,7 +943,7 @@ export default function App() {
                 </label>
 
                 <button className="btn-primary" type="button" onClick={handleSaveProfile} disabled={savingProfile || !profile || !pName.trim()} style={{ width: '100%', marginTop: '6px' }}>
-                  {savingProfile ? 'SALVANDO...' : 'Salvar alterações'}
+                  {savingProfile ? 'SALVANDO...' : 'Salvar alteraes'}
                 </button>
               </div>
             </div>

@@ -61,50 +61,62 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const user = await getAuthenticatedUser(req);
-  if (!user) {
-    return NextResponse.json({ error: 'Nao autenticado.' }, { status: 401 });
+  try {
+    const user = await getAuthenticatedUser(req);
+    if (!user) {
+      return NextResponse.json({ error: 'Nao autenticado.' }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const exercises = Array.isArray(body.exercises) ? body.exercises : [];
+
+    if (exercises.length === 0) {
+      return NextResponse.json({ error: 'Adicione pelo menos um exercicio.' }, { status: 400 });
+    }
+
+    const session = await prisma.trainingSession.create({
+      data: {
+        userId: user.id,
+        trainingType: body.trainingType || 'Livre',
+        notes: body.notes || null,
+        durationMin: body.durationMin == null ? null : Number(body.durationMin),
+        date: new Date(),
+        exercises: {
+          create: exercises.map(
+            (
+              exercise: {
+                exerciseId?: string | null;
+                name: string;
+                setsDone: number;
+                repsDone: number;
+                weight: number;
+                orderIndex?: number;
+              },
+              index: number
+            ) => ({
+              exerciseId: exercise.exerciseId ?? null,
+              name: exercise.name,
+              setsDone: Number(exercise.setsDone),
+              repsDone: Number(exercise.repsDone),
+              weight: Number(exercise.weight),
+              orderIndex: exercise.orderIndex ?? index,
+            })
+          ),
+        },
+      },
+      include: {
+        exercises: {
+          orderBy: { orderIndex: 'asc' },
+        },
+      },
+    });
+
+    return NextResponse.json({ data: mapSession(session) });
+  } catch (err) {
+    console.error('[API] sessions create error:', err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Erro interno ao salvar treino.' },
+      { status: 500 }
+    );
   }
-
-  const body = await req.json();
-  const exercises = Array.isArray(body.exercises) ? body.exercises : [];
-
-  const session = await prisma.trainingSession.create({
-    data: {
-      userId: user.id,
-      trainingType: body.trainingType || 'Livre',
-      notes: body.notes || null,
-      durationMin: body.durationMin == null ? null : Number(body.durationMin),
-      date: new Date(),
-      exercises: {
-        create: exercises.map(
-          (
-            exercise: {
-              exerciseId?: string | null;
-              name: string;
-              setsDone: number;
-              repsDone: number;
-              weight: number;
-              orderIndex?: number;
-            },
-            index: number
-          ) => ({
-            exerciseId: exercise.exerciseId ?? null,
-            name: exercise.name,
-            setsDone: Number(exercise.setsDone),
-            repsDone: Number(exercise.repsDone),
-            weight: Number(exercise.weight),
-            orderIndex: exercise.orderIndex ?? index,
-          })
-        ),
-      },
-    },
-    include: {
-      exercises: {
-        orderBy: { orderIndex: 'asc' },
-      },
-    },
-  });
-
-  return NextResponse.json({ data: mapSession(session) });
 }

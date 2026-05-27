@@ -32,17 +32,17 @@ export type ExerciseItem = {
 };
 
 export const MUSCLE_GROUPS: MuscleGroup[] = [
-  { id: 'biceps', name: 'B?ceps', imageUrl: 'https://images.pexels.com/photos/136405/pexels-photo-136405.jpeg?auto=compress&cs=tinysrgb&w=800' },
-  { id: 'triceps', name: 'Tr?ceps', imageUrl: 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { id: 'biceps', name: 'Bíceps', imageUrl: 'https://images.pexels.com/photos/136405/pexels-photo-136405.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { id: 'triceps', name: 'Tríceps', imageUrl: 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=800' },
   { id: 'chest', name: 'Peito', imageUrl: 'https://images.pexels.com/photos/1229356/pexels-photo-1229356.jpeg?auto=compress&cs=tinysrgb&w=800' },
   { id: 'shoulders', name: 'Ombro', imageUrl: 'https://images.pexels.com/photos/1552106/pexels-photo-1552106.jpeg?auto=compress&cs=tinysrgb&w=800' },
-  { id: 'trapezius', name: 'Trap?zio', imageUrl: 'https://images.pexels.com/photos/1552249/pexels-photo-1552249.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { id: 'trapezius', name: 'Trapézio', imageUrl: 'https://images.pexels.com/photos/1552249/pexels-photo-1552249.jpeg?auto=compress&cs=tinysrgb&w=800' },
   { id: 'back', name: 'Costas', imageUrl: 'https://images.pexels.com/photos/2261485/pexels-photo-2261485.jpeg?auto=compress&cs=tinysrgb&w=800' },
-  { id: 'forearms', name: 'Antebra?o', imageUrl: 'https://images.pexels.com/photos/791763/pexels-photo-791763.jpeg?auto=compress&cs=tinysrgb&w=800' },
-  { id: 'abs', name: 'Abd?men', imageUrl: 'https://images.pexels.com/photos/4720260/pexels-photo-4720260.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { id: 'forearms', name: 'Antebraço', imageUrl: 'https://images.pexels.com/photos/791763/pexels-photo-791763.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { id: 'abs', name: 'Abdômen', imageUrl: 'https://images.pexels.com/photos/4720260/pexels-photo-4720260.jpeg?auto=compress&cs=tinysrgb&w=800' },
   { id: 'legs', name: 'Pernas', imageUrl: 'https://images.pexels.com/photos/1462364/pexels-photo-1462364.jpeg?auto=compress&cs=tinysrgb&w=800' },
   { id: 'calves', name: 'Panturrilhas', imageUrl: 'https://images.pexels.com/photos/7674497/pexels-photo-7674497.jpeg?auto=compress&cs=tinysrgb&w=800' },
-  { id: 'glutes', name: 'Gl?teos', imageUrl: 'https://images.pexels.com/photos/3076509/pexels-photo-3076509.jpeg?auto=compress&cs=tinysrgb&w=800' },
+  { id: 'glutes', name: 'Glúteos', imageUrl: 'https://images.pexels.com/photos/3076509/pexels-photo-3076509.jpeg?auto=compress&cs=tinysrgb&w=800' },
 ];
 
 const by = (id: MuscleGroup['id']) => MUSCLE_GROUPS.find((m) => m.id === id)?.name || '';
@@ -78,19 +78,19 @@ const EXERCISE_NAMES_BY_GROUP: Record<MuscleGroup['id'], string[]> = {
     'Rosca zottman', 'Rosca preacher',
   ],
   triceps: [
-    'Tr?ceps pulley barra reta', 'Tr?ceps pulley corda', 'Tr?ceps franc?s', 'Tr?ceps testa', 'Supino fechado',
-    'Paralelas', 'Coice de tr?ceps', 'Tr?ceps unilateral no cross', 'Tr?ceps banco',
-    'Extens?o acima da cabe?a', 'Mergulho entre bancos', 'Flex?o diamante',
+    'Tríceps pulley barra reta', 'Tríceps pulley corda', 'Tríceps francês', 'Tríceps testa', 'Supino fechado',
+    'Paralelas', 'Coice de tríceps', 'Tríceps unilateral no cross', 'Tríceps banco',
+    'Extensão acima da cabe?a', 'Mergulho entre bancos', 'Flexão diamante',
   ],
   chest: [
     'Supino reto', 'Supino inclinado', 'Supino declinado', 'Crucifixo reto', 'Crucifixo inclinado',
-    'Crucifixo no cross', 'Peck deck', 'Flex?o de bra?o', 'Flex?o inclinada', 'Flex?o declinada',
-    'Crossover polia alta', 'Crossover polia baixa', 'Pullover', 'Chest press m?quina',
+    'Crucifixo no cross', 'Peck deck', 'Flexão de braço', 'Flexão inclinada', 'Flexão declinada',
+    'Crossover polia alta', 'Crossover polia baixa', 'Pullover', 'Chest press máquina',
   ],
   shoulders: [
-    'Desenvolvimento militar', 'Desenvolvimento halter', 'Eleva??o lateral', 'Eleva??o frontal',
+    'Desenvolvimento militar', 'Desenvolvimento halter', 'Elevação lateral', 'Elevação frontal',
     'Desenvolvimento arnold', 'Remada alta', 'Crucifixo inverso', 'Face pull',
-    'Eleva??o lateral no cabo', 'Desenvolvimento m?quina', 'Handstand push-up',
+    'Elevação lateral no cabo', 'Desenvolvimento máquina', 'Handstand push-up',
     'Encolhimento com halteres frontal',
   ],
   trapezius: [
@@ -100,31 +100,31 @@ const EXERCISE_NAMES_BY_GROUP: Record<MuscleGroup['id'], string[]> = {
   back: [
     'Puxada frente', 'Puxada supinada', 'Barra fixa', 'Remada curvada', 'Remada cavalinho',
     'Remada unilateral', 'Remada baixa', 'Pulldown', 'Serrote', 'Levantamento terra',
-    'Rack pull', 'Pullover no cabo', 'Remada T-bar', 'Remada m?quina', 'Pull up pronado', 'Chin up',
+    'Rack pull', 'Pullover no cabo', 'Remada T-bar', 'Remada máquina', 'Pull up pronado', 'Chin up',
   ],
   forearms: [
     'Rosca punho', 'Rosca punho inversa', 'Farmer walk', 'Dead hang', 'Rosca martelo',
-    'Hand gripper', 'Wrist roller', 'Flex?o dos dedos', 'Extens?o dos dedos',
+    'Hand gripper', 'Wrist roller', 'Flexão dos dedos', 'Extensão dos dedos',
     'Pegada na barra fixa', 'Reverse curl',
   ],
   abs: [
-    'Abdominal tradicional', 'Crunch', 'Infra', 'Eleva??o de pernas', 'Prancha',
+    'Abdominal tradicional', 'Crunch', 'Infra', 'Elevação de pernas', 'Prancha',
     'Prancha lateral', 'Ab wheel', 'Russian twist', 'Mountain climber', 'Bicicleta no solo',
     'Sit-up', 'Abdominal no cabo', 'Hollow body hold', 'Toes to bar', 'Vacuum abdominal',
   ],
   legs: [
     'Agachamento livre', 'Agachamento frontal', 'Leg press', 'Cadeira extensora', 'Cadeira flexora',
     'Stiff', 'Terra romeno', 'Afundo', 'Passada', 'Bulgarian squat', 'Hack squat', 'Sissy squat',
-    'Avan?o', 'Good morning', 'Step up', 'Agachamento sum?',
+    'Avanço', 'Good morning', 'Step up', 'Agachamento sumô',
   ],
   calves: [
-    'Panturrilha em p?', 'Panturrilha sentado', 'Panturrilha no leg press', 'Panturrilha unilateral',
-    'Eleva??o na escada', 'Donkey calf raise', 'Saltos pliom?tricos', 'Pular corda',
+    'Panturrilha em pé', 'Panturrilha sentado', 'Panturrilha no leg press', 'Panturrilha unilateral',
+    'Elevação na escada', 'Donkey calf raise', 'Saltos pliométricos', 'Pular corda',
   ],
   glutes: [
-    'Eleva??o p?lvica', 'Hip thrust', 'Coice no cabo', 'Glute bridge', 'Agachamento sum?', 'Stiff',
+    'Elevação pélvica', 'Hip thrust', 'Coice no cabo', 'Glute bridge', 'Agachamento sumô', 'Stiff',
     'Afundo', 'Passada', 'Cadeira abdutora', 'Bulgarian squat', 'Step up', 'Terra romeno',
-    'Kickback m?quina', 'Frog pump', 'Agachamento b?lgaro',
+    'Kickback máquina', 'Frog pump', 'Agachamento búlgaro',
   ],
 };
 const inferEquipment = (name: string): Equipment => {
@@ -134,7 +134,7 @@ const inferEquipment = (name: string): Equipment => {
     lower.includes('smith') ||
     lower.includes('cabo') ||
     lower.includes('cross') ||
-    lower.includes('m?quina') ||
+    lower.includes('máquina') ||
     lower.includes('maquina') ||
     lower.includes('leg press') ||
     lower.includes('pulley') ||
@@ -162,11 +162,11 @@ export const EXERCISES: ExerciseItem[] = Object.entries(EXERCISE_NAMES_BY_GROUP)
         name,
         muscleId as MuscleGroup['id'],
         inferEquipment(name),
-        'M?dio',
+        'Médio',
         undefined,
         undefined,
         undefined,
-        ['Ajuste postura e carga.', 'Execute com controle.', 'Mantenha a t?cnica.', 'Finalize com seguran?a.']
+        ['Ajuste postura e carga.', 'Execute com controle.', 'Mantenha a técnica.', 'Finalize com segurança.']
       )
     )
 );

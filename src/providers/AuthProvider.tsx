@@ -84,7 +84,7 @@ const normalizeGoal = (value: string | null): DbProfile['goal'] =>
   value === 'Ganhar massa' || value === 'Emagrecer' || value === 'Manter peso' ? value : null;
 
 const normalizeFitnessLevel = (value: string | null): DbProfile['fitness_level'] =>
-  value === 'Iniciante' || value === 'Intermediário' || value === 'Avançado' ? value : null;
+  value === 'Iniciante' || value === 'Intermedi�rio' || value === 'Avan�ado' ? value : null;
 
 const normalizeFrequency = (value: string | null): DbProfile['frequency'] =>
   value === '2x' || value === '3x' || value === '4x' || value === '5x+' ? value : null;

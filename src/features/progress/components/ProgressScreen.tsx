@@ -90,7 +90,7 @@ export function ProgressScreen({
     start.setHours(0, 0, 0, 0);
     start.setDate(today.getDate() - mondayOffset);
 
-    const labels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+    const labels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'S�b', 'Dom'];
     return Array.from({ length: 7 }).map((_, i) => {
       const d = new Date(start);
       d.setDate(start.getDate() + i);
@@ -108,17 +108,17 @@ export function ProgressScreen({
   const xpValue = user?.xp || 0;
   const xpInLevel = ((xpValue % xpTarget) + xpTarget) % xpTarget;
   const xpPct = Math.min(100, Math.round((xpInLevel / xpTarget) * 100));
-  const levelLabel = level <= 1 ? 'Iniciante I' : level === 2 ? 'Iniciante II' : `Nível ${level}`;
+  const levelLabel = level <= 1 ? 'Iniciante I' : level === 2 ? 'Iniciante II' : `N�vel ${level}`;
 
 
 
-  // Radar (Equilíbrio muscular)
+  // Radar (Equil�brio muscular)
   const radarGroups: Array<{ key: string; label: string; test: RegExp }> = [
     { key: 'Peito', label: 'Peito', test: /peito/i },
     { key: 'Costas', label: 'Costas', test: /costas/i },
     { key: 'Pernas', label: 'Pernas', test: /perna|pernas/i },
     { key: 'Ombro', label: 'Ombro', test: /ombro/i },
-    { key: 'Bíceps', label: 'Bíceps', test: /bíceps|biceps/i },
+    { key: 'B�ceps', label: 'B�ceps', test: /b�ceps|biceps/i },
   ];
   const radarCount = radarGroups.reduce<Record<string, number>>((acc, g) => {
     acc[g.key] = 0;
@@ -141,8 +141,8 @@ export function ProgressScreen({
     <div className="progress-dashboard">
       <header className="dash-top">
         <div>
-          <h1 className="dash-greeting">Olá, {name}</h1>
-          <p className="dash-subtitle">Seu progresso está acima da média essa semana ✨</p>
+          <h1 className="dash-greeting">Ol�, {name}</h1>
+          <p className="dash-subtitle">Seu progresso est� acima da m�dia essa semana ✨</p>
         </div>
       </header>
 
@@ -155,7 +155,7 @@ export function ProgressScreen({
               <div>
                 <div className="dash-hero-h2">{weekCount} treinos essa semana</div>
                 <div className="dash-hero-sub">
-                  {weekDelta >= 0 ? `+${weekDelta}` : weekDelta} comparado à semana passada
+                  {weekDelta >= 0 ? `+${weekDelta}` : weekDelta} comparado � semana passada
                 </div>
               </div>
             </div>
@@ -163,7 +163,7 @@ export function ProgressScreen({
             <div className="dash-hero-stats">
               <div className="dash-pill">
                 <TrendingUp size={14} style={{ color: 'var(--green)' }} />
-                <span>Evolução</span>
+                <span>Evolu��o</span>
                 <strong>+{Math.max(0, evolutionPct)}%</strong>
               </div>
               <div className="dash-pill">
@@ -173,7 +173,7 @@ export function ProgressScreen({
               </div>
               <div className="dash-pill">
                 <Flame size={14} style={{ color: 'var(--orange)' }} />
-                <span>Sequência</span>
+                <span>Sequ�ncia</span>
                 <strong>{streak}d</strong>
               </div>
             </div>
@@ -193,7 +193,7 @@ export function ProgressScreen({
           <div className="dash-insights">
             <div className="dash-insight">
               <Flame size={16} style={{ color: 'var(--orange)' }} />
-              <span>Seu melhor treino foi {bestDaysAgo === null ? '—' : `há ${bestDaysAgo} dias`}</span>
+              <span>Seu melhor treino foi {bestDaysAgo === null ? '-' : `h� ${bestDaysAgo} dias`}</span>
             </div>
             <div className="dash-insight">
               <TrendingUp size={16} style={{ color: 'var(--green)' }} />
@@ -201,7 +201,7 @@ export function ProgressScreen({
             </div>
             <div className="dash-insight">
               <AlertTriangle size={16} style={{ color: '#ffcc00' }} />
-              <span>Você não treina pernas {legsDaysAgo === null ? 'há algum tempo' : `há ${legsDaysAgo} dias`}</span>
+              <span>Voc� n�o treina pernas {legsDaysAgo === null ? 'h� algum tempo' : `h� ${legsDaysAgo} dias`}</span>
             </div>
           </div>
 
@@ -219,7 +219,7 @@ export function ProgressScreen({
       <motion.div whileHover={{ y: -2 }} className="card-premium dash-line">
         <div className="dash-card-head" style={{ marginBottom: 10 }}>
           <h3>Seu progresso</h3>
-          <span>Evolução dos últimos 10 treinos</span>
+          <span>Evolu��o dos �ltimos 10 treinos</span>
         </div>
 
         <div style={{ width: '100%', height: 260 }}>
@@ -252,7 +252,7 @@ export function ProgressScreen({
       <div className="dash-grid-bottom">
         <motion.div whileHover={{ y: -2 }} className="card-premium dash-radar">
           <div className="dash-card-head" style={{ marginBottom: 12 }}>
-            <h3>Equilíbrio muscular</h3>
+            <h3>Equil�brio muscular</h3>
             <span>Grupos musculares</span>
           </div>
 
@@ -260,11 +260,11 @@ export function ProgressScreen({
             <div className="dash-radar-insights">
               <div className="dash-insight">
                 <AlertTriangle size={16} style={{ color: '#ffcc00' }} />
-                <span>{legsBelow ? 'Pernas estão abaixo da média' : 'Pernas estão em bom ritmo'}</span>
+                <span>{legsBelow ? 'Pernas est�o abaixo da m�dia' : 'Pernas est�o em bom ritmo'}</span>
               </div>
               <div className="dash-insight">
                 <Dumbbell size={16} style={{ color: 'var(--red-primary)' }} />
-                <span><strong>{strongest}</strong> é seu grupo mais forte</span>
+                <span><strong>{strongest}</strong> � seu grupo mais forte</span>
               </div>
             </div>
 
@@ -290,7 +290,7 @@ export function ProgressScreen({
             <div className="dash-insights">
               <div className="dash-insight">
                 <Flame size={16} style={{ color: 'var(--orange)' }} />
-                <span>Você treinou mais que <strong>72%</strong> dos usuários</span>
+                <span>Voc� treinou mais que <strong>72%</strong> dos usu�rios</span>
               </div>
               <div className="dash-insight">
                 <TrendingUp size={16} style={{ color: 'var(--green)' }} />
@@ -305,7 +305,7 @@ export function ProgressScreen({
 
           <motion.div whileHover={{ y: -2 }} className="card-premium dash-level">
             <div className="dash-card-head" style={{ marginBottom: 12 }}>
-              <h3>Seu nível: {levelLabel}</h3>
+              <h3>Seu n�vel: {levelLabel}</h3>
               <span>XP</span>
             </div>
 
