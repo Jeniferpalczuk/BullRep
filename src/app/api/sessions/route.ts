@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 
 import { getAuthenticatedUser } from '@/lib/apiAuth';
 import { prisma } from '@/lib/prisma';
@@ -114,6 +115,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ data: mapSession(session) });
   } catch (err) {
     console.error('[API] sessions create error:', err);
+
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === 'P2021') {
+        return NextResponse.json(
+          { error: 'Tabela de treinos nao encontrada no banco. Rode a migracao do Prisma.' },
+          { status: 500 }
+        );
+      }
+
+      if (err.code === 'P2022') {
+        return NextResponse.json(
+          { error: 'Estrutura do banco desatualizada. Rode a migracao do Prisma.' },
+          { status: 500 }
+        );
+      }
+    }
+
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Erro interno ao salvar treino.' },
       { status: 500 }
