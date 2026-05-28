@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
     if (!name || !email || !password) {
       return NextResponse.json(
-        { error: 'Nome, e-mail e senha s�o obrigat�rios.' },
+        { error: 'Nome, e-mail e senha são obrigatórios.' },
         { status: 400 }
       );
     }
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     const existing = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() } });
     if (existing) {
       return NextResponse.json(
-        { error: 'Este e-mail j� est� cadastrado.' },
+        { error: 'Este e-mail já está cadastrado.' },
         { status: 409 }
       );
     }
@@ -83,13 +83,13 @@ export async function POST(req: NextRequest) {
 
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       if (err.code === 'P2002') {
-        return NextResponse.json({ error: 'Este e-mail j� est� cadastrado.' }, { status: 409 });
+        return NextResponse.json({ error: 'Este e-mail já está cadastrado.' }, { status: 409 });
       }
       if (err.code === 'P2021') {
-        return NextResponse.json({ error: 'Tabela de usu�rios n�o encontrada no banco.' }, { status: 500 });
+        return NextResponse.json({ error: 'Tabela de usuários não encontrada no banco.' }, { status: 500 });
       }
       if (err.code === 'P2022') {
-        return NextResponse.json({ error: 'Estrutura do banco desatualizada. Rode a migra��o.' }, { status: 500 });
+        return NextResponse.json({ error: 'Estrutura do banco desatualizada. Rode a migração.' }, { status: 500 });
       }
     }
 

@@ -54,7 +54,7 @@ export function WorkoutExperience({
           <div className="card-premium mb-5 rounded-[24px] border-red-500/20 bg-[radial-gradient(800px_260px_at_10%_0%,rgba(232,0,29,0.16),transparent_60%),rgba(12,12,12,0.86)] p-5 sm:p-6">
             <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">Escolha o Grupo Muscular</h2>
             <p className="mt-1.5 text-sm font-medium text-zinc-400 sm:text-base">
-              Selecione um grupo para ver exerc�cios com barra, halteres e peso corporal.
+              Selecione um grupo para ver exercícios com barra, halteres e peso corporal.
             </p>
           </div>
 
@@ -107,7 +107,7 @@ export function WorkoutExperience({
                 Grupo Muscular
               </div>
               <h3 className="text-[2.2rem] font-black leading-none text-white sm:text-[3rem]">{selectedMuscle.name}</h3>
-              <p className="mt-2 text-sm font-medium text-zinc-400 sm:text-base">Exerc�cios filtrados por grupo muscular</p>
+              <p className="mt-2 text-sm font-medium text-zinc-400 sm:text-base">Exercícios filtrados por grupo muscular</p>
             </div>
 
             <div className="glass-panel mb-4 rounded-2xl p-3.5 sm:p-4">
@@ -120,7 +120,7 @@ export function WorkoutExperience({
                     const value = e.target.value;
                     startTransition(() => setQuery(value));
                   }}
-                  placeholder="Buscar exerc�cio (ex: rosca, barra, halteres...)"
+                  placeholder="Buscar exercício (ex: rosca, barra, halteres...)"
                   className="w-full bg-transparent text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none sm:text-base"
                 />
               </div>
@@ -156,7 +156,7 @@ export function WorkoutExperience({
             </div>
 
             <div className="mb-5 text-sm font-semibold text-zinc-300 sm:mb-6 sm:text-base">
-              <span className="text-red-500">{filteredExercises.length}</span> exerc�cios encontrados
+              <span className="text-red-500">{filteredExercises.length}</span> exercícios encontrados
             </div>
 
             {isPending ? (
@@ -191,7 +191,7 @@ export function WorkoutExperience({
 
             {filteredExercises.length === 0 && (
               <div className="mt-5 rounded-2xl border border-zinc-800 bg-zinc-900/90 p-5 text-sm text-zinc-400 sm:text-base">
-                Nenhum exerc�cio encontrado para o filtro atual.
+                Nenhum exercício encontrado para o filtro atual.
               </div>
             )}
           </div>

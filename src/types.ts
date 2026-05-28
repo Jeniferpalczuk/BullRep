@@ -1,5 +1,5 @@
 // ─── BullRep - Tipos Oficiais (schema v2) ─────────────────────────────────────
-// Todos os IDs s�o UUID (string). Snake_case no banco, camelCase no c�digo.
+// Todos os IDs são UUID (string). Snake_case no banco, camelCase no código.
 
 // ─── DATABASE TYPES (retorno direto da API/Neon) ──────────────────────────────
 
@@ -10,7 +10,7 @@ export type DbProfile = {
   weight: number | null;
   height: number | null;
   goal: 'Ganhar massa' | 'Emagrecer' | 'Manter peso' | null;
-  fitness_level: 'Iniciante' | 'Intermedi�rio' | 'Avan�ado' | null;
+  fitness_level: 'Iniciante' | 'Intermediário' | 'Avançado' | null;
   frequency: '2x' | '3x' | '4x' | '5x+' | null;
   is_admin: boolean;
   app_level: number;

@@ -22,7 +22,7 @@ export function DashTooltip({
   return (
     <div className="dash-tooltip">
       <div className="dash-tooltip-title">Treino #{p.idx}</div>
-      <div className="dash-tooltip-sub">Carga: {formatKg(p.volume)} � Tempo: {formatDuration(p.durationMin)}</div>
+      <div className="dash-tooltip-sub">Carga: {formatKg(p.volume)} - Tempo: {formatDuration(p.durationMin)}</div>
     </div>
   );
 }

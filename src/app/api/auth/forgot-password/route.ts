@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      return NextResponse.json({ error: 'Esse e-mail n�o est� cadastrado no sistema.' }, { status: 404 });
+      return NextResponse.json({ error: 'Esse e-mail não está cadastrado no sistema.' }, { status: 404 });
     }
 
     const newPassword = generateRandomPassword();

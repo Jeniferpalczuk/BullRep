@@ -137,7 +137,7 @@ export const MUSCLE_ICONS: Record<string, string> = {
   Bceps: IMAGE_BY_MUSCLE_ID['Bceps'] || '💪',
   Trceps: IMAGE_BY_MUSCLE_ID['Trceps'] || '🏋️',
   Ombro: IMAGE_BY_MUSCLE_ID.Ombro || '🏋️',
-  Abdmen: IMAGE_BY_MUSCLE_ID['Abdmen'] || '??',
+  Abdmen: IMAGE_BY_MUSCLE_ID['Abdmen'] || '💪',
   Trapzio: IMAGE_BY_MUSCLE_ID['Trapzio'] || '💪',
   Antebrao: IMAGE_BY_MUSCLE_ID['Antebrao'] || '💪',
   Panturrilhas: IMAGE_BY_MUSCLE_ID.Panturrilhas || '🦵',

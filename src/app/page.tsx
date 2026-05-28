@@ -113,7 +113,7 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
   const exerciseListByMuscle: Record<MuscleKey, string[]> = {
     Peito: (EXERCISE_CATALOG['Peito'] || []).slice(0, 8).map((e) => e.name),
     Costas: (EXERCISE_CATALOG['Costas'] || []).slice(0, 8).map((e) => e.name),
-    Ombro: ['Desenvolvimento com barra', 'Elevao frontal', 'Remada vertical'],
+    Ombro: ['Desenvolvimento com barra', 'Elevação frontal', 'Remada vertical'],
     Bceps: (EXERCISE_CATALOG['Bceps'] || []).slice(0, 8).map((e) => e.name),
     Trceps: (EXERCISE_CATALOG['Trceps'] || []).slice(0, 8).map((e) => e.name),
     Perna: (EXERCISE_CATALOG['Perna'] || []).slice(0, 8).map((e) => e.name),
@@ -126,17 +126,17 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
       'Estenda os cotovelos',
       'Retorne com controle',
     ],
-    'Elevao frontal': [
+    'Elevação frontal': [
       'Pegue os halteres com firmeza',
-      'Eleve  frente at a altura dos ombros',
-      'Evite balano do tronco',
+      'Eleve  frente até a altura dos ombros',
+      'Evite balanço do tronco',
       'Retorne com controle',
     ],
     'Remada vertical': [
       'Segure a barra/corda na frente do corpo',
       'Puxe subindo cotovelos',
       'Pare no ponto de conforto',
-      'Desa controlando',
+      'Desça controlando',
     ],
   };
 
@@ -149,7 +149,7 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
       return [
         'Ajuste postura e pegada',
         'Execute o movimento controlado',
-        'Mantenha a tcnica durante todo o range',
+        'Mantenha a técnica durante todo o range',
         'Finalize e retorne com controle',
       ];
     }
@@ -157,7 +157,7 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
     return [
       'Ajuste postura e pegada',
       'Execute o movimento controlado',
-      'Mantenha a tcnica durante todo o range',
+      'Mantenha a técnica durante todo o range',
       'Finalize e retorne com controle',
     ];
   };
@@ -190,13 +190,13 @@ function WorkoutTab({ setTab }: { setTab: (t: Tab) => void }) {
     setTab('home');
   };
 
-  const headerTitle = view === 'grupos' ? 'Treino de Hoje' : view === 'exercicios' ? muscle : selectedExercise?.name ?? 'Exerccio';
+  const headerTitle = view === 'grupos' ? 'Treino de Hoje' : view === 'exercicios' ? muscle : selectedExercise?.name ?? 'Exercício';
   const headerSubtitle =
     view === 'grupos'
       ? 'Escolha um grupo muscular'
       : view === 'exercicios'
-        ? 'Selecione um exerccio'
-        : 'Execuo e checklist';
+        ? 'Selecione um exercício'
+        : 'Execução e checklist';
 
   const selectedMediaUrl = selectedExercise ? getCatalogEntryByName(selectedExercise.name)?.exercise.gif : null;
 
@@ -580,7 +580,7 @@ export default function App() {
 
   const navItems: { id: Tab; label: string; icon: (a: boolean) => React.ReactElement }[] = [
     { id: 'home', label: 'Home', icon: (a) => <IconHome active={a} /> },
-    { id: 'progress', label: 'Evoluo', icon: (a) => <IconTrend active={a} /> },
+    { id: 'progress', label: 'Evolução', icon: (a) => <IconTrend active={a} /> },
     ...(isAdmin ? [{ id: 'workout' as Tab, label: 'Treino', icon: (a: boolean) => <IconDumbbell active={a} /> }] : []),
     { id: 'profile', label: 'Perfil', icon: (a) => <IconUser active={a} /> },
     ...(isAdmin ? [{
@@ -693,13 +693,13 @@ export default function App() {
                   </div>
                   <div>
                     <h2 style={{ fontSize: '1.5rem', fontWeight: 950, lineHeight: 1.1 }}>Painel Admin</h2>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 700, marginTop: '4px' }}>Gerenciamento e viso geral</p>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 700, marginTop: '4px' }}>Gerenciamento e visão geral</p>
                   </div>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '18px' }}>
                   <div className="glass-panel" style={{ padding: '16px', borderRadius: '18px', borderColor: 'rgba(232,0,29,0.15)' }}>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Sesses registradas</p>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Sessões registradas</p>
                     <p style={{ fontSize: '2rem', fontWeight: 950, color: '#fff', marginTop: '4px' }}>{sessions.length}</p>
                   </div>
                   <div className="glass-panel" style={{ padding: '16px', borderRadius: '18px', borderColor: 'rgba(232,0,29,0.15)' }}>
@@ -708,35 +708,35 @@ export default function App() {
                   </div>
                   <div className="glass-panel" style={{ padding: '16px', borderRadius: '18px', borderColor: 'rgba(232,0,29,0.15)' }}>
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Tipo de conta</p>
-                    <p style={{ fontSize: '1rem', fontWeight: 950, color: 'var(--red-primary)', marginTop: '8px' }}>?? Administrador</p>
+                    <p style={{ fontSize: '1rem', fontWeight: 950, color: 'var(--red-primary)', marginTop: '8px' }}>Administrador</p>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="card-premium" style={{ padding: '22px', marginBottom: '18px' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 950, marginBottom: '14px' }}>Aes do Admin</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 950, marginBottom: '14px' }}>Ações do Admin</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '16px', lineHeight: 1.6 }}>
-                Usurios pblicos veem <strong style={{ color: '#fff' }}>3 abas</strong>: Home, Evoluo e Perfil.<br />
-                A aba <strong style={{ color: 'var(--red-primary)' }}>Treino</strong> e o <strong style={{ color: 'var(--red-primary)' }}>Painel Admin</strong> so exclusivos do administrador.
+                Usuários públicos veem <strong style={{ color: '#fff' }}>3 abas</strong>: Home, Evolução e Perfil.<br />
+                A aba <strong style={{ color: 'var(--red-primary)' }}>Treino</strong> e o <strong style={{ color: 'var(--red-primary)' }}>Painel Admin</strong> são exclusivos do administrador.
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                {['Home', 'Evoluo', 'Perfil'].map((t) => (
+                {['Home', 'Evolução', 'Perfil'].map((t) => (
                   <span key={t} className="badge-gray" style={{ fontSize: '0.82rem', padding: '8px 14px' }}>? {t}</span>
                 ))}
                 {['Treino', 'Admin'].map((t) => (
-                  <span key={t} style={{ fontSize: '0.82rem', padding: '8px 14px', borderRadius: '12px', background: 'rgba(232,0,29,0.12)', border: '1px solid rgba(232,0,29,0.3)', color: 'var(--red-primary)', fontWeight: 800 }}>?? {t}</span>
+                  <span key={t} style={{ fontSize: '0.82rem', padding: '8px 14px', borderRadius: '12px', background: 'rgba(232,0,29,0.12)', border: '1px solid rgba(232,0,29,0.3)', color: 'var(--red-primary)', fontWeight: 800 }}>{t}</span>
                 ))}
               </div>
             </div>
 
             <div className="card-premium" style={{ padding: '22px' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 950, marginBottom: '14px' }}>?? Aes do Admin</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 950, marginBottom: '14px' }}>Ações do Admin</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {[
-                  { label: 'Gerenciar Exerccios', desc: 'Adicionar/remover exerc?cios do cat?logo', icon: '?' },
-                  { label: 'Ver Todos os Usurios', desc: 'Listar usu?rios cadastrados', icon: '?' },
-                  { label: 'Configuraes do App', desc: 'Ajustar parmetros globais', icon: '?' },
+                  { label: 'Gerenciar Exercícios', desc: 'Adicionar/remover exerc?cios do cat?logo', icon: '?' },
+                  { label: 'Ver Todos os Usuários', desc: 'Listar usu?rios cadastrados', icon: '?' },
+                  { label: 'Configurações do App', desc: 'Ajustar parmetros globais', icon: '?' },
                 ].map((action) => (
                   <div key={action.label} className="glass-panel" style={{ padding: '14px 16px', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', cursor: 'pointer' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -810,7 +810,7 @@ export default function App() {
                     Aqui voc v seu progresso e mantm seus dados de treino sempre atualizados.
                   </p>
                   <div style={{ display: 'flex', gap: '8px', marginTop: '14px', flexWrap: 'wrap' }}>
-                    <span className="badge-red" style={{ fontSize: '0.75rem', fontWeight: 800 }}>NVEL {user?.level ?? profile?.app_level ?? 1}</span>
+                    <span className="badge-red" style={{ fontSize: '0.75rem', fontWeight: 800 }}>NÍVEL {user?.level ?? profile?.app_level ?? 1}</span>
                     <span className="badge-gray" style={{ fontSize: '0.75rem' }}>{user?.xp ?? profile?.xp ?? 0} XP</span>
                     <span className="badge-gray" style={{ fontSize: '0.75rem' }}>Avatar ativo</span>
                   </div>
@@ -841,8 +841,8 @@ export default function App() {
             </div>
 
             <div className="card" style={{ padding: '20px', marginTop: '18px', textAlign: 'left' }}>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Configuraes</p>
-              {['Conta', 'Notificaes', 'Privacidade', 'Sobre o App'].map((item) => (
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Configurações</p>
+              {['Conta', 'Notificações', 'Privacidade', 'Sobre o App'].map((item) => (
                 <div key={item} style={{
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   padding: '16px 0', borderBottom: '1px solid var(--border)',
@@ -873,7 +873,7 @@ export default function App() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {!profile && (
                   <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px', borderColor: 'rgba(232,0,29,0.22)', background: 'rgba(232,0,29,0.06)' }}>
-                    <p style={{ color: '#fff', fontWeight: 900, fontSize: '0.9rem' }}>Perfil no carregado</p>
+                    <p style={{ color: '#fff', fontWeight: 900, fontSize: '0.9rem' }}>Perfil não carregado</p>
                     <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.82rem', marginTop: '6px' }}>
                       Verifique se a conexo com o Neon est configurada em `DATABASE_URL` e se a tabela `users` existe.
                     </p>

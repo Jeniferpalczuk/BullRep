@@ -11,7 +11,7 @@ const STYLES = [
   { id: 'adventurer', label: 'Cartoon', img: 'https://api.dicebear.com/9.x/adventurer/svg?seed=Cartoon&skinColor=f2d3b1' },
   { id: 'notionists', label: 'Realista', img: 'https://api.dicebear.com/9.x/notionists/svg?seed=Real' },
   { id: 'pixel-art', label: 'Pixel', img: 'https://api.dicebear.com/9.x/pixel-art/svg?seed=Pixel' },
-  { id: 'bottts', label: 'Rob�', img: 'https://api.dicebear.com/9.x/bottts/svg?seed=BULL' },
+  { id: 'bottts', label: 'Robô', img: 'https://api.dicebear.com/9.x/bottts/svg?seed=BULL' },
 ];
 
 const SKIN_COLORS = ['f2d3b1', 'd4a373', 'a67c52', '6b4c3a', '3d261e'];
@@ -50,7 +50,7 @@ export default function AvatarStep() {
       accessory
     };
     console.log('Salvando no backend:', { avatar_url: avatarUrl, avatar_config: avatarConfig });
-    alert('Cadastro conclu�do com sucesso!');
+    alert('Cadastro concluído com sucesso!');
   };
 
   return (
@@ -76,7 +76,7 @@ export default function AvatarStep() {
 
         <div className="auth-step-head" style={{ marginTop: '24px', marginBottom: '24px' }}>
           <h1 className="auth-title">Criar seu avatar</h1>
-          <p className="auth-subtitle">Etapa 6 � Personaliza��o</p>
+          <p className="auth-subtitle">Etapa 6 - Personalização</p>
         </div>
 
         {/* 2-Column Grid Layout */}
@@ -169,12 +169,12 @@ export default function AvatarStep() {
             </div>
 
             <div>
-              <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, color: 'rgba(255,255,255,0.5)', marginBottom: '8px', textTransform: 'uppercase' }}>Acess�rios Opcionais</span>
+              <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: 800, color: 'rgba(255,255,255,0.5)', marginBottom: '8px', textTransform: 'uppercase' }}>Acessórios Opcionais</span>
               <div style={{ display: 'flex', gap: '12px' }}>
                 {[
                   { id: 'none', label: 'Nenhum', icon: Minus },
-                  { id: 'glasses', label: '�culos', icon: Glasses },
-                  { id: 'cap', label: 'Bon�', icon: HardHat },
+                  { id: 'glasses', label: 'Óculos', icon: Glasses },
+                  { id: 'cap', label: 'Boné', icon: HardHat },
                   { id: 'headphones', label: 'Fone', icon: Headphones },
                 ].map(acc => (
                   <button
@@ -198,10 +198,10 @@ export default function AvatarStep() {
             </div>
           </div>
 
-          {/* LADO DIREITO (Pr�vias) */}
+          {/* LADO DIREITO (Prévias) */}
           <div className="avatarstep-preview-col" style={{ display: 'flex', flexDirection: 'column' }}>
             <h4 style={{ fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.55)', marginBottom: '12px' }}>
-              PR�VIA
+              PRÉVIA
             </h4>
             <div style={{
               flex: 1,
@@ -261,7 +261,7 @@ export default function AvatarStep() {
                 }}
               >
                 <Dices size={18} />
-                Gerar aleat�rio
+                Gerar aleatório
               </button>
 
             </div>
@@ -284,7 +284,7 @@ export default function AvatarStep() {
         </div>
 
         <div className="auth-links" style={{ marginTop: '20px' }}>
-          <span className="auth-hint">J� tem conta?</span>
+          <span className="auth-hint">Já tem conta?</span>
           <button type="button" className="auth-link">Entrar</button>
         </div>
 

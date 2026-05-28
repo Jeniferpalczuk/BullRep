@@ -77,19 +77,19 @@ export default function LoginPage() {
               <div className="auth-logo">BULL<span>REP</span></div>
               <div className="auth-badge">
                 <Shield size={14} />
-                Sess�o protegida
+                Sessão protegida
               </div>
             </div>
 
-            <h2 style={{ fontSize: '1.9rem', fontWeight: 950, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Treine com consist�ncia.</h2>
+            <h2 style={{ fontSize: '1.9rem', fontWeight: 950, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Treine com consistência.</h2>
             <p style={{ marginTop: '10px', color: 'rgba(255,255,255,0.72)', fontWeight: 600 }}>
-              Acompanhe progresso, hist�rico e metas de forma pr�tica e profissional.
+              Acompanhe progresso, histórico e metas de forma prática e profissional.
             </p>
 
             <div style={{ marginTop: '20px', display: 'grid', gap: '10px' }}>
               {[
-                'Hist�rico completo de treinos',
-                'Dashboard com evolu��o semanal',
+                'Histórico completo de treinos',
+                'Dashboard com evolução semanal',
                 'Planejamento por grupo muscular',
               ].map((item) => (
                 <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', padding: '10px 12px' }}>
@@ -117,7 +117,7 @@ export default function LoginPage() {
                 <span>Senha</span>
                 <div className="auth-input">
                   <Lock size={16} />
-                  <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="��������" type={showPassword ? 'text' : 'password'} autoComplete="current-password" />
+                  <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="********" type={showPassword ? 'text' : 'password'} autoComplete="current-password" />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
@@ -151,7 +151,7 @@ export default function LoginPage() {
                 <button type="button" className="auth-link" onClick={() => router.push('/cadastro')}>
                   Criar conta
                 </button>
-                <span className="auth-sep">�</span>
+                <span className="auth-sep">-</span>
                 <span className="auth-hint">Acesso social em breve</span>
               </div>
             </form>

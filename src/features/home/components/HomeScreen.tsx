@@ -163,7 +163,7 @@ export function HomeScreen({
       }));
       const hasChanged = buildExerciseSignature(originalDrafts) !== buildExerciseSignature(exercises) || normalizeText(original?.trainingType || '') !== normalizeText(newType);
       if (hasChanged) {
-        const ok = window.confirm('Voc� est� duplicando este treino. O treino original ser� mantido e uma nova vers�o ser� salva. Deseja continuar?');
+        const ok = window.confirm('Você está duplicando este treino. O treino original será mantido e uma nova versão será salva. Deseja continuar?');
         if (!ok) {
           setCreating(false);
           return;
@@ -232,7 +232,7 @@ export function HomeScreen({
               {dayOfWeek.toUpperCase()}
             </p>
             <span className="home-level-chip">
-              N�VEL {level}
+              NÍVEL {level}
             </span>
           </div>
           <div className="home-avatar">
@@ -247,14 +247,14 @@ export function HomeScreen({
 
         <div className="home-xp-row">
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1, minWidth: '220px', flexWrap: 'wrap' }}>
-            <p style={{ fontSize: '0.8rem', fontWeight: 800, whiteSpace: 'nowrap' }}>N�vel {level} <ChevronDown size={14} style={{ display: 'inline', verticalAlign: 'middle', opacity: 0.5 }} /></p>
+            <p style={{ fontSize: '0.8rem', fontWeight: 800, whiteSpace: 'nowrap' }}>Nível {level} <ChevronDown size={14} style={{ display: 'inline', verticalAlign: 'middle', opacity: 0.5 }} /></p>
             <p style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>{xpInLevel} / {xpTarget} XP</p>
             <div style={{ height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden', flex: 1, maxWidth: '200px', display: 'flex' }}>
               <div style={{ height: '100%', background: 'var(--accent-gradient)', width: `${xpPct}%`, borderRadius: '10px', boxShadow: '0 0 14px rgba(232,0,29,0.35)' }} />
             </div>
           </div>
           <div style={{ background: 'linear-gradient(90deg, rgba(255,80,0,0.15) 0%, rgba(200,0,0,0) 100%)', border: '1px solid rgba(255,80,0,0.2)', padding: '6px 14px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '0.9rem' }}>??</span>
+            <span style={{ fontSize: '0.9rem' }}>🔥</span>
             <span style={{ color: '#ffb74d', fontSize: '0.75rem', fontWeight: 800 }}>{user?.streak?.currentStreak || 0} dias seguidos</span>
           </div>
         </div>
@@ -293,7 +293,7 @@ export function HomeScreen({
                 Hoje: <span className="home-cta-accent">{newType}</span>
               </p>
               <p className="home-cta-sub" style={{ fontSize: '1rem', marginTop: '10px', color: 'rgba(255,255,255,0.9)' }}>
-                {exercises.length} exerc�cios � {timeEstimateMin} min
+                {exercises.length} exercícios - {timeEstimateMin} min
               </p>
             </div>
           </div>
@@ -311,7 +311,7 @@ export function HomeScreen({
 
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '8px', scrollbarWidth: 'none' }}>
-               {['Peito', 'Costas', 'Perna', 'B�ceps', 'Ombro'].map((m, idx) => (
+               {['Peito', 'Costas', 'Perna', 'Bíceps', 'Ombro'].map((m, idx) => (
                  <button
                    key={m}
                    onClick={() => setNewType(m)}
@@ -331,11 +331,11 @@ export function HomeScreen({
           </div>
 
           <div style={{ marginBottom: '24px' }}>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '12px' }}>EXERC�CIOS ({exercises.length})</p>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '12px' }}>EXERCÍCIOS ({exercises.length})</p>
             {exercises.length === 0 ? (
                <div onClick={() => setSelectorOpen(true)} style={{ padding: '32px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: '2px dashed var(--border)', borderRadius: '20px', cursor: 'pointer' }}>
                  <Dumbbell size={24} style={{ color: 'var(--red-primary)', marginBottom: '8px', opacity: 0.5 }} />
-                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Clique para adicionar exerc�cios</p>
+                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Clique para adicionar exercícios</p>
                </div>
             ) : (
                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -352,7 +352,7 @@ export function HomeScreen({
                            {(entry?.exercise?.equipment || entry?.exercise?.difficulty) && (
                              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 700 }}>
                                {entry?.exercise?.equipment ? <>Equip: {entry.exercise.equipment}</> : null}
-                               {entry?.exercise?.difficulty ? <> � N�vel: {entry.exercise.difficulty}</> : null}
+                               {entry?.exercise?.difficulty ? <> - Nível: {entry.exercise.difficulty}</> : null}
                              </p>
                            )}
                          </div>
@@ -368,10 +368,10 @@ export function HomeScreen({
                        <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                          {ex.sets.map((set, idx) => (
                            <div key={set.id} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                             {/* S�rie Label */}
+                             {/* Série Label */}
                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '80px' }}>
                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--red-primary)' }} />
-                               <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-secondary)' }}>S�rie {idx + 1}</span>
+                               <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-secondary)' }}>Série {idx + 1}</span>
                              </div>
 
                              {/* Reps Input */}
@@ -420,7 +420,7 @@ export function HomeScreen({
                          ))}
 
                          <button onClick={() => addSet(ex.id)} style={{ alignSelf: 'center', marginTop: '4px', background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 800, cursor: 'pointer', opacity: 0.6 }}>
-                           + Adicionar s�rie
+                           + Adicionar série
                          </button>
                        </div>
 
@@ -433,7 +433,7 @@ export function HomeScreen({
                    className="btn-ghost"
                    style={{ padding: '16px', fontSize: '0.85rem', fontWeight: 800, border: '1px dashed rgba(255,255,255,0.1)', color: 'var(--text-secondary)' }}
                  >
-                   + Adicionar exerc�cio
+                   + Adicionar exercício
                  </button>
                </div>
             )}
@@ -446,7 +446,7 @@ export function HomeScreen({
               onClick={cancelEdit}
               type="button"
             >
-              CANCELAR EDI�ÃO
+              CANCELAR EDIÇÃO
             </button>
           )}
 
@@ -456,7 +456,7 @@ export function HomeScreen({
             disabled={exercises.length === 0 || creating}
             onClick={handleStartWorkout}
           >
-            {creating ? 'SALVANDO...' : editingSessionId ? 'SALVAR EDI�ÕES' : 'SALVAR TREINO'}
+            {creating ? 'SALVANDO...' : editingSessionId ? 'SALVAR EDI-ÕES' : 'SALVAR TREINO'}
           </button>
         </div>
 
@@ -503,7 +503,7 @@ export function HomeScreen({
                 <div>
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 800 }}>{s.trainingType}</h3>
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px', fontWeight: 600 }}>
-                    {new Date(s.date).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' })} � {s.exercises.length} exerc�cios � {s.exercises.reduce((acc, e) => acc + (e.weight * e.setsDone), 0)}kg
+                    {new Date(s.date).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' })} - {s.exercises.length} exercícios - {s.exercises.reduce((acc, e) => acc + (e.weight * e.setsDone), 0)}kg
                   </p>
                   <p style={{ fontSize: '0.74rem', color: 'var(--green)', marginTop: '6px', fontWeight: 800 }}>
                     Treinado: {trainedCount}x
@@ -571,7 +571,7 @@ export function HomeScreen({
               ))}
               {s.exercises.length > 3 && (
                 <div style={{ background: 'rgba(255,255,255,0.02)', padding: '6px 10px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700 }}>+{s.exercises.length - 3} exerc�cios</span>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700 }}>+{s.exercises.length - 3} exercícios</span>
                 </div>
               )}
               {s.exercises.length === 0 && (
@@ -597,5 +597,5 @@ export function HomeScreen({
   );
 }
 
-// �”€�”€�”€ SCREEN: PROGRESS �”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€�”€
+// Screen: Progress
 
