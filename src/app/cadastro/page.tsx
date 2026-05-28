@@ -42,8 +42,8 @@ export default function CadastroPage() {
   const [confirm, setConfirm] = useState('');
 
   // Step 2: corpo
-  const [weight, setWeight] = useState<number>(70);
-  const [height, setHeight] = useState<number>(165);
+  const [weight, setWeight] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
   const [gender, setGender] = useState<GenderOption>('Feminino');
 
   // Step 3: objetivo
@@ -266,14 +266,32 @@ export default function CadastroPage() {
                 <span>Peso (kg)</span>
                 <div className="auth-input">
                   <Weight size={16} />
-                  <input value={weight} onChange={(e) => setWeight(Number(e.target.value || 0))} type="number" min={30} max={300} />
+                  <input
+                    value={weight}
+                    onFocus={(e) => {
+                      if (e.currentTarget.value === '0') e.currentTarget.select();
+                    }}
+                    onChange={(e) => setWeight(Number(e.target.value || 0))}
+                    type="number"
+                    min={0}
+                    max={300}
+                  />
                 </div>
               </label>
               <label className="auth-field">
                 <span>Altura (cm)</span>
                 <div className="auth-input">
                   <Ruler size={16} />
-                  <input value={height} onChange={(e) => setHeight(Number(e.target.value || 0))} type="number" min={100} max={230} />
+                  <input
+                    value={height}
+                    onFocus={(e) => {
+                      if (e.currentTarget.value === '0') e.currentTarget.select();
+                    }}
+                    onChange={(e) => setHeight(Number(e.target.value || 0))}
+                    type="number"
+                    min={0}
+                    max={230}
+                  />
                 </div>
               </label>
             </div>

@@ -454,6 +454,134 @@ body {
   filter: saturate(0.6);
 }
 
+.workout-set-row {
+  display: grid;
+  grid-template-columns: minmax(74px, 1fr) auto minmax(150px, auto) 72px 28px;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.workout-set-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.workout-set-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.workout-set-field input {
+  width: 58px;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 8px 6px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-align: center;
+  outline: none;
+}
+
+.workout-set-field-reps input {
+  width: 46px;
+  background: rgba(232, 0, 29, 0.12);
+  border-color: rgba(232, 0, 29, 0.28);
+}
+
+.workout-set-weight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+}
+
+.workout-set-weight button {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.workout-set-history {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.workout-set-remove {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0.55;
+}
+
+@media (max-width: 520px) {
+  .workout-set-row {
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .workout-set-label {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .workout-set-field-reps {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .workout-set-weight {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .workout-set-history {
+    grid-column: 1;
+    grid-row: 3;
+    text-align: left;
+  }
+
+  .workout-set-remove {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: end;
+  }
+}
+
 /* --- CALENDAR STATUS --- */
 .calendar-day {
   transition: 0.2s ease;

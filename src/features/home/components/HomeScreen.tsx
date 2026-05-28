@@ -367,28 +367,25 @@ export function HomeScreen({
                        {/* Sets */}
                        <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                          {ex.sets.map((set, idx) => (
-                           <div key={set.id} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                             {/* Série Label */}
-                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '80px' }}>
+                           <div key={set.id} className="workout-set-row">
+                             <div className="workout-set-label">
                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--red-primary)' }} />
-                               <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-secondary)' }}>Série {idx + 1}</span>
+                               <span>Série {idx + 1}</span>
                              </div>
 
-                             {/* Reps Input */}
-                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                             <label className="workout-set-field workout-set-field-reps">
                                <input
                                  type="number"
+                                 inputMode="numeric"
                                  value={set.reps || ''}
                                  onChange={(e) => updateSet(ex.id, set.id, 'reps', parseInt(e.target.value) || 0)}
-                                 style={{ width: '42px', background: 'rgba(232,0,29,0.1)', border: '1px solid rgba(232,0,29,0.2)', borderRadius: '8px', padding: '6px 0', color: '#fff', fontSize: '0.9rem', fontWeight: 900, textAlign: 'center', outline: 'none' }}
                                />
-                               <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>reps</span>
-                             </div>
+                               <span>reps</span>
+                             </label>
 
-                             {/* Weight and History Link */}
-                           <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0, flexWrap: 'wrap', gap: '6px' }}>
-                               <button onClick={() => updateSet(ex.id, set.id, 'weight', Math.max(0, set.weight - 1))} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '1.2rem', cursor: 'pointer', padding: '0 8px' }}>-</button>
-                               <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                             <div className="workout-set-weight">
+                               <button type="button" onClick={() => updateSet(ex.id, set.id, 'weight', Math.max(0, set.weight - 1))}>-</button>
+                               <label className="workout-set-field">
                                  <input
                                    type="number"
                                    inputMode="decimal"
@@ -396,24 +393,15 @@ export function HomeScreen({
                                    step={0.5}
                                    value={set.weight || ''}
                                    onChange={(e) => updateSet(ex.id, set.id, 'weight', Number(e.target.value || 0))}
-                                   style={{ width: '58px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '8px', padding: '7px 6px', color: '#fff', fontSize: '0.9rem', fontWeight: 900, textAlign: 'center', outline: 'none' }}
                                  />
-                                 <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 800 }}>kg</span>
+                                 <span>kg</span>
                                </label>
-
-                               {hist ? (
-                                 <>
-                                   <div style={{ flex: 1, borderTop: '2px dotted rgba(255,255,255,0.15)', margin: '0 12px' }} />
-                                   <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', whiteSpace: 'nowrap', marginRight: '16px' }}>{hist}</span>
-                                 </>
-                               ) : (
-                                 <div style={{ flex: 1 }} />
-                               )}
-
-                               <button onClick={() => updateSet(ex.id, set.id, 'weight', set.weight + 1)} style={{ width: '36px', height: '36px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', color: '#fff', fontSize: '1.1rem', cursor: 'pointer' }}>+</button>
+                               <button type="button" onClick={() => updateSet(ex.id, set.id, 'weight', set.weight + 1)}>+</button>
                              </div>
 
-                             <button onClick={() => removeSet(ex.id, set.id)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', opacity: 0.5 }}>
+                             <span className="workout-set-history">{hist || 'Sem histórico'}</span>
+
+                             <button className="workout-set-remove" type="button" onClick={() => removeSet(ex.id, set.id)}>
                                <Trash2 size={14} />
                              </button>
                            </div>
