@@ -1,12 +1,41 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Eye, EyeOff, Lock, Mail, Shield } from 'lucide-react';
+import {
+  ArrowRight,
+  CalendarCheck,
+  Dumbbell,
+  Eye,
+  EyeOff,
+  LoaderCircle,
+  LockKeyhole,
+  Mail,
+  ShieldCheck,
+  TrendingUp,
+} from 'lucide-react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { Toast, type ToastState } from '@/components/Toast';
 import { apiRequest } from '@/lib/apiClient';
+
+const loginBenefits = [
+  {
+    icon: CalendarCheck,
+    title: 'Semana organizada',
+    description: 'Veja o que já treinou e planeje o próximo passo.',
+  },
+  {
+    icon: TrendingUp,
+    title: 'Evolução visível',
+    description: 'Acompanhe seu histórico e mantenha a constância.',
+  },
+  {
+    icon: Dumbbell,
+    title: 'Foco no treino',
+    description: 'Seu progresso reunido em um só lugar.',
+  },
+];
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,7 +57,8 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return;
+    if (!canSubmit || submitting) return;
+
     setSubmitting(true);
     const res = await signIn(email.trim(), password);
     setSubmitting(false);
@@ -37,7 +67,8 @@ export default function LoginPage() {
       setToast({ type: 'error', message: res.error });
       return;
     }
-    setToast({ type: 'success', message: 'Bem-vinda de volta. Vamos treinar.' });
+
+    setToast({ type: 'success', message: 'Boas-vindas de volta. Vamos treinar.' });
     router.replace('/');
   };
 
@@ -59,7 +90,7 @@ export default function LoginPage() {
     } catch (error) {
       setToast({
         type: 'error',
-        message: error instanceof Error ? error.message : 'Nao foi possivel recuperar a senha.',
+        message: error instanceof Error ? error.message : 'Não foi possível recuperar a senha.',
       });
     } finally {
       setRecovering(false);
@@ -67,99 +98,150 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="auth-shell">
-      <div className="auth-bg" />
-
-      <div className="auth-card card-premium auth-login-card" style={{ maxWidth: '980px', padding: '0', overflow: 'hidden' }}>
-        <div className="auth-login-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 0.95fr) minmax(0, 1.05fr)' }}>
-          <div className="auth-login-hero" style={{ padding: '30px 26px', borderRight: '1px solid rgba(255,255,255,0.06)', background: 'radial-gradient(620px 260px at 15% 0%, rgba(232,0,29,0.18), transparent 62%), rgba(12,12,12,0.86)' }}>
-            <div className="auth-brand" style={{ marginBottom: '16px' }}>
-              <div className="auth-logo">BULL<span>REP</span></div>
-              <div className="auth-badge">
-                <Shield size={14} />
-                Sessão protegida
-              </div>
-            </div>
-
-            <h2 style={{ fontSize: '1.9rem', fontWeight: 950, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Treine com consistência.</h2>
-            <p style={{ marginTop: '10px', color: 'rgba(255,255,255,0.72)', fontWeight: 600 }}>
-              Acompanhe progresso, histórico e metas de forma prática e profissional.
-            </p>
-
-            <div className="auth-login-benefits" style={{ marginTop: '20px', display: 'grid', gap: '10px' }}>
-              {[
-                'Histórico completo de treinos',
-                'Dashboard com evolução semanal',
-                'Planejamento por grupo muscular',
-              ].map((item) => (
-                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', padding: '10px 12px' }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '999px', background: 'var(--red-primary)', boxShadow: '0 0 14px rgba(232,0,29,0.35)' }} />
-                  <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="auth-login-form" style={{ padding: '30px 26px' }}>
-            <h1 className="auth-title" style={{ marginTop: 0 }}>Entrar</h1>
-            <p className="auth-subtitle">Acesse seu dashboard e continue evoluindo.</p>
-
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '18px' }}>
-              <label className="auth-field">
-                <span>E-mail</span>
-                <div className="auth-input">
-                  <Mail size={16} />
-                  <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="seuemail@exemplo.com" type="email" autoComplete="email" />
-                </div>
-              </label>
-
-              <label className="auth-field">
-                <span>Senha</span>
-                <div className="auth-input">
-                  <Lock size={16} />
-                  <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="********" type={showPassword ? 'text' : 'password'} autoComplete="current-password" />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                    style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.72)', cursor: 'pointer', display: 'grid', placeItems: 'center' }}
-                  >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-              </label>
-
-              <button
-                type="button"
-                className="auth-link"
-                style={{ alignSelf: 'flex-end', marginTop: '-2px' }}
-                onClick={handleForgotPassword}
-                disabled={recovering}
-              >
-                {recovering ? 'Enviando...' : 'Esqueci minha senha'}
-              </button>
-
-              <button className="btn-primary" type="submit" disabled={!canSubmit || submitting} style={{ width: '100%', marginTop: '6px' }}>
-                {submitting ? 'ENTRANDO...' : (
-                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                    Entrar <ArrowRight size={18} />
-                  </span>
-                )}
-              </button>
-
-              <div className="auth-links">
-                <button type="button" className="auth-link" onClick={() => router.push('/cadastro')}>
-                  Criar conta
-                </button>
-                <span className="auth-sep">-</span>
-                <span className="auth-hint">Acesso social em breve</span>
-              </div>
-            </form>
-          </div>
-        </div>
+    <main className="auth-shell login-shell">
+      <div className="auth-bg login-background" aria-hidden="true">
+        <span className="login-background-ring login-background-ring-one" />
+        <span className="login-background-ring login-background-ring-two" />
       </div>
 
+      <section className="login-card" aria-labelledby="login-title">
+        <div className="login-visual">
+          <header className="login-brand-row">
+            <div className="login-brand" aria-label="BullRep">
+              <span className="login-brand-mark" aria-hidden="true">B</span>
+              <span className="login-brand-name">BULL<span>REP</span></span>
+            </div>
+
+            <div className="login-security-badge">
+              <ShieldCheck size={15} aria-hidden="true" />
+              <span>Ambiente seguro</span>
+            </div>
+          </header>
+
+          <div className="login-hero-copy">
+            <p className="login-eyebrow">Treino, foco e evolução</p>
+            <h2>Seu progresso não para.</h2>
+            <p>
+              Registre cada treino, acompanhe sua evolução e mantenha sua semana no ritmo.
+            </p>
+          </div>
+
+          <div className="login-benefit-list" aria-label="Benefícios da BullRep">
+            {loginBenefits.map(({ icon: Icon, title, description }) => (
+              <div className="login-benefit" key={title}>
+                <span className="login-benefit-icon" aria-hidden="true">
+                  <Icon size={19} strokeWidth={2.2} />
+                </span>
+                <span>
+                  <strong>{title}</strong>
+                  <small>{description}</small>
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p className="login-visual-footer">
+            <span aria-hidden="true" />
+            Constância hoje. Resultado amanhã.
+          </p>
+        </div>
+
+        <div className="login-form-panel">
+          <div className="login-form-heading">
+            <p className="login-mobile-eyebrow">Sua evolução continua aqui</p>
+            <h1 id="login-title">Entre na sua conta</h1>
+            <p>Continue de onde parou e mantenha o foco na sua meta.</p>
+          </div>
+
+          <form className="login-form" onSubmit={handleSubmit} aria-busy={submitting}>
+            <div className="login-field">
+              <label htmlFor="login-email">E-mail</label>
+              <div className="login-input">
+                <Mail size={19} aria-hidden="true" />
+                <input
+                  id="login-email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="seuemail@exemplo.com"
+                  type="email"
+                  inputMode="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  autoComplete="email"
+                  disabled={submitting}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="login-field">
+              <label htmlFor="login-password">Senha</label>
+              <div className="login-input">
+                <LockKeyhole size={19} aria-hidden="true" />
+                <input
+                  id="login-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Digite sua senha"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  minLength={6}
+                  disabled={submitting}
+                  required
+                />
+                <button
+                  className="login-password-toggle"
+                  type="button"
+                  onClick={() => setShowPassword((value) => !value)}
+                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                  aria-pressed={showPassword}
+                  disabled={submitting}
+                >
+                  {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                </button>
+              </div>
+            </div>
+
+            <div className="login-form-help">
+              <span>Use os mesmos dados do cadastro.</span>
+              <button type="button" onClick={handleForgotPassword} disabled={recovering || submitting}>
+                {recovering ? 'Enviando...' : 'Esqueci minha senha'}
+              </button>
+            </div>
+
+            <button className="login-submit" type="submit" disabled={!canSubmit || submitting}>
+              {submitting ? (
+                <>
+                  <LoaderCircle className="login-spinner" size={20} aria-hidden="true" />
+                  Entrando...
+                </>
+              ) : (
+                <>
+                  Entrar
+                  <ArrowRight size={20} aria-hidden="true" />
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="login-divider" aria-hidden="true">
+            <span />
+            <small>Novo por aqui?</small>
+            <span />
+          </div>
+
+          <button className="login-register" type="button" onClick={() => router.push('/cadastro')}>
+            Criar minha conta
+          </button>
+
+          <p className="login-privacy">
+            <ShieldCheck size={15} aria-hidden="true" />
+            Seus dados e sua evolução ficam protegidos.
+          </p>
+        </div>
+      </section>
+
       <Toast toast={toast} onClear={() => setToast(null)} />
-    </div>
+    </main>
   );
 }
