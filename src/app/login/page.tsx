@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import {
   ArrowRight,
   CalendarCheck,
@@ -106,23 +107,37 @@ export default function LoginPage() {
 
       <section className="login-card" aria-labelledby="login-title">
         <div className="login-visual">
-          <header className="login-brand-row">
-            <div className="login-brand" aria-label="BullRep">
-              <span className="login-brand-mark" aria-hidden="true">B</span>
-              <span className="login-brand-name">BULL<span>REP</span></span>
-            </div>
+          <div className="login-energy-field" aria-hidden="true">
+            <span className="login-energy-particle login-energy-particle-one" />
+            <span className="login-energy-particle login-energy-particle-two" />
+            <span className="login-energy-particle login-energy-particle-three" />
+          </div>
 
-            <div className="login-security-badge">
-              <ShieldCheck size={15} aria-hidden="true" />
-              <span>Ambiente seguro</span>
-            </div>
-          </header>
+          <div className="login-security-badge">
+            <ShieldCheck size={15} aria-hidden="true" />
+            <span>Ambiente seguro</span>
+          </div>
+
+          <div className="login-logo-stage">
+            <span className="login-logo-orbit login-logo-orbit-one" aria-hidden="true" />
+            <span className="login-logo-orbit login-logo-orbit-two" aria-hidden="true" />
+            <span className="login-logo-aura" aria-hidden="true" />
+            <Image
+              className="login-logo-image"
+              src="/brand-source.png"
+              width={1025}
+              height={909}
+              sizes="(max-width: 899px) 190px, 340px"
+              alt="BullRep — Domine a carga"
+              priority
+            />
+          </div>
 
           <div className="login-hero-copy">
-            <p className="login-eyebrow">Treino, foco e evolução</p>
-            <h2>Seu progresso não para.</h2>
+            <p className="login-eyebrow"><span aria-hidden="true" /> Sua evolução começa agora</p>
+            <h2>Treine. Registre. Evolua.</h2>
             <p>
-              Registre cada treino, acompanhe sua evolução e mantenha sua semana no ritmo.
+              Cada repetição conta. A BullRep transforma seu esforço em progresso visível.
             </p>
           </div>
 
