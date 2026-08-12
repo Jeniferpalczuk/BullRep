@@ -1,13 +1,20 @@
 ﻿import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Check, CheckCircle2, Plus, Search, X } from 'lucide-react';
+import { Check, CheckCircle2, Plus, Search, X } from 'lucide-react';
 import { EXERCISE_CATALOG } from './utils';
+import { formatTrainingType, normalizeMuscleGroupName } from '@/lib/trainingMuscles';
+import type { ExerciseSelection } from '@/features/workout/types';
 
 function normalizeCategoryName(value?: string) {
   if (!value) return null;
   const target = value.trim().toLowerCase();
-  const found = Object.keys(EXERCISE_CATALOG).find((cat) => cat.toLowerCase() === target);
+  const normalizedMuscle = normalizeMuscleGroupName(value);
+  const found = Object.keys(EXERCISE_CATALOG).find(
+    (cat) =>
+      cat.toLowerCase() === target ||
+      (normalizedMuscle && normalizeMuscleGroupName(cat) === normalizedMuscle)
+  );
   return found ?? null;
 }
 
@@ -15,16 +22,42 @@ export function ExerciseSelectorModal({
   onSelect,
   onCancel,
   defaultCategory,
+  defaultCategories,
+  blockedCategories = [],
 }: {
-  onSelect: (names: string[]) => void;
+  onSelect: (exercises: ExerciseSelection[]) => void;
   onCancel: () => void;
   defaultCategory?: string;
+  defaultCategories?: string[];
+  blockedCategories?: string[];
 }) {
-  const defaultCat = normalizeCategoryName(defaultCategory);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(defaultCat ? [defaultCat] : []);
+  const blockedCategorySet = new Set(
+    blockedCategories.map(normalizeCategoryName).filter((category): category is string => Boolean(category))
+  );
+  const initialCategories = [...(defaultCategories || []), ...(defaultCategory ? [defaultCategory] : [])]
+    .map(normalizeCategoryName)
+    .filter((category): category is string => Boolean(category))
+    .filter((category, index, values) => values.indexOf(category) === index)
+    .filter((category) => !blockedCategorySet.has(category));
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(initialCategories);
   const [query, setQuery] = useState('');
-  const [showCategoryPicker, setShowCategoryPicker] = useState(!defaultCat);
-  const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
+  const [showCategoryPicker, setShowCategoryPicker] = useState(initialCategories.length === 0);
+  const [selectedExercises, setSelectedExercises] = useState<ExerciseSelection[]>([]);
+  const [categoryWarning, setCategoryWarning] = useState<string | null>(null);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onCancel();
+    };
+    window.addEventListener('keydown', closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [onCancel]);
 
   const allCategories = useMemo(() => Object.keys(EXERCISE_CATALOG), []);
 
@@ -48,19 +81,28 @@ export function ExerciseSelectorModal({
   }, [query, selectedCategories]);
 
   const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) => {
-      const exists = prev.includes(category);
-      if (exists) {
-        const next = prev.filter((item) => item !== category);
-        return next;
-      }
-      return [...prev, category];
-    });
+    const exists = selectedCategories.includes(category);
+    if (exists) {
+      setCategoryWarning(null);
+      setSelectedCategories((current) => current.filter((item) => item !== category));
+      return;
+    }
+    if (blockedCategorySet.has(category)) {
+      const muscle = normalizeMuscleGroupName(category);
+      setCategoryWarning(
+        `${muscle ? formatTrainingType([muscle]) : category.toUpperCase()} já foi treinado nesta semana. Escolha outro músculo.`
+      );
+      return;
+    }
+    setCategoryWarning(null);
+    setSelectedCategories((current) => [...current, category]);
   };
 
-  const toggleExercise = (name: string) => {
-    setSelectedExercises((prev) =>
-      prev.includes(name) ? prev.filter((item) => item !== name) : [...prev, name]
+  const toggleExercise = (name: string, category: string) => {
+    setSelectedExercises((current) =>
+      current.some((item) => item.name === name)
+        ? current.filter((item) => item.name !== name)
+        : [...current, { name, muscleGroup: category }]
     );
   };
 
@@ -72,6 +114,7 @@ export function ExerciseSelectorModal({
 
   return (
     <div
+      className="exercise-selector-backdrop"
       style={{
         position: 'fixed',
         inset: 0,
@@ -82,6 +125,7 @@ export function ExerciseSelectorModal({
           alignItems: 'center',
           justifyContent: 'center',
           padding: '18px',
+          overflowY: 'auto',
       }}
     >
       <motion.div
@@ -89,11 +133,14 @@ export function ExerciseSelectorModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 260, damping: 28 }}
         exit={{ opacity: 0, scale: 0.985, y: 10 }}
-        className="glass-card-premium"
+        className="glass-card-premium exercise-selector-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="exercise-selector-title"
         style={{
           width: '100%',
           maxWidth: '760px',
-          maxHeight: '90vh',
+          maxHeight: 'min(90dvh, 760px)',
           overflow: 'hidden',
           borderRadius: '24px',
           border: '1px solid rgba(255,255,255,0.08)',
@@ -103,27 +150,21 @@ export function ExerciseSelectorModal({
           flexDirection: 'column',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginBottom: '14px', position: 'sticky', top: '-20px', zIndex: 1, background: 'linear-gradient(180deg, rgba(12,12,12,0.98), rgba(12,12,12,0.94))', paddingTop: '2px', paddingBottom: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-            <button
-              type="button"
-              onClick={onCancel}
-              className="btn-ghost"
-              style={{ padding: '8px 12px', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-            >
-              <ArrowLeft size={16} />
-              Voltar
-            </button>
-            <h2 style={{ fontSize: '1.45rem', fontWeight: 900, color: '#fff' }}>Treino</h2>
+        <div className="exercise-selector-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginBottom: '14px', position: 'sticky', top: '-20px', zIndex: 1, background: 'linear-gradient(180deg, rgba(12,12,12,0.98), rgba(12,12,12,0.94))', paddingTop: '2px', paddingBottom: '8px' }}>
+          <div>
+            <h2 id="exercise-selector-title" style={{ fontSize: '1.45rem', fontWeight: 900, color: '#fff' }}>Adicionar exercícios</h2>
+            <p className="exercise-selector-subtitle">Escolha um ou mais exercícios para o treino.</p>
           </div>
 
           <button
             type="button"
             onClick={onCancel}
-            className="btn-ghost"
-            style={{ padding: '8px 14px', borderRadius: '12px', fontWeight: 800 }}
+            className="btn-ghost exercise-selector-close"
+            aria-label="Fechar seletor de exercícios"
+            style={{ padding: '8px 12px', borderRadius: '12px', fontWeight: 800 }}
           >
-            Fechar
+            <X size={18} />
+            <span>Fechar</span>
           </button>
         </div>
 
@@ -178,27 +219,38 @@ export function ExerciseSelectorModal({
             <div style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(110px,1fr))', gap: '8px' }}>
               {allCategories.map((cat) => {
                 const selected = selectedCategories.includes(cat);
+                const blocked = blockedCategorySet.has(cat);
                 return (
                   <button
                     key={cat}
                     type="button"
+                    aria-disabled={blocked}
+                    aria-label={blocked ? `${cat} já treinado nesta semana` : `Selecionar ${cat}`}
                     onClick={() => toggleCategory(cat)}
                     style={{
                       borderRadius: '12px',
                       border: selected ? '1px solid rgba(232,0,29,0.45)' : '1px solid rgba(255,255,255,0.08)',
                       background: selected ? 'rgba(232,0,29,0.16)' : 'rgba(255,255,255,0.03)',
-                      color: '#fff',
+                      color: blocked ? 'rgba(255,255,255,0.38)' : '#fff',
                       padding: '9px 10px',
                       fontSize: '0.82rem',
                       fontWeight: 800,
                       cursor: 'pointer',
                       textAlign: 'left',
+                      textDecoration: blocked ? 'line-through' : 'none',
                     }}
                   >
-                    {cat}
+                    {cat}{blocked ? ' · feito' : ''}
                   </button>
                 );
               })}
+            </div>
+          )}
+
+          {categoryWarning && (
+            <div className="weekly-muscle-warning" role="alert">
+              <span aria-hidden="true">!</span>
+              <p>{categoryWarning}</p>
             </div>
           )}
         </div>
@@ -219,9 +271,9 @@ export function ExerciseSelectorModal({
           {exerciseList.length} exercícios encontrados
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflowY: 'auto', paddingRight: '2px' }}>
+        <div className="exercise-selector-list" style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflowY: 'auto', paddingRight: '2px' }}>
           {exerciseList.map((ex, idx) => {
-            const isAdded = selectedExercises.includes(ex.name);
+            const isAdded = selectedExercises.some((item) => item.name === ex.name);
             return (
               <div
                 key={`${ex.name}-${idx}`}
@@ -263,7 +315,7 @@ export function ExerciseSelectorModal({
 
                     <button
                       type="button"
-                      onClick={() => toggleExercise(ex.name)}
+                      onClick={() => toggleExercise(ex.name, ex.category)}
                       style={{
                         width: '100%',
                         borderRadius: '12px',
@@ -296,7 +348,7 @@ export function ExerciseSelectorModal({
           )}
         </div>
 
-        <div style={{ position: 'sticky', bottom: '-20px', paddingTop: '14px', paddingBottom: '2px', background: 'linear-gradient(180deg, rgba(6,6,6,0), rgba(6,6,6,0.98) 35%)' }}>
+        <div className="exercise-selector-footer" style={{ position: 'sticky', bottom: '-20px', paddingTop: '14px', paddingBottom: '2px', background: 'linear-gradient(180deg, rgba(6,6,6,0), rgba(6,6,6,0.98) 35%)' }}>
           <button
             type="button"
             className="btn-primary"

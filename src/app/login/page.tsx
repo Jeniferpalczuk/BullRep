@@ -86,7 +86,7 @@ export default function LoginPage() {
               Acompanhe progresso, histórico e metas de forma prática e profissional.
             </p>
 
-            <div style={{ marginTop: '20px', display: 'grid', gap: '10px' }}>
+            <div className="auth-login-benefits" style={{ marginTop: '20px', display: 'grid', gap: '10px' }}>
               {[
                 'Histórico completo de treinos',
                 'Dashboard com evolução semanal',

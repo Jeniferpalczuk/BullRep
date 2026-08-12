@@ -3,6 +3,12 @@ import { Prisma } from '@prisma/client';
 
 import { getAuthenticatedUser } from '@/lib/apiAuth';
 import { prisma } from '@/lib/prisma';
+import {
+  formatTrainingType,
+  getMondayWeekRange,
+  getTrainingMuscleGroups,
+  parseDateKey,
+} from '@/lib/trainingMuscles';
 
 function mapSession(session: {
   id: string;
@@ -75,13 +81,57 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Adicione pelo menos um exercicio.' }, { status: 400 });
     }
 
+    const requestedDate =
+      typeof body.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.date)
+        ? body.date
+        : new Date().toISOString().slice(0, 10);
+    const sessionDate = parseDateKey(requestedDate);
+    const muscleGroups = getTrainingMuscleGroups(
+      body.trainingType,
+      exercises.map((exercise: { name?: string }) => exercise.name || '')
+    );
+
+    if (muscleGroups.length > 0) {
+      const { start, end } = getMondayWeekRange(requestedDate);
+      const sessionsInWeek = await prisma.trainingSession.findMany({
+        where: {
+          userId: user.id,
+          date: { gte: start, lt: end },
+        },
+        select: {
+          trainingType: true,
+          exercises: { select: { name: true } },
+        },
+      });
+
+      const trainedThisWeek = new Set(
+        sessionsInWeek.flatMap((savedSession) =>
+          getTrainingMuscleGroups(
+            savedSession.trainingType,
+            savedSession.exercises.map((exercise) => exercise.name)
+          )
+        )
+      );
+      const repeatedGroups = muscleGroups.filter((group) => trainedThisWeek.has(group));
+
+      if (repeatedGroups.length > 0) {
+        return NextResponse.json(
+          {
+            error: `${formatTrainingType(repeatedGroups)} já foi treinado nesta semana. Escolha outro músculo.`,
+            code: 'MUSCLE_ALREADY_TRAINED_THIS_WEEK',
+          },
+          { status: 409 }
+        );
+      }
+    }
+
     const session = await prisma.trainingSession.create({
       data: {
         userId: user.id,
-        trainingType: body.trainingType || 'Livre',
+        trainingType: muscleGroups.length > 0 ? formatTrainingType(muscleGroups) : body.trainingType || 'Livre',
         notes: body.notes || null,
         durationMin: body.durationMin == null ? null : Number(body.durationMin),
-        date: new Date(),
+        date: sessionDate,
         exercises: {
           create: exercises.map(
             (

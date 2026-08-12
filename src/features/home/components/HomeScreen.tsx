@@ -1,21 +1,30 @@
 'use client';
 /* eslint-disable @next/next/no-img-element */
 
-import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Calendar, Trash2, Weight, Dumbbell, Zap } from 'lucide-react';
 
 import type { TrainingSession, User } from '@/types';
 import { getGreeting, getDayOfWeek, toDateKey, getWeekRange, isInRange, getCatalogEntryByName } from '@/components/utils';
 import { ExerciseSelectorModal } from '@/components/modals';
 import { CalendarSection } from '@/features/dashboard/components/CalendarSection';
-import type { ExerciseDraft } from '@/features/workout/types';
+import type { ExerciseDraft, ExerciseSelection } from '@/features/workout/types';
+import {
+  formatTrainingType,
+  getTrainingMuscleGroups,
+  normalizeMuscleGroupName,
+  type TrainingMuscleGroup,
+} from '@/lib/trainingMuscles';
 
 type HomeTab = 'home' | 'progress' | 'workout' | 'profile';
+
+const FEATURED_MUSCLE_GROUPS: TrainingMuscleGroup[] = ['Peito', 'Costas', 'Perna', 'Bíceps', 'Ombro'];
 
 export function HomeScreen({
   sessions,
   onCreateSession,
+  onDeleteSession,
   user,
   displayName,
   currentAvatarUrl,
@@ -24,6 +33,7 @@ export function HomeScreen({
 }: {
   sessions: TrainingSession[];
   onCreateSession: (type: string, obs: string, exercises: ExerciseDraft[]) => Promise<boolean>;
+  onDeleteSession: (sessionId: string) => Promise<boolean>;
   user: User | null;
   displayName: string;
   currentAvatarUrl: string;
@@ -31,11 +41,15 @@ export function HomeScreen({
   setTab: (t: HomeTab) => void;
   loading?: boolean;
 }) {
-  const [newType, setNewType] = useState('Peito');
+  const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<TrainingMuscleGroup[]>(['Peito']);
   const [exercises, setExercises] = useState<ExerciseDraft[]>([]);
   const [creating, setCreating] = useState(false);
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
+  const [deleteCandidate, setDeleteCandidate] = useState<TrainingSession | null>(null);
+  const [deletingSessionId, setDeletingSessionId] = useState<string | null>(null);
+  const [showAllSaved, setShowAllSaved] = useState(false);
+  const [weeklyWarning, setWeeklyWarning] = useState<string | null>(null);
   const [savedChecks, setSavedChecks] = useState<Record<string, { doneDates: string[] }>>(() => {
     if (typeof window === 'undefined') return {};
     try {
@@ -60,6 +74,7 @@ export function HomeScreen({
 
   const sessionsSorted = [...sessions].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   const savedSessions = [...sessionsSorted].reverse();
+  const visibleSavedSessions = showAllSaved ? savedSessions : savedSessions.slice(0, 4);
   const recordAllTime = sessionsSorted.reduce(
     (maxSession, session) =>
       Math.max(
@@ -72,6 +87,18 @@ export function HomeScreen({
   const { startOfWeek, endOfWeek, startPrevWeek } = getWeekRange();
   const sessionsThisWeek = sessionsSorted.filter((s) => isInRange(s.date, startOfWeek, endOfWeek));
   const sessionsPrevWeek = sessionsSorted.filter((s) => isInRange(s.date, startPrevWeek, startOfWeek));
+  const trainedMusclesThisWeek = new Map<TrainingMuscleGroup, TrainingSession>();
+  sessionsThisWeek.forEach((savedSession) => {
+    getTrainingMuscleGroups(
+      savedSession.trainingType,
+      savedSession.exercises.map((exercise) => exercise.name)
+    ).forEach((group) => {
+      if (!trainedMusclesThisWeek.has(group)) trainedMusclesThisWeek.set(group, savedSession);
+    });
+  });
+  const newType = selectedMuscleGroups.length > 0
+    ? formatTrainingType(selectedMuscleGroups)
+    : 'ESCOLHA UM MÚSCULO';
   const daysDoneThisWeek = new Set(sessionsThisWeek.map((s) => toDateKey(s.date)));
   const weekGoal = 5;
   const weekDone = Math.min(weekGoal, daysDoneThisWeek.size);
@@ -92,9 +119,35 @@ export function HomeScreen({
   })();
 
   const timeEstimateMin = Math.max(20, exercises.length * 15);
-  const buildDraftExercise = (name: string): ExerciseDraft => ({
+
+  const buildWeeklyWarning = (group: TrainingMuscleGroup) => {
+    const savedSession = trainedMusclesThisWeek.get(group);
+    if (!savedSession) return null;
+    const trainedDate = new Date(`${toDateKey(savedSession.date)}T12:00:00`).toLocaleDateString(
+      'pt-BR',
+      { weekday: 'long', day: '2-digit', month: '2-digit' }
+    );
+    return `${formatTrainingType([group])} já foi treinado nesta semana (${trainedDate}). Escolha outro músculo.`;
+  };
+  const displayedWeeklyWarning =
+    weeklyWarning ||
+    selectedMuscleGroups.map(buildWeeklyWarning).find((warning) => Boolean(warning)) ||
+    null;
+
+  const selectMuscleGroup = (group: TrainingMuscleGroup) => {
+    const warning = buildWeeklyWarning(group);
+    if (warning) {
+      setWeeklyWarning(warning);
+      return;
+    }
+    setWeeklyWarning(null);
+    setSelectedMuscleGroups([group]);
+  };
+
+  const buildDraftExercise = (selection: ExerciseSelection): ExerciseDraft => ({
       id: crypto.randomUUID(),
-      name,
+      name: selection.name,
+      muscleGroup: selection.muscleGroup,
       sets: [
         { id: crypto.randomUUID(), reps: 10, weight: 0 },
         { id: crypto.randomUUID(), reps: 10, weight: 0 },
@@ -102,8 +155,28 @@ export function HomeScreen({
       ],
     });
 
-  const addExercises = (names: string[]) => {
-    setExercises((prev) => [...prev, ...names.map(buildDraftExercise)]);
+  const getDraftMuscleGroups = (drafts: ExerciseDraft[]): TrainingMuscleGroup[] => {
+    const groups = drafts.flatMap((exercise) => {
+      const explicitGroup = normalizeMuscleGroupName(exercise.muscleGroup || '');
+      return explicitGroup
+        ? [explicitGroup]
+        : getTrainingMuscleGroups(null, [exercise.name]);
+    });
+    return groups.filter((group, index) => groups.indexOf(group) === index);
+  };
+
+  const addExercises = (selectedExercises: ExerciseSelection[]) => {
+    const nextExercises = [...exercises, ...selectedExercises.map(buildDraftExercise)];
+    setExercises(nextExercises);
+    setSelectedMuscleGroups(getDraftMuscleGroups(nextExercises));
+    setWeeklyWarning(null);
+  };
+
+  const removeExercise = (exerciseId: string) => {
+    const nextExercises = exercises.filter((exercise) => exercise.id !== exerciseId);
+    setExercises(nextExercises);
+    const inferredGroups = getDraftMuscleGroups(nextExercises);
+    if (inferredGroups.length > 0) setSelectedMuscleGroups(inferredGroups);
   };
 
   const normalizeText = (v: string) => v.trim().toLowerCase();
@@ -149,6 +222,16 @@ export function HomeScreen({
   };
 
   const handleCreate = async () => {
+    const repeatedGroup = selectedMuscleGroups.find((group) => trainedMusclesThisWeek.has(group));
+    if (repeatedGroup) {
+      setWeeklyWarning(buildWeeklyWarning(repeatedGroup));
+      return;
+    }
+    if (selectedMuscleGroups.length === 0) {
+      setWeeklyWarning('Escolha pelo menos um músculo para montar o treino.');
+      return;
+    }
+
     setCreating(true);
     if (editingSessionId) {
       const original = sessions.find((s) => s.id === editingSessionId);
@@ -201,7 +284,30 @@ export function HomeScreen({
   const cancelEdit = () => {
     setEditingSessionId(null);
     setExercises([]);
-    setNewType('Peito');
+    setSelectedMuscleGroups(['Peito']);
+    setWeeklyWarning(null);
+  };
+
+  const loadSessionTemplate = (savedSession: TrainingSession) => {
+    setEditingSessionId(savedSession.id);
+    const templateMuscles = getTrainingMuscleGroups(
+      savedSession.trainingType,
+      savedSession.exercises.map((exercise) => exercise.name)
+    );
+    setSelectedMuscleGroups(templateMuscles);
+    const repeatedGroup = templateMuscles.find((group) => trainedMusclesThisWeek.has(group));
+    setWeeklyWarning(repeatedGroup ? buildWeeklyWarning(repeatedGroup) : null);
+    const exDrafts: ExerciseDraft[] = savedSession.exercises.map((dbEx) => ({
+      id: crypto.randomUUID(),
+      name: dbEx.name,
+      sets: Array.from({ length: Math.max(1, dbEx.setsDone) }).map(() => ({
+        id: crypto.randomUUID(),
+        reps: dbEx.repsDone,
+        weight: dbEx.weight,
+      })),
+    }));
+    setExercises(exDrafts);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const persistChecks = (next: Record<string, { doneDates: string[] }>) => {
@@ -221,8 +327,40 @@ export function HomeScreen({
     });
   };
 
+  const confirmDeleteSession = async () => {
+    if (!deleteCandidate || deletingSessionId) return;
+
+    setDeletingSessionId(deleteCandidate.id);
+    const deleted = await onDeleteSession(deleteCandidate.id);
+    setDeletingSessionId(null);
+
+    if (!deleted) return;
+
+    const nextChecks = { ...savedChecks };
+    delete nextChecks[deleteCandidate.id];
+    persistChecks(nextChecks);
+    if (editingSessionId === deleteCandidate.id) cancelEdit();
+    setDeleteCandidate(null);
+  };
+
+  useEffect(() => {
+    if (!deleteCandidate) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !deletingSessionId) setDeleteCandidate(null);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [deleteCandidate, deletingSessionId]);
+
   return (
-    <div className="animate-fade-in home-screen">
+    <div className="home-screen">
       {/* HEADER SECTION */}
       <div className="home-shell">
 
@@ -311,32 +449,46 @@ export function HomeScreen({
 
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '8px', scrollbarWidth: 'none' }}>
-               {['Peito', 'Costas', 'Perna', 'Bíceps', 'Ombro'].map((m, idx) => (
+               {FEATURED_MUSCLE_GROUPS.map((m, idx) => {
+                 const isSelected = selectedMuscleGroups.includes(m);
+                 const isBlocked = trainedMusclesThisWeek.has(m);
+                 return (
                  <button
                    key={m}
-                   onClick={() => setNewType(m)}
+                   type="button"
+                   aria-disabled={isBlocked}
+                   aria-label={isBlocked ? `${m} já treinado nesta semana` : `Selecionar ${m}`}
+                   onClick={() => selectMuscleGroup(m)}
                    style={{
                      padding: '8px 16px', fontSize: '0.8rem', fontWeight: 800, borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)',
-                     background: newType === m ? 'var(--red-primary)' : 'rgba(255,255,255,0.03)',
-                     color: newType === m ? '#fff' : 'var(--text-muted)',
+                     background: isBlocked ? 'rgba(255,255,255,0.025)' : isSelected ? 'var(--red-primary)' : 'rgba(255,255,255,0.03)',
+                     color: isBlocked ? 'rgba(255,255,255,0.35)' : isSelected ? '#fff' : 'var(--text-muted)',
                      whiteSpace: 'nowrap', cursor: 'pointer', transition: '0.2s',
-                     display: 'flex', alignItems: 'center', gap: '6px'
+                     display: 'flex', alignItems: 'center', gap: '6px',
+                     textDecoration: isBlocked ? 'line-through' : 'none'
                    }}
                  >
-                   <Dumbbell size={14} style={{ color: newType === m ? '#fff' : ['#ffcc00', '#00e676', '#aa00ff'][idx % 3] }} />
+                   <Dumbbell size={14} style={{ color: isSelected && !isBlocked ? '#fff' : ['#ffcc00', '#00e676', '#aa00ff'][idx % 3] }} />
                    {m}
                  </button>
-               ))}
+                 );
+               })}
             </div>
+            {displayedWeeklyWarning && (
+              <div className="weekly-muscle-warning" role="alert">
+                <span aria-hidden="true">!</span>
+                <p>{displayedWeeklyWarning}</p>
+              </div>
+            )}
           </div>
 
           <div style={{ marginBottom: '24px' }}>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 800, marginBottom: '12px' }}>EXERCÍCIOS ({exercises.length})</p>
             {exercises.length === 0 ? (
-               <div onClick={() => setSelectorOpen(true)} style={{ padding: '32px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: '2px dashed var(--border)', borderRadius: '20px', cursor: 'pointer' }}>
+               <button type="button" onClick={() => setSelectorOpen(true)} style={{ width: '100%', padding: '32px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: '2px dashed var(--border)', borderRadius: '20px', cursor: 'pointer', color: 'inherit' }}>
                  <Dumbbell size={24} style={{ color: 'var(--red-primary)', marginBottom: '8px', opacity: 0.5 }} />
                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Clique para adicionar exercícios</p>
-               </div>
+               </button>
             ) : (
                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                  {exercises.map((ex) => {
@@ -358,7 +510,7 @@ export function HomeScreen({
                          </div>
                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{new Date().toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' })} &rsaquo;</span>
-                           <button onClick={() => setExercises(prev => prev.filter(e => e.id !== ex.id))} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                           <button type="button" aria-label={`Remover exercício ${ex.name}`} onClick={() => removeExercise(ex.id)} className="exercise-remove-button" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
                              <Trash2 size={16} />
                            </button>
                          </div>
@@ -384,7 +536,7 @@ export function HomeScreen({
                              </label>
 
                              <div className="workout-set-weight">
-                               <button type="button" onClick={() => updateSet(ex.id, set.id, 'weight', Math.max(0, set.weight - 1))}>-</button>
+                               <button type="button" aria-label={`Diminuir carga da série ${idx + 1}`} onClick={() => updateSet(ex.id, set.id, 'weight', Math.max(0, set.weight - 1))}>-</button>
                                <label className="workout-set-field">
                                  <input
                                    type="number"
@@ -396,18 +548,18 @@ export function HomeScreen({
                                  />
                                  <span>kg</span>
                                </label>
-                               <button type="button" onClick={() => updateSet(ex.id, set.id, 'weight', set.weight + 1)}>+</button>
+                               <button type="button" aria-label={`Aumentar carga da série ${idx + 1}`} onClick={() => updateSet(ex.id, set.id, 'weight', set.weight + 1)}>+</button>
                              </div>
 
                              <span className="workout-set-history">{hist || 'Sem histórico'}</span>
 
-                             <button className="workout-set-remove" type="button" onClick={() => removeSet(ex.id, set.id)}>
+                             <button className="workout-set-remove" type="button" aria-label={`Remover série ${idx + 1}`} onClick={() => removeSet(ex.id, set.id)}>
                                <Trash2 size={14} />
                              </button>
                            </div>
                          ))}
 
-                         <button onClick={() => addSet(ex.id)} style={{ alignSelf: 'center', marginTop: '4px', background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 800, cursor: 'pointer', opacity: 0.6 }}>
+                         <button type="button" onClick={() => addSet(ex.id)} className="add-set-button" style={{ alignSelf: 'center', marginTop: '4px', background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 800, cursor: 'pointer', opacity: 0.6 }}>
                            + Adicionar série
                          </button>
                        </div>
@@ -444,7 +596,7 @@ export function HomeScreen({
             disabled={exercises.length === 0 || creating}
             onClick={handleStartWorkout}
           >
-            {creating ? 'SALVANDO...' : editingSessionId ? 'SALVAR EDI-ÕES' : 'SALVAR TREINO'}
+            {creating ? 'SALVANDO...' : editingSessionId ? 'SALVAR NOVA VERSÃO' : 'SALVAR TREINO'}
           </button>
         </div>
 
@@ -477,21 +629,21 @@ export function HomeScreen({
           </span>
         </div>
 
-        {savedSessions.slice(0, 6).map(s => {
+        {visibleSavedSessions.map(s => {
           const doneDates = savedChecks[s.id]?.doneDates || [];
           const trainedCount = doneDates.length;
           const doneToday = doneDates.includes(todayKey);
           return (
-          <div key={s.id} className="card-premium home-section-card" style={{ padding: '16px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div style={{ display: 'flex', gap: '16px' }}>
-                <div style={{ width: '48px', height: '48px', background: 'var(--red-primary)', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.4rem', color: '#fff' }}>
-                  A
+          <div key={s.id} className="card-premium home-section-card saved-workout-card">
+            <div className="saved-workout-head">
+              <div className="saved-workout-summary">
+                <div className="saved-workout-icon" aria-hidden="true">
+                  {s.trainingType.trim().charAt(0).toUpperCase() || 'T'}
                 </div>
-                <div>
+                <div className="saved-workout-details">
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 800 }}>{s.trainingType}</h3>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px', fontWeight: 600 }}>
-                    {new Date(s.date).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' })} - {s.exercises.length} exercícios - {s.exercises.reduce((acc, e) => acc + (e.weight * e.setsDone), 0)}kg
+                  <p className="saved-workout-meta">
+                    {new Date(`${toDateKey(s.date)}T12:00:00`).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' })} - {s.exercises.length} exercícios - {s.exercises.reduce((acc, e) => acc + (e.weight * e.setsDone), 0)}kg
                   </p>
                   <p style={{ fontSize: '0.74rem', color: 'var(--green)', marginTop: '6px', fontWeight: 800 }}>
                     Treinado: {trainedCount}x
@@ -499,58 +651,36 @@ export function HomeScreen({
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+              <div className="saved-workout-actions">
                 <button
-                  className="btn-primary"
-                  style={{ padding: '8px 12px', borderRadius: '10px', fontSize: '0.75rem', fontWeight: 800 }}
+                  className="btn-primary saved-workout-primary"
                   type="button"
-                  onClick={() => {
-                    setEditingSessionId(s.id);
-                    setNewType(s.trainingType.split(' ')[0] || 'Costas');
-                    const exDrafts: ExerciseDraft[] = s.exercises.map(dbEx => {
-                      const sets = Array.from({ length: dbEx.setsDone }).map(() => ({
-                        id: crypto.randomUUID(), reps: dbEx.repsDone, weight: dbEx.weight
-                      }));
-                      return { id: crypto.randomUUID(), name: dbEx.name, sets };
-                    });
-                    setExercises(exDrafts);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
+                  onClick={() => loadSessionTemplate(s)}
                 >
-                  Duplicar treino
+                  Usar como modelo
                 </button>
                 <button
-                  className="btn-ghost"
-                  style={{ padding: '6px 10px', cursor: 'pointer', borderRadius: '8px', borderColor: doneToday ? 'rgba(0,230,118,0.45)' : undefined }}
+                  className={`btn-ghost saved-workout-check${doneToday ? ' is-done' : ''}`}
                   type="button"
                   onClick={() => toggleSavedDoneToday(s.id)}
                 >
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: doneToday ? 'var(--green)' : undefined }}>
-                    {doneToday ? 'Feito hoje ?' : 'Marcar ?'}
+                  <span>
+                    {doneToday ? 'Feito hoje ✓' : 'Marcar como feito'}
                   </span>
                 </button>
                 <button
-                   className="btn-ghost"
-                   style={{ padding: '6px 10px', cursor: 'pointer', borderRadius: '8px' }}
-                   onClick={() => {
-                     setEditingSessionId(s.id);
-                     setNewType(s.trainingType.split(' ')[0] || 'Costas');
-                     const exDrafts: ExerciseDraft[] = s.exercises.map(dbEx => {
-                       const sets = Array.from({ length: dbEx.setsDone }).map(() => ({
-                         id: crypto.randomUUID(), reps: dbEx.repsDone, weight: dbEx.weight
-                       }));
-                       return { id: crypto.randomUUID(), name: dbEx.name, sets };
-                     });
-                     setExercises(exDrafts);
-                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                   }}
+                  className="saved-workout-delete"
+                  type="button"
+                  aria-label={`Excluir treino ${s.trainingType}`}
+                  onClick={() => setDeleteCandidate(s)}
                 >
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800 }}>Duplicar e editar</span>
+                  <Trash2 size={18} />
+                  <span>Excluir</span>
                 </button>
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '8px', marginTop: '14px', flexWrap: 'wrap' }}>
+            <div className="saved-workout-exercises">
               {s.exercises.slice(0, 3).map(ex => (
                 <div key={ex.id} style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 12px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid rgba(255,255,255,0.05)' }}>
                   <Dumbbell size={12} style={{ color: 'var(--text-muted)' }} />
@@ -570,15 +700,79 @@ export function HomeScreen({
             </div>
           </div>
         )})}      </div>
+        {savedSessions.length > 4 && (
+          <button
+            className="btn-ghost saved-workout-toggle"
+            type="button"
+            onClick={() => setShowAllSaved((current) => !current)}
+          >
+            {showAllSaved ? 'Mostrar menos' : `Ver todos os ${savedSessions.length} treinos`}
+          </button>
+        )}
       </div>
 
       <AnimatePresence>
         {selectorOpen && (
           <ExerciseSelectorModal
-            defaultCategory={newType}
-            onSelect={(names) => { addExercises(names); }}
+            defaultCategories={selectedMuscleGroups}
+            blockedCategories={[...trainedMusclesThisWeek.keys()]}
+            onSelect={(selectedExercises) => { addExercises(selectedExercises); }}
             onCancel={() => setSelectorOpen(false)}
           />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {deleteCandidate && (
+          <motion.div
+            className="delete-workout-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => {
+              if (!deletingSessionId) setDeleteCandidate(null);
+            }}
+          >
+            <motion.div
+              className="delete-workout-dialog"
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby="delete-workout-title"
+              aria-describedby="delete-workout-description"
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 24, scale: 0.98 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="delete-workout-icon" aria-hidden="true">
+                <Trash2 size={24} />
+              </div>
+              <div>
+                <h2 id="delete-workout-title">Excluir treino salvo?</h2>
+                <p id="delete-workout-description">
+                  O treino <strong>{deleteCandidate.trainingType}</strong> e seu histórico serão removidos definitivamente.
+                </p>
+              </div>
+              <div className="delete-workout-actions">
+                <button
+                  className="btn-ghost"
+                  type="button"
+                  disabled={Boolean(deletingSessionId)}
+                  onClick={() => setDeleteCandidate(null)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="delete-workout-confirm"
+                  type="button"
+                  disabled={Boolean(deletingSessionId)}
+                  onClick={confirmDeleteSession}
+                >
+                  {deletingSessionId ? 'Excluindo...' : 'Excluir treino'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
@@ -586,4 +780,3 @@ export function HomeScreen({
 }
 
 // Screen: Progress
-

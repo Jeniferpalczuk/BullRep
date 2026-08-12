@@ -12,7 +12,7 @@ export function CalendarSection({ sessions }: { sessions: TrainingSession[] }) {
   const [viewMonth, setViewMonth] = useState(today.getMonth());
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const monthNames = ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho',
+  const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
   const weekDaysShort = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 
@@ -77,10 +77,10 @@ export function CalendarSection({ sessions }: { sessions: TrainingSession[] }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {isExpanded && (
             <div style={{ display: 'flex', gap: '4px', marginRight: '8px' }}>
-              <button onClick={prevMonth} className="btn-ghost" style={{ padding: '4px 8px', borderRadius: '8px' }}>
+              <button type="button" aria-label="Mês anterior" onClick={prevMonth} className="btn-ghost calendar-nav-button" style={{ padding: '4px 8px', borderRadius: '8px' }}>
                 <ChevronDown size={14} style={{ transform: 'rotate(90deg)' }} />
               </button>
-              <button onClick={nextMonth} className="btn-ghost" style={{ padding: '4px 8px', borderRadius: '8px' }}>
+              <button type="button" aria-label="Próximo mês" onClick={nextMonth} className="btn-ghost calendar-nav-button" style={{ padding: '4px 8px', borderRadius: '8px' }}>
                 <ChevronDown size={14} style={{ transform: 'rotate(-90deg)' }} />
               </button>
             </div>

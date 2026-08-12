@@ -54,13 +54,11 @@ export default function CadastroPage() {
   const [frequency, setFrequency] = useState<BullrepFrequency>('3x');
 
   // Step 6: avatar
-  const [avatarUrl, setAvatarUrl] = useState('');
   const [avatarStyle, setAvatarStyle] = useState('adventurer');
   const [avatarSeed, setAvatarSeed] = useState('BULLREP');
   const [skinColor, setSkinColor] = useState('f2d3b1');
 
-  // Update Avatar URL in Real Time
-  useEffect(() => {
+  const avatarUrl = useMemo(() => {
     let url = `https://api.dicebear.com/9.x/${avatarStyle}/svg?seed=${avatarSeed}`;
     
     if (avatarStyle === 'adventurer') {
@@ -69,7 +67,7 @@ export default function CadastroPage() {
       url += `&skinColor=${skinColor}`;
     }
     
-    setAvatarUrl(url);
+    return url;
   }, [avatarStyle, avatarSeed, skinColor]);
 
   const handleRandomize = () => {
