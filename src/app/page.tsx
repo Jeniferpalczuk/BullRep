@@ -36,6 +36,7 @@ import { WorkoutExperience } from '@/components/workout/WorkoutExperience';
 import { useAuth } from '@/hooks/useAuth';
 import { Toast, type ToastState } from '@/components/Toast';
 import { apiRequest } from '@/lib/apiClient';
+import { getLocalDateKey } from '@/lib/trainingMuscles';
 import { CalendarSection } from '@/features/dashboard/components/CalendarSection';
 import { DashTooltip } from '@/features/dashboard/components/DashTooltip';
 import { ProgressScreen } from '@/features/progress/components/ProgressScreen';
@@ -466,6 +467,7 @@ export default function App() {
   const createSession = async (type: string, obs: string, exercises: ExerciseDraft[]) => {
     const { error } = await createSessionService({
       trainingType: type,
+      date: getLocalDateKey(),
       notes: obs || undefined,
       exercises: exercises.flatMap((ex) =>
         ex.sets.map((s, idx) => ({

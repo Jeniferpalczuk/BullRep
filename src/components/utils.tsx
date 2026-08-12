@@ -8,19 +8,28 @@ export function getGreeting(): string {
 }
 
 export function getDayOfWeek(): string {
-  const days = ['Domingo', 'Segunda-feira', 'Tera-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sbado'];
+  const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
   return days[new Date().getDay()];
 }
 
 export function toDateKey(dateStr: string): string {
+  if (/^\d{4}-\d{2}-\d{2}/.test(dateStr)) return dateStr.slice(0, 10);
   return new Date(dateStr).toISOString().slice(0, 10);
+}
+
+function toLocalDateKey(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 export function getWeekRange(): { startOfWeek: Date; endOfWeek: Date; startPrevWeek: Date } {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const startOfWeek = new Date(today);
-  startOfWeek.setDate(today.getDate() - today.getDay());
+  const daysSinceMonday = (today.getDay() + 6) % 7;
+  startOfWeek.setDate(today.getDate() - daysSinceMonday);
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 7);
   const startPrevWeek = new Date(startOfWeek);
@@ -29,8 +38,8 @@ export function getWeekRange(): { startOfWeek: Date; endOfWeek: Date; startPrevW
 }
 
 export function isInRange(dateStr: string, start: Date, end: Date): boolean {
-  const d = new Date(dateStr);
-  return d.getTime() >= start.getTime() && d.getTime() < end.getTime();
+  const dateKey = toDateKey(dateStr);
+  return dateKey >= toLocalDateKey(start) && dateKey < toLocalDateKey(end);
 }
 
 export type CatalogExercise = {
@@ -45,36 +54,36 @@ export type CatalogExercise = {
 
 const DIFFICULTY_MAP: Record<string, string> = {
   Iniciante: 'Iniciante',
-  Mdio: 'Intermedirio',
-  Avanado: 'Avanado',
+  Médio: 'Intermediário',
+  Avançado: 'Avançado',
 };
 
 const CATEGORY_BY_MUSCLE_ID: Record<string, string> = {
-  biceps: 'Bceps',
-  triceps: 'Trceps',
+  biceps: 'Bíceps',
+  triceps: 'Tríceps',
   chest: 'Peito',
   shoulders: 'Ombro',
-  trapezius: 'Trapzio',
+  trapezius: 'Trapézio',
   back: 'Costas',
-  forearms: 'Antebrao',
-  abs: 'Abdmen',
+  forearms: 'Antebraço',
+  abs: 'Abdômen',
   legs: 'Perna',
   calves: 'Panturrilhas',
-  glutes: 'Glteo',
+  glutes: 'Glúteo',
 };
 
 const TARGET_BY_MUSCLE_ID: Record<string, string> = {
-  biceps: 'Bceps',
-  triceps: 'Trceps',
+  biceps: 'Bíceps',
+  triceps: 'Tríceps',
   chest: 'Peitoral',
   shoulders: 'Ombro',
-  trapezius: 'Trapzio',
+  trapezius: 'Trapézio',
   back: 'Costas',
-  forearms: 'Antebrao',
-  abs: 'Abdmen',
+  forearms: 'Antebraço',
+  abs: 'Abdômen',
   legs: 'Pernas',
   calves: 'Panturrilhas',
-  glutes: 'Glteos',
+  glutes: 'Glúteos',
 };
 
 const EQUIPMENT_LABEL: Record<string, string> = {
@@ -133,12 +142,12 @@ export const MUSCLE_ICONS: Record<string, string> = {
   Peito: IMAGE_BY_MUSCLE_ID.Peito || '💪',
   Costas: IMAGE_BY_MUSCLE_ID.Costas || '💪',
   Perna: IMAGE_BY_MUSCLE_ID.Perna || '🦵',
-  Glteo: IMAGE_BY_MUSCLE_ID['Glteo'] || '🍑',
-  Bceps: IMAGE_BY_MUSCLE_ID['Bceps'] || '💪',
-  Trceps: IMAGE_BY_MUSCLE_ID['Trceps'] || '🏋️',
+  Glúteo: IMAGE_BY_MUSCLE_ID['Glúteo'] || '🍑',
+  Bíceps: IMAGE_BY_MUSCLE_ID['Bíceps'] || '💪',
+  Tríceps: IMAGE_BY_MUSCLE_ID['Tríceps'] || '🏋️',
   Ombro: IMAGE_BY_MUSCLE_ID.Ombro || '🏋️',
-  Abdmen: IMAGE_BY_MUSCLE_ID['Abdmen'] || '💪',
-  Trapzio: IMAGE_BY_MUSCLE_ID['Trapzio'] || '💪',
-  Antebrao: IMAGE_BY_MUSCLE_ID['Antebrao'] || '💪',
+  Abdômen: IMAGE_BY_MUSCLE_ID['Abdômen'] || '💪',
+  Trapézio: IMAGE_BY_MUSCLE_ID['Trapézio'] || '💪',
+  Antebraço: IMAGE_BY_MUSCLE_ID['Antebraço'] || '💪',
   Panturrilhas: IMAGE_BY_MUSCLE_ID.Panturrilhas || '🦵',
 };

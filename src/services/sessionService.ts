@@ -46,6 +46,7 @@ export async function fetchSessions(): Promise<{ data: TrainingSession[]; error?
 
 type CreateSessionPayload = {
   trainingType: string;
+  date?: string;
   notes?: string;
   durationMin?: number;
   exercises: Array<{
