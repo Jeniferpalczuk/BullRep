@@ -22,7 +22,12 @@ import {
   type BullrepFrequency,
   type BullrepGoal,
 } from '@/features/profile/options';
-import { fetchSessions, createSession as createSessionService, updateSession as updateSessionService } from '@/services/api';
+import {
+  fetchSessions,
+  createSession as createSessionService,
+  deleteSession as deleteSessionService,
+  updateSession as updateSessionService,
+} from '@/services/api';
 import type { TrainingSession, User } from '@/types';
 import { IconHome, IconTrend, IconDumbbell, IconUser, BullMascot } from '@/components/icons';
 import { getGreeting, getDayOfWeek, toDateKey, getWeekRange, isInRange, EXERCISE_CATALOG, MUSCLE_ICONS, getCatalogEntryByName } from '@/components/utils';
@@ -42,7 +47,7 @@ const AVATAR_STYLES = [
   { id: 'adventurer', label: 'Cartoon' },
   { id: 'notionists', label: 'Realista' },
   { id: 'pixel-art', label: 'Pixel' },
-  { id: 'bottts', label: 'Rob' },
+  { id: 'bottts', label: 'Robô' },
 ] as const;
 
 const AVATAR_SKIN_COLORS = ['f2d3b1', 'd4a373', 'a67c52', '6b4c3a', '3d261e'];
@@ -503,9 +508,21 @@ export default function App() {
     }
   };
 
+  const deleteSessionHandler = async (sessionId: string) => {
+    const { error } = await deleteSessionService(sessionId);
+    if (error) {
+      setToast({ type: 'error', message: `Erro ao excluir treino: ${error}` });
+      return false;
+    }
+
+    setSessions((current) => current.filter((savedSession) => savedSession.id !== sessionId));
+    setToast({ type: 'success', message: 'Treino excluído com sucesso.' });
+    return true;
+  };
+
   const handleSaveProfile = async () => {
     if (!profile) {
-      setToast({ type: 'error', message: 'No foi possvel carregar seu perfil. Verifique a conexo com o Neon e a tabela users.' });
+      setToast({ type: 'error', message: 'Não foi possível carregar seu perfil. Verifique a conexão com o Neon e a tabela users.' });
       return;
     }
     if (pName.trim().length < 2) {
@@ -571,7 +588,7 @@ export default function App() {
     } catch (error) {
       setToast({
         type: 'error',
-        message: error instanceof Error ? error.message : 'Nao foi possivel alterar a senha.',
+        message: error instanceof Error ? error.message : 'Não foi possível alterar a senha.',
       });
     } finally {
       setChangingPassword(false);
@@ -601,7 +618,7 @@ export default function App() {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="card-premium" style={{ padding: '18px 20px' }}>
-          <p style={{ fontWeight: 900, color: '#fff' }}>Carregando sesso…</p>
+          <p style={{ fontWeight: 900, color: '#fff' }}>Carregando sessão…</p>
         </div>
       </div>
     );
@@ -652,7 +669,7 @@ export default function App() {
                 <p style={{ fontSize: '0.9rem', fontWeight: 800, whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{user.name || 'Atleta BullRep'}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
                   <div style={{ width: '4px', height: '4px', background: 'var(--red-primary)', borderRadius: '50%' }} />
-                  <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Nvel {user.level || 1}</p>
+                  <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Nível {user.level || 1}</p>
                 </div>
               </div>
             </div>
@@ -661,12 +678,13 @@ export default function App() {
       </aside>
 
       {/* Main Content Area */}
-      <div className="main-content">
+      <main className="main-content">
         {tab === 'home' && (
           <HomeScreen
             sessions={sessions}
             loading={loading}
             onCreateSession={createSession}
+            onDeleteSession={deleteSessionHandler}
             user={user}
             displayName={displayName}
             currentAvatarUrl={currentAvatarUrl}
@@ -679,7 +697,7 @@ export default function App() {
           <WorkoutExperience onBack={() => setTab('home')} />
         )}
         {tab === 'admin' && isAdmin && (
-          <div style={{ padding: '28px 20px 44px', animation: 'fadeInUp 0.4s ease' }}>
+          <div className="app-panel-page" style={{ padding: '28px 20px 44px', animation: 'fadeInUp 0.4s ease' }}>
             <div className="card-premium" style={{ padding: '22px', marginBottom: '18px', position: 'relative', overflow: 'hidden', border: '1px solid rgba(232,0,29,0.25)' }}>
               <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at top left, rgba(232,0,29,0.20), transparent 58%)', pointerEvents: 'none' }} />
               <div style={{ position: 'relative' }}>
@@ -734,9 +752,9 @@ export default function App() {
               <h3 style={{ fontSize: '1.1rem', fontWeight: 950, marginBottom: '14px' }}>Ações do Admin</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {[
-                  { label: 'Gerenciar Exercícios', desc: 'Adicionar/remover exerc?cios do cat?logo', icon: '?' },
-                  { label: 'Ver Todos os Usuários', desc: 'Listar usu?rios cadastrados', icon: '?' },
-                  { label: 'Configurações do App', desc: 'Ajustar parmetros globais', icon: '?' },
+                  { label: 'Gerenciar Exercícios', desc: 'Adicionar ou remover exercícios do catálogo', icon: '🏋️' },
+                  { label: 'Ver Todos os Usuários', desc: 'Listar usuários cadastrados', icon: '👥' },
+                  { label: 'Configurações do App', desc: 'Ajustar parâmetros globais', icon: '⚙️' },
                 ].map((action) => (
                   <div key={action.label} className="glass-panel" style={{ padding: '14px 16px', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', cursor: 'pointer' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -754,7 +772,7 @@ export default function App() {
           </div>
         )}
         {tab === 'profile' && (
-          <div style={{ padding: '28px 20px 44px', animation: 'fadeInUp 0.4s ease' }}>
+          <div className="app-panel-page" style={{ padding: '28px 20px 44px', animation: 'fadeInUp 0.4s ease' }}>
             <div
               className="card-premium"
               style={{
@@ -807,7 +825,7 @@ export default function App() {
                   </p>
                   <h2 style={{ fontSize: '2rem', fontWeight: 950, marginTop: '10px', lineHeight: 1.05 }}>{pName || displayName}</h2>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '10px', maxWidth: '42ch' }}>
-                    Aqui voc v seu progresso e mantm seus dados de treino sempre atualizados.
+                    Aqui você vê seu progresso e mantém seus dados de treino sempre atualizados.
                   </p>
                   <div style={{ display: 'flex', gap: '8px', marginTop: '14px', flexWrap: 'wrap' }}>
                     <span className="badge-red" style={{ fontSize: '0.75rem', fontWeight: 800 }}>NÍVEL {user?.level ?? profile?.app_level ?? 1}</span>
@@ -834,7 +852,7 @@ export default function App() {
                   <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{profile?.goal ?? user?.goal ?? '-'}</p>
                 </div>
                 <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px' }}>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Frequncia</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Frequência</p>
                   <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{profile?.frequency ?? user?.frequency ?? '-'}</p>
                 </div>
               </div>
@@ -875,7 +893,7 @@ export default function App() {
                   <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px', borderColor: 'rgba(232,0,29,0.22)', background: 'rgba(232,0,29,0.06)' }}>
                     <p style={{ color: '#fff', fontWeight: 900, fontSize: '0.9rem' }}>Perfil não carregado</p>
                     <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.82rem', marginTop: '6px' }}>
-                      Verifique se a conexo com o Neon est configurada em `DATABASE_URL` e se a tabela `users` existe.
+                      Verifique se a conexão com o Neon está configurada em `DATABASE_URL` e se a tabela `users` existe.
                     </p>
                   </div>
                 )}
@@ -920,7 +938,7 @@ export default function App() {
                     </div>
                   </label>
                   <label className="auth-field">
-                    <span>Nvel</span>
+                    <span>Nível</span>
                     <div className="auth-input">
                       <select value={pFitness} onChange={(e) => setPFitness(e.target.value as BullrepFitnessLevel)} style={{ width: '100%', background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontWeight: 800 }}>
                         {FITNESS_LEVEL_OPTIONS.map((option) => (
@@ -932,7 +950,7 @@ export default function App() {
                 </div>
 
                 <label className="auth-field">
-                  <span>Frequncia semanal</span>
+                  <span>Frequência semanal</span>
                   <div className="auth-input">
                     <select value={pFrequency} onChange={(e) => setPFrequency(e.target.value as BullrepFrequency)} style={{ width: '100%', background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontWeight: 800 }}>
                       {FREQUENCY_OPTIONS.map((option) => (
@@ -943,13 +961,13 @@ export default function App() {
                 </label>
 
                 <button className="btn-primary" type="button" onClick={handleSaveProfile} disabled={savingProfile || !profile || !pName.trim()} style={{ width: '100%', marginTop: '6px' }}>
-                  {savingProfile ? 'SALVANDO...' : 'Salvar alteraes'}
+                  {savingProfile ? 'SALVANDO...' : 'Salvar alterações'}
                 </button>
               </div>
             </div>
           </div>
         )}
-      </div>
+      </main>
 
       <AnimatePresence>
         {showSummary && lastWorkoutDuration !== null && (
@@ -961,10 +979,12 @@ export default function App() {
       </AnimatePresence>
 
       {/* Bottom Navigation (Mobile Only) */}
-      <nav className="mobile-nav">
+      <nav className="mobile-nav" aria-label="Navegação principal">
         {navItems.map(({ id, label, icon }) => (
           <button key={id} id={`nav-${id}`}
             className={`nav-link${tab === id ? ' active' : ''}`}
+            type="button"
+            aria-current={tab === id ? 'page' : undefined}
             onClick={() => setTab(id)}>
             <div style={{ transform: tab === id ? 'scale(1.1) translateY(-2px)' : 'scale(1)', transition: 'all 0.2s' }}>
               {icon(tab === id)}

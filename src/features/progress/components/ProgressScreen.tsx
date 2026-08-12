@@ -155,7 +155,7 @@ export function ProgressScreen({
               <div>
                 <div className="dash-hero-h2">{weekCount} treinos essa semana</div>
                 <div className="dash-hero-sub">
-                  {weekDelta >= 0 ? `+${weekDelta}` : weekDelta} comparado - semana passada
+                  {weekDelta >= 0 ? `+${weekDelta}` : weekDelta} em comparação com a semana passada
                 </div>
               </div>
             </div>
@@ -178,8 +178,8 @@ export function ProgressScreen({
               </div>
             </div>
 
-            <button className="dash-cta-btn" type="button" onClick={() => setTab('workout')}>
-              Iniciar treino
+            <button className="dash-cta-btn" type="button" onClick={() => setTab('home')}>
+              Montar treino
             </button>
           </div>
         </motion.div>
@@ -222,7 +222,7 @@ export function ProgressScreen({
           <span>Evolução dos últimos 10 treinos</span>
         </div>
 
-        <div style={{ width: '100%', height: 260 }}>
+        <div className="dash-chart dash-chart-line" style={{ width: '100%', height: 260 }}>
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData} margin={{ top: 10, right: 18, left: 0, bottom: 0 }}>
               <defs>
@@ -268,7 +268,7 @@ export function ProgressScreen({
               </div>
             </div>
 
-            <div style={{ width: '100%', height: 240 }}>
+            <div className="dash-chart dash-chart-radar" style={{ width: '100%', height: 240 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={radarData}>
                   <PolarGrid stroke="rgba(255,255,255,0.10)" />

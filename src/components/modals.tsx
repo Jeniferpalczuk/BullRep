@@ -1,7 +1,7 @@
 ﻿import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Check, CheckCircle2, Plus, Search, X } from 'lucide-react';
+import { Check, CheckCircle2, Plus, Search, X } from 'lucide-react';
 import { EXERCISE_CATALOG } from './utils';
 
 function normalizeCategoryName(value?: string) {
@@ -25,6 +25,20 @@ export function ExerciseSelectorModal({
   const [query, setQuery] = useState('');
   const [showCategoryPicker, setShowCategoryPicker] = useState(!defaultCat);
   const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onCancel();
+    };
+    window.addEventListener('keydown', closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [onCancel]);
 
   const allCategories = useMemo(() => Object.keys(EXERCISE_CATALOG), []);
 
@@ -72,6 +86,7 @@ export function ExerciseSelectorModal({
 
   return (
     <div
+      className="exercise-selector-backdrop"
       style={{
         position: 'fixed',
         inset: 0,
@@ -90,6 +105,9 @@ export function ExerciseSelectorModal({
         transition={{ type: 'spring', stiffness: 260, damping: 28 }}
         exit={{ opacity: 0, scale: 0.985, y: 10 }}
         className="glass-card-premium"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="exercise-selector-title"
         style={{
           width: '100%',
           maxWidth: '760px',
@@ -103,27 +121,21 @@ export function ExerciseSelectorModal({
           flexDirection: 'column',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginBottom: '14px', position: 'sticky', top: '-20px', zIndex: 1, background: 'linear-gradient(180deg, rgba(12,12,12,0.98), rgba(12,12,12,0.94))', paddingTop: '2px', paddingBottom: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-            <button
-              type="button"
-              onClick={onCancel}
-              className="btn-ghost"
-              style={{ padding: '8px 12px', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-            >
-              <ArrowLeft size={16} />
-              Voltar
-            </button>
-            <h2 style={{ fontSize: '1.45rem', fontWeight: 900, color: '#fff' }}>Treino</h2>
+        <div className="exercise-selector-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', marginBottom: '14px', position: 'sticky', top: '-20px', zIndex: 1, background: 'linear-gradient(180deg, rgba(12,12,12,0.98), rgba(12,12,12,0.94))', paddingTop: '2px', paddingBottom: '8px' }}>
+          <div>
+            <h2 id="exercise-selector-title" style={{ fontSize: '1.45rem', fontWeight: 900, color: '#fff' }}>Adicionar exercícios</h2>
+            <p className="exercise-selector-subtitle">Escolha um ou mais exercícios para o treino.</p>
           </div>
 
           <button
             type="button"
             onClick={onCancel}
-            className="btn-ghost"
-            style={{ padding: '8px 14px', borderRadius: '12px', fontWeight: 800 }}
+            className="btn-ghost exercise-selector-close"
+            aria-label="Fechar seletor de exercícios"
+            style={{ padding: '8px 12px', borderRadius: '12px', fontWeight: 800 }}
           >
-            Fechar
+            <X size={18} />
+            <span>Fechar</span>
           </button>
         </div>
 
@@ -219,7 +231,7 @@ export function ExerciseSelectorModal({
           {exerciseList.length} exercícios encontrados
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflowY: 'auto', paddingRight: '2px' }}>
+        <div className="exercise-selector-list" style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflowY: 'auto', paddingRight: '2px' }}>
           {exerciseList.map((ex, idx) => {
             const isAdded = selectedExercises.includes(ex.name);
             return (
@@ -296,7 +308,7 @@ export function ExerciseSelectorModal({
           )}
         </div>
 
-        <div style={{ position: 'sticky', bottom: '-20px', paddingTop: '14px', paddingBottom: '2px', background: 'linear-gradient(180deg, rgba(6,6,6,0), rgba(6,6,6,0.98) 35%)' }}>
+        <div className="exercise-selector-footer" style={{ position: 'sticky', bottom: '-20px', paddingTop: '14px', paddingBottom: '2px', background: 'linear-gradient(180deg, rgba(6,6,6,0), rgba(6,6,6,0.98) 35%)' }}>
           <button
             type="button"
             className="btn-primary"
