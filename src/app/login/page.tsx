@@ -1,42 +1,25 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
+  Activity,
   ArrowRight,
-  CalendarCheck,
-  Dumbbell,
   Eye,
   EyeOff,
   LoaderCircle,
   LockKeyhole,
   Mail,
   ShieldCheck,
-  TrendingUp,
 } from 'lucide-react';
 
-import { useAuth } from '@/hooks/useAuth';
 import { Toast, type ToastState } from '@/components/Toast';
+import { useAuth } from '@/hooks/useAuth';
 import { apiRequest } from '@/lib/apiClient';
+import styles from './page.module.css';
 
-const loginBenefits = [
-  {
-    icon: CalendarCheck,
-    title: 'Semana organizada',
-    description: 'Veja o que já treinou e planeje o próximo passo.',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Evolução visível',
-    description: 'Acompanhe seu histórico e mantenha a constância.',
-  },
-  {
-    icon: Dumbbell,
-    title: 'Foco no treino',
-    description: 'Seu progresso reunido em um só lugar.',
-  },
-];
+const rhythmBars = [36, 58, 44, 78, 66, 92, 72];
 
 export default function LoginPage() {
   const router = useRouter();
@@ -56,16 +39,16 @@ export default function LoginPage() {
 
   const canSubmit = useMemo(() => email.trim().length > 3 && password.length >= 6, [email, password]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (!canSubmit || submitting) return;
 
     setSubmitting(true);
-    const res = await signIn(email.trim(), password);
+    const response = await signIn(email.trim(), password);
     setSubmitting(false);
 
-    if (res.error) {
-      setToast({ type: 'error', message: res.error });
+    if (response.error) {
+      setToast({ type: 'error', message: response.error });
       return;
     }
 
@@ -99,161 +82,156 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="auth-shell login-shell">
-      <div className="auth-bg login-background" aria-hidden="true">
-        <span className="login-background-ring login-background-ring-one" />
-        <span className="login-background-ring login-background-ring-two" />
+    <main className={styles.page}>
+      <div className={styles.ambient} aria-hidden="true">
+        <span className={styles.ambientGlow} />
+        <span className={styles.ambientLine} />
       </div>
 
-      <section className="login-card" aria-labelledby="login-title">
-        <div className="login-visual">
-          <div className="login-energy-field" aria-hidden="true">
-            <span className="login-energy-particle login-energy-particle-one" />
-            <span className="login-energy-particle login-energy-particle-two" />
-            <span className="login-energy-particle login-energy-particle-three" />
-          </div>
+      <section className={styles.shell} aria-labelledby="login-title">
+        <aside className={styles.hero}>
+          <div className={styles.heroLight} aria-hidden="true" />
+          <div className={styles.heroWordmark} aria-hidden="true">BULLREP</div>
 
-          <div className="login-security-badge">
-            <ShieldCheck size={15} aria-hidden="true" />
-            <span>Ambiente seguro</span>
-          </div>
+          <header className={styles.brand}>
+            <div className={styles.logoCrop}>
+              <Image
+                className={styles.logoArtwork}
+                src="/brand-source.png"
+                width={1025}
+                height={909}
+                sizes="140px"
+                alt=""
+                priority
+              />
+            </div>
+            <div className={styles.brandText}>
+              <strong>BULL<span>REP</span></strong>
+              <small>DOMINE A CARGA</small>
+            </div>
+          </header>
 
-          <div className="login-logo-stage">
-            <span className="login-logo-orbit login-logo-orbit-one" aria-hidden="true" />
-            <span className="login-logo-orbit login-logo-orbit-two" aria-hidden="true" />
-            <span className="login-logo-aura" aria-hidden="true" />
-            <Image
-              className="login-logo-image"
-              src="/brand-source.png"
-              width={1025}
-              height={909}
-              sizes="(max-width: 899px) 190px, 340px"
-              alt="BullRep — Domine a carga"
-              priority
-            />
-          </div>
-
-          <div className="login-hero-copy">
-            <p className="login-eyebrow"><span aria-hidden="true" /> Sua evolução começa agora</p>
-            <h2>Treine. Registre. Evolua.</h2>
-            <p>
-              Cada repetição conta. A BullRep transforma seu esforço em progresso visível.
+          <div className={styles.heroCopy}>
+            <p className={styles.eyebrow}><span aria-hidden="true" /> Evolua a cada treino</p>
+            <h1>Volte<br /><em>mais forte.</em></h1>
+            <p className={styles.heroDescription}>
+              Seu histórico, seus treinos e sua evolução em um só lugar.
             </p>
           </div>
 
-          <div className="login-benefit-list" aria-label="Benefícios da BullRep">
-            {loginBenefits.map(({ icon: Icon, title, description }) => (
-              <div className="login-benefit" key={title}>
-                <span className="login-benefit-icon" aria-hidden="true">
-                  <Icon size={19} strokeWidth={2.2} />
-                </span>
-                <span>
-                  <strong>{title}</strong>
-                  <small>{description}</small>
-                </span>
-              </div>
-            ))}
+          <div className={styles.rhythmCard}>
+            <div className={styles.rhythmLabel}>
+              <span className={styles.rhythmIcon}><Activity size={18} aria-hidden="true" /></span>
+              <span>
+                <small>SEU RITMO</small>
+                <strong>Constância gera resultado</strong>
+              </span>
+            </div>
+            <div className={styles.rhythmBars} aria-hidden="true">
+              {rhythmBars.map((height, index) => (
+                <span key={`${height}-${index}`} style={{ height: `${height}%` }} />
+              ))}
+            </div>
           </div>
+        </aside>
 
-          <p className="login-visual-footer">
-            <span aria-hidden="true" />
-            Constância hoje. Resultado amanhã.
-          </p>
-        </div>
-
-        <div className="login-form-panel">
-          <div className="login-form-heading">
-            <p className="login-mobile-eyebrow">Sua evolução continua aqui</p>
-            <h1 id="login-title">Entre na sua conta</h1>
-            <p>Continue de onde parou e mantenha o foco na sua meta.</p>
-          </div>
-
-          <form className="login-form" onSubmit={handleSubmit} aria-busy={submitting}>
-            <div className="login-field">
-              <label htmlFor="login-email">E-mail</label>
-              <div className="login-input">
-                <Mail size={19} aria-hidden="true" />
-                <input
-                  id="login-email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="seuemail@exemplo.com"
-                  type="email"
-                  inputMode="email"
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                  autoComplete="email"
-                  disabled={submitting}
-                  required
-                />
-              </div>
+        <section className={styles.formPanel}>
+          <div className={styles.formContent}>
+            <div className={styles.secureLabel}>
+              <ShieldCheck size={15} aria-hidden="true" />
+              Acesso protegido
             </div>
 
-            <div className="login-field">
-              <label htmlFor="login-password">Senha</label>
-              <div className="login-input">
-                <LockKeyhole size={19} aria-hidden="true" />
-                <input
-                  id="login-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Digite sua senha"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  minLength={6}
-                  disabled={submitting}
-                  required
-                />
-                <button
-                  className="login-password-toggle"
-                  type="button"
-                  onClick={() => setShowPassword((value) => !value)}
-                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                  aria-pressed={showPassword}
-                  disabled={submitting}
-                >
-                  {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
-                </button>
-              </div>
+            <div className={styles.formHeading}>
+              <p>Bom ter você de volta</p>
+              <h2 id="login-title">Entre na sua conta</h2>
+              <span>Continue de onde parou e mantenha sua evolução.</span>
             </div>
 
-            <div className="login-form-help">
-              <span>Use os mesmos dados do cadastro.</span>
-              <button type="button" onClick={handleForgotPassword} disabled={recovering || submitting}>
-                {recovering ? 'Enviando...' : 'Esqueci minha senha'}
+            <form className={styles.form} onSubmit={handleSubmit} aria-busy={submitting}>
+              <div className={styles.field}>
+                <label htmlFor="login-email">E-mail</label>
+                <div className={styles.inputWrap}>
+                  <Mail size={19} aria-hidden="true" />
+                  <input
+                    id="login-email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    placeholder="seuemail@exemplo.com"
+                    type="email"
+                    inputMode="email"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    autoComplete="email"
+                    disabled={submitting}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className={styles.field}>
+                <div className={styles.passwordLabelRow}>
+                  <label htmlFor="login-password">Senha</label>
+                  <button type="button" onClick={handleForgotPassword} disabled={recovering || submitting}>
+                    {recovering ? 'Enviando...' : 'Esqueci minha senha'}
+                  </button>
+                </div>
+                <div className={styles.inputWrap}>
+                  <LockKeyhole size={19} aria-hidden="true" />
+                  <input
+                    id="login-password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    placeholder="Digite sua senha"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    minLength={6}
+                    disabled={submitting}
+                    required
+                  />
+                  <button
+                    className={styles.passwordToggle}
+                    type="button"
+                    onClick={() => setShowPassword((value) => !value)}
+                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                    aria-pressed={showPassword}
+                    disabled={submitting}
+                  >
+                    {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                  </button>
+                </div>
+              </div>
+
+              <button className={styles.submit} type="submit" disabled={!canSubmit || submitting}>
+                {submitting ? (
+                  <>
+                    <LoaderCircle className={styles.spinner} size={20} aria-hidden="true" />
+                    Entrando...
+                  </>
+                ) : (
+                  <>
+                    Entrar
+                    <ArrowRight size={20} aria-hidden="true" />
+                  </>
+                )}
               </button>
+            </form>
+
+            <div className={styles.divider} aria-hidden="true">
+              <span />
+              <small>Ainda não treina com a BullRep?</small>
+              <span />
             </div>
 
-            <button className="login-submit" type="submit" disabled={!canSubmit || submitting}>
-              {submitting ? (
-                <>
-                  <LoaderCircle className="login-spinner" size={20} aria-hidden="true" />
-                  Entrando...
-                </>
-              ) : (
-                <>
-                  Entrar
-                  <ArrowRight size={20} aria-hidden="true" />
-                </>
-              )}
+            <button className={styles.register} type="button" onClick={() => router.push('/cadastro')}>
+              Criar minha conta
             </button>
-          </form>
 
-          <div className="login-divider" aria-hidden="true">
-            <span />
-            <small>Novo por aqui?</small>
-            <span />
+            <p className={styles.privacy}>
+              Ao continuar, seus dados permanecem protegidos.
+            </p>
           </div>
-
-          <button className="login-register" type="button" onClick={() => router.push('/cadastro')}>
-            Criar minha conta
-          </button>
-
-          <p className="login-privacy">
-            <ShieldCheck size={15} aria-hidden="true" />
-            Seus dados e sua evolução ficam protegidos.
-          </p>
-        </div>
+        </section>
       </section>
 
       <Toast toast={toast} onClear={() => setToast(null)} />

@@ -1,0 +1,758 @@
+.page {
+  --login-red: #ef233c;
+  --login-red-dark: #a90920;
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden auto;
+  background: #050506;
+  color: #fff;
+}
+
+.ambient {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ambient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, #000, transparent 70%);
+}
+
+.ambientGlow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  top: -310px;
+  left: -190px;
+  background: rgba(239, 35, 60, 0.34);
+  border-radius: 50%;
+  filter: blur(100px);
+  animation: ambient-breathe 7s ease-in-out infinite;
+}
+
+.ambientLine {
+  position: absolute;
+  width: 1px;
+  height: 64vh;
+  top: 8vh;
+  right: 12vw;
+  opacity: 0.35;
+  background: linear-gradient(transparent, rgba(239, 35, 60, 0.65), transparent);
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100dvh;
+  background: #080809;
+}
+
+.hero {
+  position: relative;
+  min-height: 250px;
+  padding: max(18px, env(safe-area-inset-top)) 22px 30px;
+  overflow: hidden;
+  background:
+    radial-gradient(430px 250px at 10% 0%, rgba(239, 35, 60, 0.26), transparent 65%),
+    linear-gradient(145deg, #111114, #09090a 72%);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -115px;
+  bottom: -170px;
+  width: 280px;
+  height: 280px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 50%;
+  box-shadow: 0 0 0 42px rgba(255, 255, 255, 0.015), 0 0 0 84px rgba(255, 255, 255, 0.01);
+}
+
+.heroLight {
+  position: absolute;
+  z-index: 0;
+  top: -40%;
+  bottom: -40%;
+  left: -35%;
+  width: 22%;
+  opacity: 0.55;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
+  transform: rotate(19deg);
+  animation: light-pass 8s ease-in-out infinite;
+}
+
+.heroWordmark {
+  position: absolute;
+  z-index: 0;
+  right: -16px;
+  bottom: -14px;
+  color: rgba(255, 255, 255, 0.018);
+  font-size: clamp(4.5rem, 25vw, 7.4rem);
+  font-weight: 1000;
+  letter-spacing: -0.08em;
+  line-height: 0.8;
+  user-select: none;
+}
+
+.brand {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.logoCrop {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  overflow: hidden;
+  background: #030304;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+.logoArtwork {
+  position: absolute;
+  width: 120px;
+  max-width: none;
+  height: auto;
+  top: -7px;
+  left: -36px;
+}
+
+.brandText {
+  display: grid;
+  gap: 1px;
+}
+
+.brandText strong {
+  font-size: 1.05rem;
+  font-weight: 1000;
+  letter-spacing: 0.07em;
+}
+
+.brandText strong span {
+  color: var(--login-red);
+}
+
+.brandText small {
+  color: rgba(255, 255, 255, 0.43);
+  font-size: 0.53rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.heroCopy {
+  position: relative;
+  z-index: 1;
+  max-width: 520px;
+  margin-top: 28px;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.67rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.eyebrow span {
+  width: 22px;
+  height: 2px;
+  background: var(--login-red);
+  border-radius: 999px;
+}
+
+.heroCopy h1 {
+  margin-top: 10px;
+  font-size: clamp(2.45rem, 12vw, 3.35rem);
+  font-weight: 1000;
+  letter-spacing: -0.055em;
+  line-height: 0.88;
+}
+
+.heroCopy h1 em {
+  color: var(--login-red);
+  font-style: normal;
+}
+
+.heroDescription {
+  display: none;
+}
+
+.rhythmCard {
+  display: none;
+}
+
+.formPanel {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  margin-top: -18px;
+  padding: 27px 20px max(22px, env(safe-area-inset-bottom));
+  background: #0b0b0d;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -18px 42px rgba(0, 0, 0, 0.24);
+}
+
+.formContent {
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+.secureLabel {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: 6px;
+  padding: 6px 9px;
+  color: rgba(255, 255, 255, 0.48);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 999px;
+  font-size: 0.67rem;
+  font-weight: 700;
+}
+
+.secureLabel svg {
+  color: #7fda9e;
+}
+
+.formHeading {
+  margin-top: 17px;
+}
+
+.formHeading > p {
+  color: var(--login-red);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.formHeading h2 {
+  margin-top: 5px;
+  font-size: clamp(1.65rem, 8vw, 2.05rem);
+  font-weight: 950;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.formHeading > span {
+  display: block;
+  margin-top: 7px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.84rem;
+  font-weight: 550;
+  line-height: 1.45;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+  margin-top: 21px;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.field label,
+.passwordLabelRow > label {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.passwordLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.passwordLabelRow > button {
+  min-height: 30px;
+  padding: 3px 0 3px 8px;
+  color: #ff687c;
+  background: none;
+  border: 0;
+  font-size: 0.73rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.inputWrap {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  gap: 11px;
+  padding: 0 14px;
+  color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.028);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inputWrap:focus-within {
+  color: var(--login-red);
+  background: rgba(239, 35, 60, 0.035);
+  border-color: rgba(239, 35, 60, 0.55);
+  box-shadow: 0 0 0 3px rgba(239, 35, 60, 0.08);
+}
+
+.inputWrap input {
+  width: 100%;
+  min-width: 0;
+  min-height: 50px;
+  padding: 0;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.inputWrap input::placeholder {
+  color: rgba(255, 255, 255, 0.27);
+  font-weight: 500;
+}
+
+.passwordToggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  margin-right: -10px;
+  color: rgba(255, 255, 255, 0.48);
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.submit,
+.register {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 52px;
+  gap: 10px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit {
+  margin-top: 1px;
+  color: #fff;
+  background: linear-gradient(135deg, #ef233c, #b80d25);
+  border: 0;
+  box-shadow: 0 12px 30px rgba(239, 35, 60, 0.22);
+}
+
+.submit:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 15px 34px rgba(239, 35, 60, 0.3);
+}
+
+.submit:not(:disabled):hover svg:not(.spinner) {
+  transform: translateX(3px);
+}
+
+.submit svg {
+  transition: transform 0.2s ease;
+}
+
+.submit:disabled {
+  opacity: 0.42;
+  box-shadow: none;
+}
+
+.spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+.divider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  margin: 19px 0 12px;
+}
+
+.divider span {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.075);
+}
+
+.divider small {
+  color: rgba(255, 255, 255, 0.34);
+  font-size: 0.67rem;
+  font-weight: 650;
+}
+
+.register {
+  color: rgba(255, 255, 255, 0.88);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.register:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.privacy {
+  margin-top: 13px;
+  color: rgba(255, 255, 255, 0.27);
+  font-size: 0.64rem;
+  font-weight: 550;
+  text-align: center;
+}
+
+.passwordLabelRow > button:hover,
+.passwordLabelRow > button:focus-visible {
+  color: #fff;
+}
+
+.passwordToggle:focus-visible,
+.passwordLabelRow > button:focus-visible,
+.submit:focus-visible,
+.register:focus-visible {
+  outline: 3px solid rgba(239, 35, 60, 0.45);
+  outline-offset: 3px;
+}
+
+@media (max-width: 359px) {
+  .hero {
+    min-height: 216px;
+    padding-inline: 17px;
+  }
+
+  .heroCopy {
+    margin-top: 20px;
+  }
+
+  .heroCopy h1 {
+    font-size: 2.18rem;
+  }
+
+  .formPanel {
+    padding: 23px 16px max(18px, env(safe-area-inset-bottom));
+  }
+
+  .formHeading {
+    margin-top: 13px;
+  }
+
+  .formHeading > span {
+    font-size: 0.79rem;
+  }
+
+  .form {
+    margin-top: 17px;
+  }
+}
+
+@media (max-width: 899px) and (max-height: 650px) {
+  .hero {
+    min-height: 138px;
+    padding-bottom: 23px;
+  }
+
+  .heroCopy {
+    margin-top: 14px;
+  }
+
+  .eyebrow,
+  .heroDescription {
+    display: none;
+  }
+
+  .heroCopy h1 {
+    margin-top: 0;
+    font-size: 2rem;
+    line-height: 0.9;
+  }
+
+  .secureLabel {
+    display: none;
+  }
+
+  .formHeading {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+  .page {
+    padding: 24px;
+  }
+
+  .shell {
+    max-width: 640px;
+    min-height: auto;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 28px;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero,
+  .formPanel {
+    padding-inline: 38px;
+  }
+
+  .formPanel {
+    border-radius: 28px 28px 0 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .page {
+    align-items: center;
+    padding: max(32px, env(safe-area-inset-top)) 32px max(32px, env(safe-area-inset-bottom));
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1.06fr) minmax(420px, 0.94fr);
+    width: min(1120px, 100%);
+    min-height: min(700px, calc(100dvh - 64px));
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    box-shadow: 0 32px 100px rgba(0, 0, 0, 0.62), 0 0 60px rgba(239, 35, 60, 0.055);
+  }
+
+  .hero {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    padding: 36px 42px 38px;
+    border-right: 1px solid rgba(255, 255, 255, 0.075);
+  }
+
+  .heroWordmark {
+    right: -42px;
+    bottom: 25px;
+    font-size: 9rem;
+  }
+
+  .logoCrop {
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
+    border-radius: 17px;
+  }
+
+  .logoArtwork {
+    width: 132px;
+    top: -8px;
+    left: -39px;
+  }
+
+  .brandText strong {
+    font-size: 1.16rem;
+  }
+
+  .heroCopy {
+    margin-top: clamp(80px, 12vh, 116px);
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+  }
+
+  .heroCopy h1 {
+    margin-top: 16px;
+    font-size: clamp(4.35rem, 6vw, 5.45rem);
+    line-height: 0.86;
+  }
+
+  .heroDescription {
+    display: block;
+    max-width: 410px;
+    margin-top: 24px;
+    color: rgba(255, 255, 255, 0.57);
+    font-size: 1rem;
+    font-weight: 550;
+    line-height: 1.58;
+  }
+
+  .rhythmCard {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 78px;
+    gap: 24px;
+    margin-top: auto;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+  }
+
+  .rhythmLabel {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 11px;
+  }
+
+  .rhythmIcon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    color: #ff5369;
+    background: rgba(239, 35, 60, 0.1);
+    border-radius: 13px;
+  }
+
+  .rhythmLabel small,
+  .rhythmLabel strong {
+    display: block;
+  }
+
+  .rhythmLabel small {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.6rem;
+    font-weight: 850;
+    letter-spacing: 0.14em;
+  }
+
+  .rhythmLabel strong {
+    margin-top: 3px;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.82rem;
+    font-weight: 750;
+    white-space: nowrap;
+  }
+
+  .rhythmBars {
+    display: flex;
+    align-items: flex-end;
+    width: 116px;
+    height: 40px;
+    gap: 6px;
+  }
+
+  .rhythmBars span {
+    width: 100%;
+    min-height: 5px;
+    background: linear-gradient(to top, rgba(239, 35, 60, 0.45), #ef233c);
+    border-radius: 4px 4px 2px 2px;
+  }
+
+  .formPanel {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    padding: 46px 54px;
+    background:
+      radial-gradient(420px 250px at 100% 0%, rgba(239, 35, 60, 0.05), transparent 67%),
+      #0b0b0d;
+    border-top: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .secureLabel {
+    margin-left: auto;
+  }
+
+  .formHeading {
+    margin-top: 40px;
+  }
+
+  .formHeading h2 {
+    font-size: 2.25rem;
+  }
+
+  .formHeading > span {
+    font-size: 0.91rem;
+  }
+
+  .form {
+    gap: 18px;
+    margin-top: 31px;
+  }
+
+  .inputWrap,
+  .submit,
+  .register {
+    min-height: 56px;
+  }
+
+  .divider {
+    margin-top: 24px;
+  }
+}
+
+@keyframes ambient-breathe {
+  0%, 100% { opacity: 0.7; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes light-pass {
+  0%, 42% { left: -35%; }
+  74%, 100% { left: 125%; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambientGlow,
+  .heroLight {
+    animation: none;
+  }
+
+  .inputWrap,
+  .submit,
+  .submit svg,
+  .register {
+    transition: none;
+  }
+}
