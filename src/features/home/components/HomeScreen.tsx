@@ -447,6 +447,29 @@ export function HomeScreen({
             </div>
           </div>
 
+          <div className={`workout-launch-panel ${exercises.length > 0 ? 'is-ready' : ''}`}>
+            <div className="workout-launch-summary">
+              <span className="workout-launch-kicker">
+                {exercises.length > 0
+                  ? `${exercises.length} ${exercises.length === 1 ? 'exercício selecionado' : 'exercícios selecionados'}`
+                  : 'Ação principal'}
+              </span>
+              <strong>
+                {exercises.length > 0 ? 'Treino pronto para lançar' : 'Adicione exercícios para liberar'}
+              </strong>
+            </div>
+
+            <button
+              className="btn-primary workout-launch-button"
+              disabled={exercises.length === 0 || creating}
+              onClick={handleStartWorkout}
+              type="button"
+            >
+              <Zap size={18} aria-hidden="true" />
+              {creating ? 'SALVANDO...' : editingSessionId ? 'SALVAR NOVA VERSÃO' : 'LANÇAR TREINO'}
+            </button>
+          </div>
+
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '8px', scrollbarWidth: 'none' }}>
                {FEATURED_MUSCLE_GROUPS.map((m, idx) => {
@@ -590,14 +613,6 @@ export function HomeScreen({
             </button>
           )}
 
-          <button
-            className="btn-primary"
-            style={{ width: '100%', opacity: exercises.length === 0 ? 0.5 : 1, marginTop: '12px' }}
-            disabled={exercises.length === 0 || creating}
-            onClick={handleStartWorkout}
-          >
-            {creating ? 'SALVANDO...' : editingSessionId ? 'SALVAR NOVA VERSÃO' : 'SALVAR TREINO'}
-          </button>
         </div>
 
         {/* SUA SEMANA */}
