@@ -168,6 +168,17 @@ export function ExerciseSelectorModal({
           </button>
         </div>
 
+        <div className="exercise-selector-launch">
+          <button
+            type="button"
+            className="btn-primary exercise-selector-launch-button"
+            disabled={selectedExercises.length === 0}
+            onClick={launchExercises}
+          >
+            Lançar exercícios ({selectedExercises.length})
+          </button>
+        </div>
+
         <div className="glass-panel" style={{ borderRadius: '18px', padding: '14px', marginBottom: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', flexWrap: 'wrap' }}>
             <div>
@@ -348,17 +359,6 @@ export function ExerciseSelectorModal({
           )}
         </div>
 
-        <div className="exercise-selector-footer" style={{ position: 'sticky', bottom: '-20px', paddingTop: '14px', paddingBottom: '2px', background: 'linear-gradient(180deg, rgba(6,6,6,0), rgba(6,6,6,0.98) 35%)' }}>
-          <button
-            type="button"
-            className="btn-primary"
-            disabled={selectedExercises.length === 0}
-            onClick={launchExercises}
-            style={{ width: '100%', opacity: selectedExercises.length === 0 ? 0.55 : 1 }}
-          >
-            Lançar exercícios ({selectedExercises.length})
-          </button>
-        </div>
       </motion.div>
     </div>
   );
