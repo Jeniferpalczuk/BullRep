@@ -86,11 +86,18 @@ export default function LoginPage() {
       <div className={styles.ambient} aria-hidden="true">
         <span className={styles.ambientGlow} />
         <span className={styles.ambientLine} />
+        <span className={`${styles.smoke} ${styles.smokeLeft}`} />
+        <span className={`${styles.smoke} ${styles.smokeRight}`} />
+        <span className={`${styles.smoke} ${styles.smokeBottom}`} />
       </div>
 
       <section className={styles.shell} aria-labelledby="login-title">
         <aside className={styles.hero}>
           <div className={styles.heroLight} aria-hidden="true" />
+          <div className={styles.heroSmoke} aria-hidden="true">
+            <span />
+            <span />
+          </div>
           <div className={styles.heroWordmark} aria-hidden="true">BULLREP</div>
 
           <header className={styles.brand}>
