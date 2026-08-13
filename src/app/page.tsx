@@ -8,7 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronDown, ChevronUp, Calendar, Trash2, Weight, Play, CheckCircle2,
   Award, TrendingUp, Dumbbell,
-  Flame, Clock, Zap, Star, XCircle, AlertTriangle, Dices
+  Flame, Clock, Zap, Star, XCircle, AlertTriangle, Dices,
+  CalendarDays, LogOut, Pencil, Ruler, ShieldCheck, Target, X
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -374,6 +375,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<ToastState>(null);
   const [savingProfile, setSavingProfile] = useState(false);
+  const [isProfileEditing, setIsProfileEditing] = useState(false);
   const [changingPassword, setChangingPassword] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -556,6 +558,7 @@ export default function App() {
       return;
     }
     setToast({ type: 'success', message: 'Perfil atualizado com sucesso.' });
+    setIsProfileEditing(false);
   };
 
   const handleChangePassword = async () => {
@@ -774,123 +777,73 @@ export default function App() {
           </div>
         )}
         {tab === 'profile' && (
-          <div className="app-panel-page" style={{ padding: '28px 20px 44px', animation: 'fadeInUp 0.4s ease' }}>
-            <div
-              className="card-premium"
-              style={{
-                padding: '18px',
-                marginBottom: '18px',
-                position: 'relative',
-                overflow: 'hidden',
-                border: '1px solid rgba(232,0,29,0.12)',
-              }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'radial-gradient(circle at top, rgba(232,0,29,0.16), transparent 58%)',
-                  pointerEvents: 'none',
-                }}
-              />
-              <div
-                className="profile-hero-grid"
-                style={{
-                  position: 'relative',
-                  display: 'grid',
-                  gridTemplateColumns: 'minmax(220px, 260px) minmax(0, 1fr)',
-                  gap: '18px',
-                  alignItems: 'center',
-                }}
-              >
-                <div className="profile-hero-avatar-wrap" style={{ display: 'flex', justifyContent: 'center' }}>
-                  <div
-                    className="profile-hero-avatar"
-                    style={{
-                      width: '224px',
-                      height: '224px',
-                      borderRadius: '50%',
-                      overflow: 'hidden',
-                      border: '4px solid rgba(232,0,29,0.92)',
-                      boxShadow: '0 18px 50px rgba(232,0,29,0.34)',
-                      background: 'rgba(0,0,0,0.35)',
-                      position: 'relative',
-                    }}
+          <div className="app-panel-page profile-page">
+            <section className="profile-hero-card">
+              <div className="profile-brand-row">
+                <div className="profile-brand-symbol">
+                  <img src="/brand-source.png" alt="Mascote BullRep levantando uma barra" />
+                </div>
+                <div className="profile-brand-copy">
+                  <strong>BULL<span>REP</span></strong>
+                  <small>Domine a carga</small>
+                </div>
+                <span className="profile-brand-area">Área do atleta</span>
+              </div>
+
+              <div className="profile-hero-grid">
+                <div className="profile-hero-avatar-wrap">
+                  <div className="profile-hero-avatar">
+                    <img src={user?.avatarUrl || currentAvatarUrl} alt={`Avatar de ${pName || displayName}`} />
+                  </div>
+                  <span className="profile-avatar-status">Ativo</span>
+                </div>
+
+                <div className="profile-hero-copy">
+                  <p>Perfil do atleta</p>
+                  <h2>{pName || displayName}</h2>
+                  <span>Seu espaço para acompanhar informações, objetivo e evolução no BullRep.</span>
+
+                  <div className="profile-level-row">
+                    <span className="badge-red">Nível {user?.level ?? profile?.app_level ?? 1}</span>
+                    <span className="badge-gray">{user?.xp ?? profile?.xp ?? 0} XP</span>
+                    <span className="badge-gray">{profile?.fitness_level ?? user?.fitnessLevel ?? 'Atleta'}</span>
+                  </div>
+
+                  <button
+                    className="profile-edit-trigger"
+                    type="button"
+                    aria-expanded={isProfileEditing}
+                    aria-controls="profile-editor"
+                    onClick={() => setIsProfileEditing((current) => !current)}
                   >
-                    <img src={user?.avatarUrl || currentAvatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                </div>
-
-                <div style={{ textAlign: 'left' }}>
-                  <p style={{ fontSize: '0.72rem', fontWeight: 900, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)' }}>
-                    Perfil do atleta
-                  </p>
-                  <h2 style={{ fontSize: '2rem', fontWeight: 950, marginTop: '10px', lineHeight: 1.05 }}>{pName || displayName}</h2>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '10px', maxWidth: '42ch' }}>
-                    Aqui você vê seu progresso e mantém seus dados de treino sempre atualizados.
-                  </p>
-                  <div style={{ display: 'flex', gap: '8px', marginTop: '14px', flexWrap: 'wrap' }}>
-                    <span className="badge-red" style={{ fontSize: '0.75rem', fontWeight: 800 }}>NÍVEL {user?.level ?? profile?.app_level ?? 1}</span>
-                    <span className="badge-gray" style={{ fontSize: '0.75rem' }}>{user?.xp ?? profile?.xp ?? 0} XP</span>
-                    <span className="badge-gray" style={{ fontSize: '0.75rem' }}>Avatar ativo</span>
-                  </div>
+                    <Pencil size={17} aria-hidden="true" />
+                    {isProfileEditing ? 'Fechar edição' : 'Editar perfil'}
+                  </button>
                 </div>
               </div>
-            </div>
+            </section>
 
-            <div className="card" style={{ padding: '20px', marginTop: '0', textAlign: 'left' }}>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Resumo</p>
-              <div className="profile-summary-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px' }}>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Peso</p>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{(profile?.weight ?? user?.weight) ? `${profile?.weight ?? user?.weight}kg` : '-'}</p>
-                </div>
-                <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px' }}>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Altura</p>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{(profile?.height ?? user?.height) ? `${profile?.height ?? user?.height}cm` : '-'}</p>
-                </div>
-                <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px' }}>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Objetivo</p>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{profile?.goal ?? user?.goal ?? '-'}</p>
-                </div>
-                <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px' }}>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 800 }}>Frequência</p>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 900 }}>{profile?.frequency ?? user?.frequency ?? '-'}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="card" style={{ padding: '20px', marginTop: '18px', textAlign: 'left' }}>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Configurações</p>
-              {['Conta', 'Notificações', 'Privacidade', 'Sobre o App'].map((item) => (
-                <div key={item} style={{
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                  padding: '16px 0', borderBottom: '1px solid var(--border)',
-                  cursor: 'pointer'
-                }}>
-                  <span style={{ fontSize: '0.95rem', fontWeight: 500 }}>{item}</span>
-                  <ChevronDown size={16} style={{ color: 'var(--text-muted)', transform: 'rotate(-90deg)' }} />
-                </div>
-              ))}
-            </div>
-
-            <div className="card-premium" style={{ padding: '22px', marginTop: '18px', textAlign: 'left' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 950 }}>Dados do perfil</h3>
-                <button
-                  className="btn-ghost"
-                  type="button"
-                  onClick={async () => {
-                    await signOut();
-                    router.replace('/login');
-                  }}
-                  style={{ padding: '10px 12px' }}
+            <AnimatePresence initial={false}>
+              {isProfileEditing && (
+                <motion.section
+                  id="profile-editor"
+                  className="card-premium profile-editor-card"
+                  initial={{ opacity: 0, height: 0, y: -10 }}
+                  animate={{ opacity: 1, height: 'auto', y: 0 }}
+                  exit={{ opacity: 0, height: 0, y: -10 }}
+                  transition={{ duration: 0.25, ease: 'easeOut' }}
                 >
-                  Sair
-                </button>
-              </div>
+                  <div className="profile-editor-head">
+                    <div>
+                      <span>Configurações pessoais</span>
+                      <h3>Editar dados do perfil</h3>
+                    </div>
+                    <button type="button" aria-label="Fechar edição do perfil" onClick={() => setIsProfileEditing(false)}>
+                      <X size={19} />
+                    </button>
+                  </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div className="profile-editor-fields">
                 {!profile && (
                   <div className="glass-panel" style={{ padding: '12px 14px', borderRadius: '16px', borderColor: 'rgba(232,0,29,0.22)', background: 'rgba(232,0,29,0.06)' }}>
                     <p style={{ color: '#fff', fontWeight: 900, fontSize: '0.9rem' }}>Perfil não carregado</p>
@@ -965,8 +918,61 @@ export default function App() {
                 <button className="btn-primary" type="button" onClick={handleSaveProfile} disabled={savingProfile || !profile || !pName.trim()} style={{ width: '100%', marginTop: '6px' }}>
                   {savingProfile ? 'SALVANDO...' : 'Salvar alterações'}
                 </button>
+                  </div>
+                </motion.section>
+              )}
+            </AnimatePresence>
+
+            <section className="profile-summary-card">
+              <div className="profile-section-heading">
+                <span>Resumo</span>
+                <h3>Seu perfil em números</h3>
               </div>
-            </div>
+              <div className="profile-summary-grid">
+                {[
+                  { label: 'Peso', value: (profile?.weight ?? user?.weight) ? `${profile?.weight ?? user?.weight} kg` : '-', icon: <Weight size={19} /> },
+                  { label: 'Altura', value: (profile?.height ?? user?.height) ? `${profile?.height ?? user?.height} cm` : '-', icon: <Ruler size={19} /> },
+                  { label: 'Objetivo', value: profile?.goal ?? user?.goal ?? '-', icon: <Target size={19} /> },
+                  { label: 'Frequência', value: profile?.frequency ?? user?.frequency ?? '-', icon: <CalendarDays size={19} /> },
+                ].map((item) => (
+                  <div key={item.label} className="profile-summary-item">
+                    <div className="profile-summary-icon">{item.icon}</div>
+                    <div>
+                      <span>{item.label}</span>
+                      <strong>{item.value}</strong>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="profile-account-card">
+              <div className="profile-account-icon"><ShieldCheck size={22} /></div>
+              <div>
+                <span>Conta BullRep</span>
+                <strong>{profile?.email || user?.email || session?.user?.email || 'Conta conectada'}</strong>
+                <small>Seus dados de treino ficam vinculados a esta conta.</small>
+              </div>
+              <span className="profile-account-status">Conectada</span>
+            </section>
+
+            <footer className="profile-signout-zone">
+              <div>
+                <span>Encerrar sessão</span>
+                <p>Use esta opção somente quando quiser sair da sua conta neste aparelho.</p>
+              </div>
+              <button
+                className="profile-signout-button"
+                type="button"
+                onClick={async () => {
+                  await signOut();
+                  router.replace('/login');
+                }}
+              >
+                <LogOut size={18} aria-hidden="true" />
+                Sair da conta
+              </button>
+            </footer>
           </div>
         )}
       </main>
